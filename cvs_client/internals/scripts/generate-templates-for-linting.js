@@ -33,17 +33,17 @@ const removeTestsDirFrom = (relativePath) => () => rimraf.sync(path.join(__dirna
 const plop = nodePlop('./index');
 
 const componentGen = plop.getGenerator('component');
-componentGen.runActions({ name: 'RbGeneratedComponentEsclass', type: 'React.Component', wantMessages: true, wantLoadable: true, })
+const ComponentEsclass = componentGen.runActions({ name: 'RbGeneratedComponentEsclass', type: 'ES6 Class', wantMessages: true })
   .then(checkForErrors)
   .then(removeTestsDirFrom('components/RbGeneratedComponentEsclass'))
-  .catch(reportErrorsFor('component/React.Component'));
+  .catch(reportErrorsFor('component/ES6 Class'));
 
-componentGen.runActions({ name: 'RbGeneratedComponentEsclasspure', type: 'React.PureComponent', wantMessages: true, wantLoadable: true })
+componentGen.runActions({ name: 'RbGeneratedComponentEsclasspure', type: 'ES6 Class (Pure)', wantMessages: true })
   .then(checkForErrors)
   .then(removeTestsDirFrom('components/RbGeneratedComponentEsclasspure'))
-  .catch(reportErrorsFor('component/React.PureComponent'));
+  .catch(reportErrorsFor('component/ES6 Class (Pure)'));
 
-componentGen.runActions({ name: 'RbGeneratedComponentStatelessfunction', type: 'Stateless Function', wantMessages: true, wantLoadable: true })
+componentGen.runActions({ name: 'RbGeneratedComponentStatelessfunction', type: 'Stateless Function', wantMessages: true })
   .then(checkForErrors)
   .then(removeTestsDirFrom('components/RbGeneratedComponentStatelessfunction'))
   .catch(reportErrorsFor('component/Stateless Function'));
@@ -51,42 +51,41 @@ componentGen.runActions({ name: 'RbGeneratedComponentStatelessfunction', type: '
 const containerGen = plop.getGenerator('container');
 containerGen.runActions({
   name: 'RbGeneratedContainerPureComponent',
-  type: 'React.PureComponent',
+  component: 'PureComponent',
   wantHeaders: true,
   wantActionsAndReducer: true,
   wantSagas: true,
-  wantMessages: true,
-  wantLoadable: true,
+  wantMessages: true
 })
   .then(checkForErrors)
   .then(removeTestsDirFrom('containers/RbGeneratedContainerPureComponent'))
-  .catch(reportErrorsFor('container/React.PureComponent'));
+  .catch(reportErrorsFor('container/PureComponent'));
 
-containerGen.runActions({
+const ContainerComponent = containerGen.runActions({
   name: 'RbGeneratedContainerComponent',
-  type: 'React.Component',
+  component: 'Component',
   wantHeaders: true,
   wantActionsAndReducer: true,
   wantSagas: true,
-  wantMessages: true,
-  wantLoadable: true,
+  wantMessages: true
 })
   .then(checkForErrors)
   .then(removeTestsDirFrom('containers/RbGeneratedContainerComponent'))
-  .catch(reportErrorsFor('container/React.Component'));
+  .catch(reportErrorsFor('container/Component'));
 
-containerGen.runActions({
-  name: 'RbGeneratedContainerStateless',
-  type: 'Stateless Function',
-  wantHeaders: true,
-  wantActionsAndReducer: true,
-  wantSagas: true,
-  wantMessages: true,
-  wantLoadable: true,
-})
-  .then(checkForErrors)
-  .then(removeTestsDirFrom('containers/RbGeneratedContainerStateless'))
-  .catch(reportErrorsFor('container/Stateless'));
+const routeGen = plop.getGenerator('route');
+
+ContainerComponent
+  .then(() => routeGen.runActions({ component: 'RbGeneratedContainerComponent', path: '/generated-route-container' })
+    .then(checkForErrors)
+    .catch(reportErrorsFor('route/Container'))
+);
+
+ComponentEsclass
+  .then(() => routeGen.runActions({ component: 'RbGeneratedComponentEsclass', path: '/generated-route-component' })
+    .then(checkForErrors)
+    .catch(reportErrorsFor('route/Component'))
+);
 
 const languageGen = plop.getGenerator('language');
 languageGen.runActions({ language: 'fr' })
