@@ -29,48 +29,48 @@ some examples! (read [this comparison](https://stackoverflow.com/questions/34930
 ## Usage
 
 Sagas are associated with a container, just like actions, constants, selectors
-and reducers. If your container already has a `saga.js` file, simply add your
-saga to that. If your container does not yet have a `saga.js` file, add one with
+and reducers. If your container already has a `sagas.js` file, simply add your
+saga to that. If your container does not yet have a `sagas.js` file, add one with
 this boilerplate structure:
 
 ```JS
-import { takeLatest, call, put, select } from 'redux-saga/effects';
+import { take, call, put, select } from 'redux-saga/effects';
 
-// Root saga
-export default function* rootSaga() {
-  // if necessary, start multiple sagas at once with `all` 
-  yield [
-    takeLatest(LOAD_REPOS, getRepos),
-    takeLatest(LOAD_USERS, getUsers),
-  ];
+// Your sagas for this container
+export default [
+  sagaName,
+];
+
+// Individual exports for testing
+export function* sagaName() {
+
 }
 ```
 
-Then, in your `index.js`, use a decorator to inject the root saga:
+Then, in your `routes.js`, add injection for the newly added saga:
 
 ```JS
-import injectSaga from 'utils/injectSaga';
-import { RESTART_ON_REMOUNT } from 'utils/constants';
-import saga from './saga';
+getComponent(nextState, cb) {
+  const importModules = Promise.all([
+    import('containers/YourComponent/reducer'),
+    import('containers/YourComponent/sagas'),
+    import('containers/YourComponent'),
+  ]);
 
-// ...
+  const renderRoute = loadModule(cb);
 
-// `mode` is an optional argument, default value is `RESTART_ON_REMOUNT`
-const withSaga = injectSaga({ key: 'yourcomponent', saga, mode: RESTART_ON_REMOUNT });
+  importModules.then(([reducer, sagas, component]) => {
+    injectReducer('home', reducer.default);
+    injectSagas(sagas.default); // Inject the saga
 
-export default compose(
-  withSaga,
-)(YourComponent);
+    renderRoute(component);
+  });
+
+  importModules.catch(errorLoading);
+},
 ```
 
-A `mode` argument can be one of three constants (import them from `utils/constants`):
-
-- `RESTART_ON_REMOUNT` (default value)—starts a saga when a component is being mounted 
-and cancels with `task.cancel()` on component un-mount for improved performance;
-- `DAEMON`—starts a saga on component mount and never cancels it or starts again;
-- `ONCE_TILL_UNMOUNT`—behaves like `RESTART_ON_REMOUNT` but never runs the saga again.
-
-Now add as many sagas to your `saga.js` file as you want!
+Now add as many sagas to your `sagas.js` file as you want!
 
 ---
 
