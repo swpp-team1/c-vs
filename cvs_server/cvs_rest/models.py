@@ -82,7 +82,6 @@ class Comment(models.Model):
 
 class Image(models.Model):
     created = models.DateTimeField(auto_now_add=True)
-    edited = models.DateTimeField(auto_now=True)
     image = models.ImageField()
     review_id = models.ForeignKey(
         'Review',
