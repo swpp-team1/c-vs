@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'cvs_rest.apps.CvsRestConfig',
 ]
 
 MIDDLEWARE = [
@@ -119,3 +120,6 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.0/howto/static-files/
 
 STATIC_URL = '/static/'
+
+# Setting for CustomUser as Default User
+AUTH_USER_MODEL = 'cvs_rest.CustomUser'

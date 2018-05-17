@@ -1,6 +1,15 @@
 import requests
 import json
+#to import upper folder `cvs_server`
+import sys
+import os
+sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
+#django settings
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "cvs_server.settings")
+import django
+django.setup()
 
+from cvs_rest.models import Product
 
 #productSrvFoodCK description
 #FreshFoodKey - fresh food
@@ -20,8 +29,8 @@ import json
 #productRamen - search ramen & processed food
 #productGoods - search living items
 
-product_list = []
 def getPBProducts():
+    product_list = []
     #setting url
     pageNum = 1
     pageSize = 16
@@ -63,7 +72,10 @@ def getPBProducts():
                 'img':product['attFileNm'],
                 'price':product['price']
             })
+    return product_list
             
-        
-getPBProducts()
-print(product_list)
+if __name__ == '__main__':
+    product_data_dict = getPBProducts()
+    for p in product_data_dict:
+        Product(name=p['name'], price=p['price'], image=p['img']).save()
+    

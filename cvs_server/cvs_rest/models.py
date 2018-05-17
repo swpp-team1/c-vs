@@ -32,7 +32,7 @@ class Recipe(models.Model):
     edited = models.DateTimeField(auto_now=True)
     title = models.CharField(max_length=100)
     content = models.TextField()
-    ingredients = ManyToManyField('Product')
+    ingredients = models.ManyToManyField('Product')
     user_id = models.ForeignKey(
         'CustomUser',
         on_delete=models.CASCADE,
