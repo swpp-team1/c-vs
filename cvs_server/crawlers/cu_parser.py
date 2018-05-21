@@ -1,5 +1,6 @@
 import requests
 from bs4 import BeautifulSoup
+from product_classify import classifyProducts
 
 #PB Product PBG
 #CU Product CUG
@@ -9,7 +10,11 @@ productList = []
 
 def parsePBList(x):
     if x.find(class_='prodName'):
+        name = x.find(class_='prodName').find('a').get_text()
+        category = classifyProducts(name)
         return {
+            'large_category': category['large_category'],
+            'small_category': category['small_category'], 
             'name': x.find(class_='prodName').find('a').get_text(), 
             'price': int(x.find(class_='prodPrice').find('span').get_text().replace('\n','').replace(',','')), 
             'url': x.find('img')['src']
@@ -52,7 +57,8 @@ def productCrawler(productCode):
             if soup.find(class_='prodListWrap').find('div').get_text() == '조회된 상품이 없습니다.':
                 break
         pageIndex = pageIndex + 1
-        
+
+'''        
 productCrawler(10) #간편식사      
 productCrawler(20) #즉석조리
 productCrawler(30) #과자류
@@ -61,9 +67,10 @@ productCrawler(50) #식품
 productCrawler(60) #음료
 productCrawler(70) #샏활용품
 productList = [x for x in productList if x is not None]
+'''
 
 pbCrawler('PBG')
 pbCrawler('CUG')
 pbList = [x for x in pbList if x is not None]
 
-print(productList)
+print(pbList)

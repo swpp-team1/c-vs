@@ -1,5 +1,6 @@
 import requests
 from bs4 import BeautifulSoup
+from product_classify import classifyProducts
 
 productList = []
 
@@ -12,9 +13,10 @@ def pbCrawler():
         html = req.text
         soup = BeautifulSoup(html, 'html.parser')
         htmlList = soup.select('.pic_product > .pic_product')
-        productList.extend(list(map(
-            lambda x: {'name': x.find(class_='name').get_text(), 'price': int(x.find(class_='price').get_text().replace('\n','').replace(',','')), 'url': 'http://www.7-eleven.co.kr' + x.find('img')['src']}, 
-            htmlList)))
+        for element in htmlList:
+            name = element.find(class_='name').get_text()
+            category = classifyProducts(name)
+            productList.append({'large_category': category['large_category'], 'small_category': category['small_category'], 'name': name, 'price': int(element.find(class_='price').get_text().replace('\n','').replace(',','')), 'url': 'http://www.7-eleven.co.kr' + element.find('img')['src']})
         pageNo = pageNo + 1
         listCnt = int(soup.find(id='listCnt')['value'])
 
@@ -34,9 +36,10 @@ def lunchboxCrawler():
     html = req.text
     soup = BeautifulSoup(html, 'html.parser')
     htmlList = soup.select('.pic_product')
-    productList.extend(list(map(
-        lambda x: {'name': x.find(class_='name').get_text(), 'price': int(x.select('.price > span')[0].get_text().replace('\n','').replace(',','')), 'url': 'http://www.7-eleven.co.kr' + x.find('img')['src']}, 
-        htmlList)))
+    for element in htmlList:
+        name = element.find(class_='name').get_text()
+        category = classifyProducts(name)
+        productList.append({'large_category': category['large_category'], 'small_category': category['small_category'], 'name': name, 'price': int(element.select('.price > span')[0].get_text().replace('\n','').replace(',','')), 'url': 'http://www.7-eleven.co.kr' + element.find('img')['src']}) 
 pbCrawler()
 lunchboxCrawler()
 print(productList)

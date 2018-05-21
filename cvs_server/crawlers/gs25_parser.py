@@ -10,6 +10,7 @@ import django
 django.setup()
 
 from cvs_rest.models import Product
+from product_classify import classifyProducts
 
 #productSrvFoodCK description
 #FreshFoodKey - fresh food
@@ -67,15 +68,21 @@ def getPBProducts():
         json_data = json.loads(json_data) 
         products = json_data["SubPageListData"]
         for product in products:
+            name = product['goodsNm']
+            category = classifyProducts(name)
             product_list.append({
+                'large_category': category['large_category'],
+                'small_category': category['small_category'], 
                 'name':product['goodsNm'],
                 'img':product['attFileNm'],
                 'price':product['price']
             })
     return product_list
-            
+
+print(getPBProducts())
+'''
 if __name__ == '__main__':
     product_data_dict = getPBProducts()
     for p in product_data_dict:
         Product(name=p['name'], price=p['price'], image=p['img']).save()
-    
+''' 
