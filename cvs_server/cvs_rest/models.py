@@ -21,6 +21,7 @@ class Product(models.Model):
         max_length=2,
         choices=MANUFACTURER_CHOICES,
     )
+    PB = models.BooleanField()
     comments = fields.GenericRelation('Comment', related_query_name='products')
     reviews = fields.GenericRelation('Review', related_query_name='products')
 
