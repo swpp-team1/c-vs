@@ -1,5 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from django.contrib.contenttypes.models import ContentType
+from django.contrib.contenttypes import fields
 
 
 class Product(models.Model):
@@ -19,6 +21,10 @@ class Product(models.Model):
         max_length=2,
         choices=MANUFACTURER_CHOICES,
     )
+    PB = models.BooleanField()
+    comments = fields.GenericRelation('Comment', related_query_name='products')
+    reviews = fields.GenericRelation('Review', related_query_name='products')
+
 
     class Meta:
         ordering = ('manufacturer', 'name',)
@@ -30,34 +36,38 @@ class CustomUser(AbstractUser):
 class Recipe(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     edited = models.DateTimeField(auto_now=True)
-    title = models.CharField(max_length=100)
-    content = models.TextField()
+    title = models.CharField(max_length=100) 
     ingredients = models.ManyToManyField('Product')
     user_id = models.ForeignKey(
         'CustomUser',
         on_delete=models.CASCADE,
     )
+    images = fields.GenericRelation('Post', related_query_name='recipes') 
+    comments = fields.GenericRelation('Comment', related_query_name='recipes')
+    reviews = fields.GenericRelation('Review', related_query_name='recipes')
+
 
     class Meta:
         ordering = ('created',)
+
 
 class Review(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     edited = models.DateTimeField(auto_now=True)
     title = models.CharField(max_length=100)
-    content = models.TextField()
     user_id = models.ForeignKey(
         'CustomUser',
         on_delete=models.CASCADE,
     )
-    product_id = models.ForeignKey(
-        'Product',
-        on_delete=models.CASCADE,
-    )
-    recipe_id = models.ForeignKey(
-        'Recipe',
-        on_delete=models.CASCADE,
-    )
+    content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
+    object_id = models.PositiveIntegerField()
+    belong_to = fields.GenericForeignKey('content_type', 'object_id') 
+    images = fields.GenericRelation('Post', related_query_name='reviews')
+
+
+    class Meta:
+        ordering = ('created',)
+
 
 class Comment(models.Model):
     created = models.DateTimeField(auto_now_add=True)
@@ -68,29 +78,23 @@ class Comment(models.Model):
         'CustomUser',
         on_delete=models.CASCADE,
     )
-    product_id = models.ForeignKey(
-        'Product',
-        on_delete=models.CASCADE,
-    )
-    recipe_id = models.ForeignKey(
-        'Recipe',
-        on_delete=models.CASCADE,
-    )
+    content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
+    object_id = models.PositiveIntegerField()
+    belong_to = fields.GenericForeignKey('content_type', 'object_id')
+
 
     class Meta:
         ordering = ('created',)
 
-class Image(models.Model):
+
+class Post(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     image = models.ImageField()
-    review_id = models.ForeignKey(
-        'Review',
-        on_delete=models.CASCADE,
-    )
-    recipe_id = models.ForeignKey(
-        'Recipe',
-        on_delete=models.CASCADE,
-    )
+    content = models.TextField()
+    content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
+    object_id = models.PositiveIntegerField()
+    belong_to = fields.GenericForeignKey('content_type', 'object_id')
+    
 
     class Meta:
         ordering = ('created',)
