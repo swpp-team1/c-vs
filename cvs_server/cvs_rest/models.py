@@ -24,6 +24,7 @@ class Product(models.Model):
     PB = models.BooleanField()
     comments = fields.GenericRelation('Comment', related_query_name='products')
     reviews = fields.GenericRelation('Review', related_query_name='products')
+    atings = fields.GenericRelation('Rating', related_query_name='products')
 
 
     class Meta:
@@ -45,7 +46,18 @@ class Recipe(models.Model):
     images = fields.GenericRelation('Post', related_query_name='recipes') 
     comments = fields.GenericRelation('Comment', related_query_name='recipes')
     reviews = fields.GenericRelation('Review', related_query_name='recipes')
+    ratings = fields.GenericRelation('Rating', related_query_name='recipes')
 
+
+    class Meta:
+        ordering = ('created',)
+
+class Rating(models.Model) :
+    created = models.DateTimeField(auto_now_add=True)
+    value = models.PositiveSmallIntegerField()
+    content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
+    object_id = models.PositiveIntegerField()
+    belong_to = fields.GenericForeignKey('content_type', 'object_id')
 
     class Meta:
         ordering = ('created',)
@@ -63,6 +75,7 @@ class Review(models.Model):
     object_id = models.PositiveIntegerField()
     belong_to = fields.GenericForeignKey('content_type', 'object_id') 
     images = fields.GenericRelation('Post', related_query_name='reviews')
+    rating = fields.GenericRelation('Rating', related_query_name='reviews')
 
 
     class Meta:
@@ -73,7 +86,8 @@ class Comment(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     edited = models.DateTimeField(auto_now=True)
     content = models.TextField()
-    rating = models.PositiveSmallIntegerField()
+    #rating = models.PositiveSmallIntegerField()
+    rating = fields.GenericRelation('Rating', related_query_name='comments')
     user_id = models.ForeignKey(
         'CustomUser',
         on_delete=models.CASCADE,
