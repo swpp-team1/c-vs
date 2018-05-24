@@ -74,6 +74,7 @@ class Review(models.Model):
     content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
     object_id = models.PositiveIntegerField()
     belong_to = fields.GenericForeignKey('content_type', 'object_id') 
+    
     images = fields.GenericRelation('Post', related_query_name='reviews')
     rating = fields.GenericRelation('Rating', related_query_name='reviews')
 
