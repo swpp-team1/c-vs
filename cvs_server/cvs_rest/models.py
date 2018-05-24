@@ -24,7 +24,7 @@ class Product(models.Model):
     PB = models.BooleanField()
     comments = fields.GenericRelation('Comment', related_query_name='products')
     reviews = fields.GenericRelation('Review', related_query_name='products')
-    atings = fields.GenericRelation('Rating', related_query_name='products')
+    ratings = fields.GenericRelation('Rating', related_query_name='products')
 
 
     class Meta:
