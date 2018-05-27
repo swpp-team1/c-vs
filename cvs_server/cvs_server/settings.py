@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'cvs_rest.apps.CvsRestConfig',
+    'rest_framework.authtoken',
 ]
 
 MIDDLEWARE = [
@@ -123,3 +124,10 @@ STATIC_URL = '/static/'
 
 # Setting for CustomUser as Default User
 AUTH_USER_MODEL = 'cvs_rest.CustomUser'
+
+# Setting for authentication
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.TokenAuthentication',
+    )
+}
