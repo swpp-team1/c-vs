@@ -15,8 +15,6 @@ import withProgressBar from 'components/ProgressBar';
 export function App(props) {
   return (
     <GrommetApp>
-      <Title>Hello World</Title>
-      <p>Hello from a Grommet page!</p>
       {React.Children.toArray(props.children)}
     </GrommetApp>
   );
