@@ -1,11 +1,12 @@
-from cvs_rest.models import CustomUser, Product, Review, Recipe, Comment, Post
+from cvs_rest.models import * 
+from cvs_rest.serializers import *
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.authtoken.models import Token
 from rest_framework.response import Response
-from cvs_rest.serializers import UserSerializer
-from cvs_rest.models import CustomUser
 from rest_framework import status
 from rest_framework.decorators import api_view
+from rest_framework import generics
+import django_filters.rest_framework
 import re
 
 class CustomAuthToken(ObtainAuthToken):
@@ -58,4 +59,76 @@ def sign_up(request):
     else:
         return Response(data={'message':'User already exist'}, status=status.HTTP_400_BAD_REQUEST)
 
+
+#/products
+class ProductList(generics.ListAPIView) :
+    queryset = Product.objects.all()
+    serializer_class = ProductSerializer
+    filter_backends = (DjangoFilterBackend,)
+    filter_fields = ('manufacturer', 'PB')
+
+
+#/products/pk
+class ProductDetail(generics.RetrieveAPIView) :
+    queryset = Product.objects.all()
+    serializer_class = ProductSerializer
+
+
+#/reviews
+class ReviewList(generics.ListCreateAPIView) :
+    queryset = Review.objects.all()
+    serializer_class = ReviewSerializer
+    filter_backends = (DjangoFilterBackend,)
+    filter_fields = ('user_id')
+
+
+#/reviews/pk
+class ReviewDetail(generics.RetrieveUpdateDestroyAPIView) :
+    queryset = Review.objects.all()
+    serializer_class = ReviewSerializer
+
+
+"""
+#review filtered by user
+class ReviewListByUser(generics.ListAPIView) :
+    serializer_class = ReviewSerializer
+
+    def get_queryset(self) :
+        user = self.request.user
+        return Review.objects.filter(user_id=user)
+"""
+
+
+#/comments
+class CommentList(generics.ListCreateAPIView) :
+    queryset = Comment.objects.all()
+    serializer_class = CommentSerializer
+    filter_backends = (DjangoFilterBackend,)
+    filter_fields = ('user_id')
+
+
+#/comments/pk
+class CommentDetail(generics.RetrieveUpdateDestroyAPIView) :
+    queryset = Comment.objects.all()
+    serializer_class = CommentSerializer
+
+
+#/users/pk
+class CustomUserDetail(generics.RetrieveAPIView) :
+    queryset = CustomUser.objects.all()
+    serializer_class = CustomUserSerializer
+
+
+#/recipes
+class RecipeList(generics.ListCreateAPIView) :
+    queryset = Recipe.objects.all()
+    serializer_class = RecipeSerializer
+    filter_backends = (DjangoFilterBackend,)
+    filter_fields = ('user_id')
+
+
+#/recipes/pk
+class RecipeDetail(generics.RetrieveUpdateDestroyAPIView) :
+    queryset = Recipe.objects.all()
+    serializer_class = RecipeSerializer
 
