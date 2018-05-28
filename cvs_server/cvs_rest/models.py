@@ -55,6 +55,10 @@ class Recipe(models.Model):
 class Rating(models.Model) :
     created = models.DateTimeField(auto_now_add=True)
     value = models.PositiveSmallIntegerField()
+    user_id = models.ForeignKey(
+        'CustomUser',
+        on_delete=models.CASCADE,
+    )
     content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
     object_id = models.PositiveIntegerField()
     belong_to = fields.GenericForeignKey('content_type', 'object_id')
@@ -87,7 +91,6 @@ class Comment(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     edited = models.DateTimeField(auto_now=True)
     content = models.TextField()
-    #rating = models.PositiveSmallIntegerField()
     rating = fields.GenericRelation('Rating', related_query_name='comments')
     user_id = models.ForeignKey(
         'CustomUser',
