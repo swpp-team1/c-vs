@@ -6,7 +6,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework import generics
-import django_filters.rest_framework
+from django_filters.rest_framework import DjangoFilterBackend
 import re
 
 class CustomAuthToken(ObtainAuthToken):
