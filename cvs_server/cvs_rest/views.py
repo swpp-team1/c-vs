@@ -79,7 +79,7 @@ class ReviewList(generics.ListCreateAPIView) :
     queryset = Review.objects.all()
     serializer_class = ReviewSerializer
     filter_backends = (DjangoFilterBackend,)
-    filter_fields = ('user_id')
+    filter_fields = ('user_id',)
 
 
 #/reviews/pk
@@ -104,7 +104,7 @@ class CommentList(generics.ListCreateAPIView) :
     queryset = Comment.objects.all()
     serializer_class = CommentSerializer
     filter_backends = (DjangoFilterBackend,)
-    filter_fields = ('user_id')
+    filter_fields = ('user_id',)
 
 
 #/comments/pk
@@ -116,7 +116,7 @@ class CommentDetail(generics.RetrieveUpdateDestroyAPIView) :
 #/users/pk
 class CustomUserDetail(generics.RetrieveAPIView) :
     queryset = CustomUser.objects.all()
-    serializer_class = CustomUserSerializer
+    serializer_class = UserSerializer
 
 
 #/recipes
@@ -124,7 +124,7 @@ class RecipeList(generics.ListCreateAPIView) :
     queryset = Recipe.objects.all()
     serializer_class = RecipeSerializer
     filter_backends = (DjangoFilterBackend,)
-    filter_fields = ('user_id')
+    filter_fields = ('user_id',)
 
 
 #/recipes/pk
