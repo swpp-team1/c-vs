@@ -31,7 +31,9 @@ export class ProductAll extends React.Component { // eslint-disable-line react/p
         <Article>
         <Header style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0px 15px'}}>
             <div style={{display: 'flex', flexDirection: 'row', alignItems: 'center'}}>
-              <Title onClick={<Redirect to=""/>}>C:VS</Title>
+              <Title onClick={<Redirect to=""/>} 
+              // onClick method need to be modified.
+              >C:VS</Title>
               <Button plain={true} label='제품' href='productAll'/>
               <Button plain={true} label='레시피' href='#'/>
             </div>
