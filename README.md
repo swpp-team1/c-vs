@@ -16,5 +16,10 @@ reference : [virtualenv](https://virtualenv.pypa.io/en/latest/index.html)
  - `pip install uwsgi`
 
 ### 3. Running Server
+ - It needs secret folder .config_secret which is not in git hub
 #### Debug
  - `python manage.py runserver --settings=config.settings.debug`
+
+### Deploy
+ - `python manage.py runserver --settings=config.settings.deploy`
+
