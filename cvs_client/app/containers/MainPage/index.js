@@ -34,7 +34,7 @@ import CustomHeader from '../../components/CustomHeader'
 export class MainPage extends React.Component { // eslint-disable-line react/prefer-stateless-function
   render() {
     return (
-      <App>
+      <App style={{maxWidth: 'none'}}>
         <Article>
           <CustomHeader/>
           <Hero background={<Image src='https://images.pexels.com/photos/811108/pexels-photo-811108.jpeg' fit='cover' full={true} />}

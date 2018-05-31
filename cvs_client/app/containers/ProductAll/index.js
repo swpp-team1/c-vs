@@ -28,7 +28,7 @@ import CustomHeader from '../../components/CustomHeader'
 export class ProductAll extends React.Component { // eslint-disable-line react/prefer-stateless-function
   render() {
     return (
-      <App>
+      <div>
         <Article>
         <CustomHeader/>
       <Section colorIndex='light-2'>
@@ -47,7 +47,7 @@ export class ProductAll extends React.Component { // eslint-disable-line react/p
       </Tiles>
       </Section>
       </Article>
-      </App>
+      </div>
 
       // <div>
       //   <Helmet
