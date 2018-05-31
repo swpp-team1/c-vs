@@ -114,3 +114,7 @@ ENV/
 # db.splite3
 db.sqlite3
 migrations/
+
+# config file
+.config_secret/
+*.pem

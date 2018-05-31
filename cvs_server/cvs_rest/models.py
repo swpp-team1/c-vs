@@ -23,8 +23,7 @@ class Product(models.Model):
     )
     PB = models.BooleanField()
     comments = fields.GenericRelation('Comment', related_query_name='products')
-    reviews = fields.GenericRelation('Review', related_query_name='products')
-    ratings = fields.GenericRelation('Rating', related_query_name='products')
+    reviews = fields.GenericRelation('Review', related_query_name='products') 
 
 
     class Meta:
@@ -43,11 +42,10 @@ class Recipe(models.Model):
         'CustomUser',
         on_delete=models.CASCADE,
     )
-    images = fields.GenericRelation('Post', related_query_name='recipes') 
+    posts = fields.GenericRelation('Post', related_query_name='recipes') 
     comments = fields.GenericRelation('Comment', related_query_name='recipes')
     reviews = fields.GenericRelation('Review', related_query_name='recipes')
-    ratings = fields.GenericRelation('Rating', related_query_name='recipes')
-
+    
 
     class Meta:
         ordering = ('created',)
@@ -79,10 +77,9 @@ class Review(models.Model):
     object_id = models.PositiveIntegerField()
     belong_to = fields.GenericForeignKey('content_type', 'object_id') 
     
-    images = fields.GenericRelation('Post', related_query_name='reviews')
-    rating = fields.GenericRelation('Rating', related_query_name='reviews')
-
-
+    posts = fields.GenericRelation('Post', related_query_name='reviews')    
+    ratings = fields.GenericRelation('Rating', related_query_name='reviews')
+    
     class Meta:
         ordering = ('created',)
 
@@ -100,6 +97,7 @@ class Comment(models.Model):
     object_id = models.PositiveIntegerField()
     belong_to = fields.GenericForeignKey('content_type', 'object_id')
 
+    ratings = fields.GenericRelation('Rating', related_query_name='comments')
 
     class Meta:
         ordering = ('created',)
@@ -113,6 +111,5 @@ class Post(models.Model):
     object_id = models.PositiveIntegerField()
     belong_to = fields.GenericForeignKey('content_type', 'object_id')
     
-
     class Meta:
         ordering = ('created',)
