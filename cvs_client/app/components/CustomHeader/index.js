@@ -16,7 +16,7 @@ class CustomHeader extends React.Component { // eslint-disable-line react/prefer
           <Button plain={true} label='레시피' href='recipeAll'/>
         </div>
         <div>
-          <Button plain={true} icon={<User size='small'/>} label='로그인' href='#'/>
+          <Button plain={true} icon={<User size='small'/>} label='로그인' href='login'/>
         </div>
       </Header>
     );
