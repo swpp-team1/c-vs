@@ -1,6 +1,16 @@
 import requests
 from bs4 import BeautifulSoup
 from product_classify import classifyProducts
+#to import upper folder `cvs_server`
+import sys
+import os
+sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
+#django settings
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "cvs_server.settings")
+import django
+django.setup()
+
+from cvs_rest.models import Product
 
 productList = []
 
@@ -16,7 +26,13 @@ def pbCrawler():
         for element in htmlList:
             name = element.find(class_='name').get_text()
             category = classifyProducts(name)
-            productList.append({'large_category': category['large_category'], 'small_category': category['small_category'], 'name': name, 'price': int(element.find(class_='price').get_text().replace('\n','').replace(',','')), 'url': 'http://www.7-eleven.co.kr' + element.find('img')['src']})
+            productList.append({
+                'large_category': category['large_category'], 
+                'small_category': category['small_category'], 
+                'name': name, 
+                'price': int(element.find(class_='price').get_text().replace('\n','').replace(',','')), 
+                'img': 'http://www.7-eleven.co.kr' + element.find('img')['src']
+            })
         pageNo = pageNo + 1
         listCnt = int(soup.find(id='listCnt')['value'])
 
@@ -39,7 +55,27 @@ def lunchboxCrawler():
     for element in htmlList:
         name = element.find(class_='name').get_text()
         category = classifyProducts(name)
-        productList.append({'large_category': category['large_category'], 'small_category': category['small_category'], 'name': name, 'price': int(element.select('.price > span')[0].get_text().replace('\n','').replace(',','')), 'url': 'http://www.7-eleven.co.kr' + element.find('img')['src']}) 
+        productList.append({
+            'large_category': category['large_category'], 
+            'small_category': category['small_category'], 
+            'name': name, 
+            'price': int(element.select('.price > span')[0].get_text().replace('\n','').replace(',','')), 
+            'img': 'http://www.7-eleven.co.kr' + element.find('img')['src']
+        }) 
 pbCrawler()
 lunchboxCrawler()
-print(productList)
+# print(productList)
+
+# code for registering product to DB
+if __name__ == '__main__':
+    product_data_dict = productList
+    for p in product_data_dict:
+        Product(
+            name=p['name'], 
+            price=p['price'], 
+            image=p['img'], 
+            manufacturer='SE',
+            large_category=p['large_category'],
+            small_category=p['small_category'],
+            PB=True,
+        ).save()   

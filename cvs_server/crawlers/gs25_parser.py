@@ -82,12 +82,20 @@ def getPBProducts():
                 
     return product_list
 
-print(getPBProducts())
+# Print crawler
+# print(getPBProducts())
 
-'''
+
 # code for registering product to DB
 if __name__ == '__main__':
     product_data_dict = getPBProducts()
     for p in product_data_dict:
-        Product(name=p['name'], price=p['price'], image=p['img'], manufacturer=p['manufacturer']).save()   
-'''
+        Product(
+            name=p['name'], 
+            price=p['price'], 
+            image=p['img'], 
+            manufacturer=p['manufacturer'],
+            large_category=p['large_category'],
+            small_category=p['small_category'],
+            PB=True,
+        ).save()   
