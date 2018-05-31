@@ -65,7 +65,7 @@ class ProductList(generics.ListAPIView) :
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
     filter_backends = (DjangoFilterBackend,)
-    filter_fields = ('manufacturer', 'PB')
+    filter_fields = ('name', 'price', 'large_category', 'small_category', 'manufacturer', 'PB')
 
 
 #/products/pk
