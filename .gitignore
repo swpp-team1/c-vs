@@ -110,3 +110,7 @@ ENV/
 
 # mypy
 .mypy_cache/
+
+# db.splite3
+db.sqlite3
+migrations/

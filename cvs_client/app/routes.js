@@ -47,6 +47,46 @@ export default function createRoutes(store) {
           .catch(errorLoading);
       },
     }, {
+      path: '/productAll',
+      name: 'productAll',
+      getComponent(nextState, cb) {
+        const importModules = Promise.all([
+          import('containers/ProductAll/reducer'),
+          import('containers/ProductAll/sagas'),
+          import('containers/ProductAll'),
+        ]);
+
+        const renderRoute = loadModule(cb);
+
+        importModules.then(([reducer, sagas, component]) => {
+          injectReducer('productAll', reducer.default);
+          injectSagas(sagas.default);
+          renderRoute(component);
+        });
+
+        importModules.catch(errorLoading);
+      },
+    }, {
+      path: '/recipeAll',
+      name: 'recipeAll',
+      getComponent(nextState, cb) {
+        const importModules = Promise.all([
+          import('containers/RecipeAll/reducer'),
+          import('containers/RecipeAll/sagas'),
+          import('containers/RecipeAll'),
+        ]);
+
+        const renderRoute = loadModule(cb);
+
+        importModules.then(([reducer, sagas, component]) => {
+          injectReducer('recipeAll', reducer.default);
+          injectSagas(sagas.default);
+          renderRoute(component);
+        });
+
+        importModules.catch(errorLoading);
+      },
+    }, {
       path: '*',
       name: 'notfound',
       getComponent(nextState, cb) {
