@@ -38,48 +38,47 @@ export class MainPage extends React.Component { // eslint-disable-line react/pre
         <Article>
           <Header style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0px 15px'}}>
             <div style={{display: 'flex', flexDirection: 'row', alignItems: 'center'}}>
-              <Title>C:VS</Title>
-              <Button plain={true} label='제품' href='#'/>
-              <Button plain={true} label='레시피' href='#'/>
+              <Title onClick={() => href=""}>C:VS</Title>
+              <Button plain={true} label='제품' href='productAll'/>
+              <Button plain={true} label='레시피' href='recipeAll'/>
             </div>
             <div>
               <Button plain={true} icon={<User size='small'/>} label='로그인' href='#'/>
             </div>
           </Header>
-          {/**/}
+
           <Hero background={<Image src='https://images.pexels.com/photos/811108/pexels-photo-811108.jpeg' fit='cover' full={true} />}
             backgroundColorIndex='dark' size='small'>
             <Box direction='row' justify='center' align='center'>
-              {/* <Box basis='1/2' align='end'pad='medium' /> */}
               <Box basis='1/2' align='start' pad='medium'>
               <Section style={{alignItems: 'center', justifyContent: 'center', height: 300}}>
               <Heading margin='none' strong = {true} tag = 'h2'>제품 및 레시피 검색</Heading>
-                {/* <Title>제품 및 레시피 검색</Title> */}
+                {/* HEADING? TITLE? <Title>제품 및 레시피 검색</Title> */}
                 <Search style={{width: '700px', margin: '20px 0px'}} inline={true} placeHolder='검색' />
               </Section>
-                
-                
               </Box>
               
             </Box>
           </Hero>
-          {/* <Section style={{alignItems: 'center', justifyContent: 'center', height: 300, backgroundColor: '#f6f6f6'}}>
+          {/* LEGACY CODE
+          <Section style={{alignItems: 'center', justifyContent: 'center', height: 300, backgroundColor: '#f6f6f6'}}>
             <Title>제품 및 레시피 검색</Title>
             <Search style={{width: '700px', margin: '20px 0px'}} inline={true} placeHolder='검색'/>
           </Section> */}
 
           <Section colorIndex='light-2'>
-          <Heading tag = 'h2' align = 'start'>인기 제품</Heading>
-          <Tiles fill={false} flush={false} >
-          <Tile>
-          <Card thumbnail='http://cdn2.bgfretail.com/bgfbrand/files/product/5D8998FE3B78430B99641CCA0C3F3506.jpg'
+          <Heading tag = 'h2' align = 'start' style={{margin: '20px 40px'}}>인기 제품</Heading>
+          {/*There's problem when using anchor. Need to fix it.*/}
+          <Tiles fill={false} flush={false} size='small'>
+          <Tile> <Card thumbnail='http://cdn2.bgfretail.com/bgfbrand/files/product/5D8998FE3B78430B99641CCA0C3F3506.jpg'
                 label='Sample Label'
                 heading='Sample Heading'
                 description='Sample description providing more details.'
-                link={<Anchor href=''
-                label='Sample anchor' />}
-                colorIndex='light-1' />
-          </Tile>
+                onClick = {() => alert("clicked")}
+                // link={<Anchor href=''
+                // label='Sample anchor' />}
+                colorIndex='light-1' /> </Tile>
+                
           </Tiles>
           </Section>
 
