@@ -14,7 +14,7 @@ import withProgressBar from 'components/ProgressBar';
 
 export function App(props) {
   return (
-    <GrommetApp>
+    <GrommetApp style={{width: '100%', margin: 0, padding: 0, maxWidth: 'none'}}>
       {React.Children.toArray(props.children)}
     </GrommetApp>
   );
