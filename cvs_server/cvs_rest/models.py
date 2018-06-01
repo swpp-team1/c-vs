@@ -102,8 +102,7 @@ class Comment(models.Model):
     content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
     object_id = models.PositiveIntegerField()
     belong_to = fields.GenericForeignKey('content_type', 'object_id')
-
-    ratings = fields.GenericRelation('Rating', related_query_name='comments')
+ 
 
     class Meta:
         ordering = ('created',)

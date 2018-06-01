@@ -3,9 +3,8 @@ from cvs_rest.serializers import *
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.authtoken.models import Token
 from rest_framework.response import Response
-from rest_framework import status
+from rest_framework import status, generics, filters
 from rest_framework.decorators import api_view
-from rest_framework import generics
 from django_filters.rest_framework import DjangoFilterBackend
 import re
 
@@ -64,8 +63,9 @@ def sign_up(request):
 class ProductList(generics.ListAPIView) :
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
-    filter_backends = (DjangoFilterBackend,)
-    filter_fields = ('name', 'price', 'large_category', 'small_category', 'manufacturer', 'PB')
+    filter_backends = (filters.SearchFilter, DjangoFilterBackend)
+    search_fields = ('name',)
+    filter_fields = ('price', 'large_category', 'small_category', 'manufacturer', 'PB')
 
 
 #/products/pk
