@@ -23,10 +23,15 @@ import Section from 'grommet/components/Section';
 import Article from 'grommet/components/Article';
 import { Redirect } from 'react-router/lib';
 import CustomHeader from '../../components/CustomHeader'
+import { getAllProducts } from './actions'
 
 
 export class ProductAll extends React.Component { // eslint-disable-line react/prefer-stateless-function
+  componentWillMount() {
+    this.props.getProductAll()
+  }
   render() {
+    console.log(this.props.ProductAll.productsList)
     return (
       <div>
         <Article>
@@ -72,7 +77,7 @@ const mapStateToProps = createStructuredSelector({
 
 function mapDispatchToProps(dispatch) {
   return {
-    dispatch,
+    getProductAll: () => dispatch(getAllProducts())
   };
 }
 
