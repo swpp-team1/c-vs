@@ -65,9 +65,10 @@ def lunchboxCrawler():
         }) 
 pbCrawler()
 lunchboxCrawler()
-# print(productList)
+print(productList)
 
 # code for registering product to DB
+'''
 if __name__ == '__main__':
     print('Seven Eleven crawler START')
     product_data_dict = productList
@@ -85,3 +86,4 @@ if __name__ == '__main__':
                 small_category=p['small_category'],
                 PB=True,
             ).save()   
+'''
