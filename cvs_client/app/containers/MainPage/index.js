@@ -26,7 +26,8 @@ import Tiles from 'grommet/components/Tiles';
 import Tile from 'grommet/components/Tile';
 import Card from 'grommet/components/Card';
 import Anchor from 'grommet/components/Anchor';
-import CustomHeader from '../../components/CustomHeader'
+import CustomHeader from '../../components/CustomHeader';
+import MediaQuery from 'react-responsive';
 
 // How to load image?
 
@@ -40,14 +41,18 @@ export class MainPage extends React.Component { // eslint-disable-line react/pre
           <Hero background={<Image src='https://images.pexels.com/photos/811108/pexels-photo-811108.jpeg' fit='cover' full={true} />}
             backgroundColorIndex='dark' size='small'>
             <Box direction='row' justify='center' align='center'>
-              <Box basis='1/2' align='start' pad='medium'>
-              <Section style={{alignItems: 'center', justifyContent: 'center', height: 300}}>
+              <Section align='center' style={{alignItems: 'center', justifyContent: 'center', height: 300}}>
               <Heading margin='none' strong = {true} tag = 'h2'>제품 및 레시피 검색</Heading>
                 {/* HEADING? TITLE? <Title>제품 및 레시피 검색</Title> */}
-                <Search style={{width: '700px', margin: '20px 0px'}} inline={true} placeHolder='검색' />
+                <Box colorIndex='light-1' style={{margin: '20px 0px'}}>
+                <MediaQuery query="(min-device-width: 1024px)">
+                <Search style={{width: '700px'}} inline={true} placeHolder='검색' />
+                </MediaQuery>
+                <MediaQuery query="(max-device-width: 1023px)">
+                <Search inline={true} placeHolder='검색' />
+                </MediaQuery>
+                </Box>
               </Section>
-              </Box>
-
             </Box>
           </Hero>
           {/* LEGACY CODE
