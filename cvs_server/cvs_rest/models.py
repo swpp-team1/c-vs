@@ -25,8 +25,8 @@ class Product(models.Model):
         choices=MANUFACTURER_CHOICES,
     )
     PB = models.BooleanField()
-    comments = fields.GenericRelation('Comment', related_query_name='products')
-    reviews = fields.GenericRelation('Review', related_query_name='products') 
+    comments = fields.GenericRelation(Comment, related_query_name='products')
+    reviews = fields.GenericRelation(Review, related_query_name='products') 
 
 
     class Meta:
@@ -43,9 +43,9 @@ class Recipe(models.Model):
         'CustomUser',
         on_delete=models.CASCADE,
     )
-    posts = fields.GenericRelation('Post', related_query_name='recipes') 
-    comments = fields.GenericRelation('Comment', related_query_name='recipes')
-    reviews = fields.GenericRelation('Review', related_query_name='recipes')
+    post = fields.GenericRelation(Post, related_query_name='recipes') 
+    comments = fields.GenericRelation(Comment, related_query_name='recipes')
+    reviews = fields.GenericRelation(Review, related_query_name='recipes')
     
 
     class Meta:
@@ -64,9 +64,9 @@ class Review(models.Model):
     content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
     object_id = models.PositiveIntegerField()
     belong_to = fields.GenericForeignKey('content_type', 'object_id') 
-    ratings = fields.GenericRelation('Rating', related_query_name='comments')
+    #rating = fields.GenericRelation(Rating, related_query_name='review')
     
-    posts = fields.GenericRelation('Post', related_query_name='reviews')    
+    post = fields.GenericRelation(Post, related_query_name='review')    
     
     
     class Meta:
@@ -85,7 +85,7 @@ class Comment(models.Model):
     object_id = models.PositiveIntegerField()
     belong_to = fields.GenericForeignKey('content_type', 'object_id')
 
-    ratings = fields.GenericRelation('Rating', related_query_name='comments')
+    #rating = fields.GenericRelation(Rating, related_query_name='comment')
 
     class Meta:
         ordering = ('created',)
@@ -113,9 +113,10 @@ class Rating(models.Model) :
         on_delete=models.CASCADE,
     )
     
-    content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
-    object_id = models.PositiveIntegerField()
-    belong_to = fields.GenericForeignKey('content_type', 'object_id')
-
+    comment = models.ForeignKey('Comment', on_delete=models.CASCADE)
+    review = models.ForeignKey('Review', on_delete=models.CASCADE)
     class Meta:
         ordering = ('created',)
+    
+    def __unicode__(self) :
+        return '%d' % self.value
