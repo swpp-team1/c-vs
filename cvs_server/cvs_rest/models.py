@@ -8,7 +8,6 @@ class Product(models.Model):
     name = models.CharField(max_length=100)
     image = models.URLField()
     price = models.IntegerField()
-    flag = models.CharField(max_length=50)
     SEVEN_ELEVEN = 'SE'
     GS25 = 'GS'
     CU = 'CU'
@@ -18,10 +17,17 @@ class Product(models.Model):
         (CU, 'CU'),
     )
     manufacturer = models.CharField(
-        max_length=2,
-        choices=MANUFACTURER_CHOICES,
+        max_length=10
     )
     PB = models.BooleanField()
+    large_category = models.CharField(
+        max_length=10,
+        null=True,
+    )
+    small_category = models.CharField(
+        max_length=10,
+        null=True,
+    )
     comments = fields.GenericRelation('Comment', related_query_name='products')
     reviews = fields.GenericRelation('Review', related_query_name='products') 
 
@@ -96,8 +102,7 @@ class Comment(models.Model):
     content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
     object_id = models.PositiveIntegerField()
     belong_to = fields.GenericForeignKey('content_type', 'object_id')
-
-    ratings = fields.GenericRelation('Rating', related_query_name='comments')
+ 
 
     class Meta:
         ordering = ('created',)
