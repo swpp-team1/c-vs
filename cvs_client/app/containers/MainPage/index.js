@@ -56,20 +56,21 @@ export class MainPage extends React.Component { // eslint-disable-line react/pre
             <Search style={{width: '700px', margin: '20px 0px'}} inline={true} placeHolder='검색'/>
           </Section> */}
 
-          <Section colorIndex='light-2'>
-          <Heading tag = 'h2' align = 'start' style={{margin: '20px 40px'}}>인기 제품</Heading>
+          <Box colorIndex='light-2'>
+          <Heading align = 'start' tag='h2' style={{margin: '40px 40px', color: '#383838'}}>인기 제품
+          <Anchor align='end' label='Label' primary={true} reverse={true} path='/productAll' style={{margin : '20px 40px', color: '#383838'}}>전체 제품 보기</Anchor></Heading>
           {/*There's problem when using anchor. Need to fix it.*/}
           <Tiles fill={false} flush={false} size='small'>
-          <Tile> <Card thumbnail='http://cdn2.bgfretail.com/bgfbrand/files/product/5D8998FE3B78430B99641CCA0C3F3506.jpg'
+          <Tile> <Card colorIndex = 'light-1' thumbnail='http://cdn2.bgfretail.com/bgfbrand/files/product/5D8998FE3B78430B99641CCA0C3F3506.jpg'
                 label='Sample Label'
                 heading='Sample Heading'
                 description='Sample description providing more details.'
                 onClick = {() => alert("clicked")}
                 // link={<Anchor href=''
                 // label='Sample anchor' />}
-                colorIndex='light-1' /> </Tile>
+                 /> </Tile>
           </Tiles>
-          </Section>
+          </Box>
 
 
           <Footer style={{justifyContent: 'center'}}>
