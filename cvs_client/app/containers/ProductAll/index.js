@@ -22,25 +22,20 @@ import User from 'grommet/components/icons/base/User';
 import Section from 'grommet/components/Section';
 import Article from 'grommet/components/Article';
 import { Redirect } from 'react-router/lib';
+import CustomHeader from '../../components/CustomHeader'
+import { getAllProducts } from './actions'
 
 
 export class ProductAll extends React.Component { // eslint-disable-line react/prefer-stateless-function
+  componentWillMount() {
+    this.props.getProductAll()
+  }
   render() {
+    console.log(this.props.ProductAll.productsList)
     return (
-      <App>
+      <div>
         <Article>
-        <Header style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0px 15px'}}>
-            <div style={{display: 'flex', flexDirection: 'row', alignItems: 'center'}}>
-              <Title onClick={<Redirect to=""/>} 
-              // onClick method need to be modified.
-              >C:VS</Title>
-              <Button plain={true} label='제품' href='productAll'/>
-              <Button plain={true} label='레시피' href='#'/>
-            </div>
-            <div>
-              <Button plain={true} icon={<User size='small'/>} label='로그인' href='#'/>
-            </div>
-          </Header>
+        <CustomHeader/>
       <Section colorIndex='light-2'>
       <Tiles  fill={false} flush={false} >
       <Tile>
@@ -57,8 +52,8 @@ export class ProductAll extends React.Component { // eslint-disable-line react/p
       </Tiles>
       </Section>
       </Article>
-      </App>
-      
+      </div>
+
       // <div>
       //   <Helmet
       //     title="ProductAll"
@@ -82,7 +77,7 @@ const mapStateToProps = createStructuredSelector({
 
 function mapDispatchToProps(dispatch) {
   return {
-    dispatch,
+    getProductAll: () => dispatch(getAllProducts())
   };
 }
 

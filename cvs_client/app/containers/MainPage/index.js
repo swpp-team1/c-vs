@@ -11,7 +11,6 @@ import { createStructuredSelector } from 'reselect';
 import makeSelectMainPage from './selectors';
 import messages from './messages';
 import App from 'grommet/components/App';
-import Header from 'grommet/components/Header';
 import Title from 'grommet/components/Title';
 import Article from 'grommet/components/Article';
 import Button from 'grommet/components/Button';
@@ -27,6 +26,7 @@ import Tiles from 'grommet/components/Tiles';
 import Tile from 'grommet/components/Tile';
 import Card from 'grommet/components/Card';
 import Anchor from 'grommet/components/Anchor';
+import CustomHeader from '../../components/CustomHeader'
 
 // How to load image?
 
@@ -34,19 +34,9 @@ import Anchor from 'grommet/components/Anchor';
 export class MainPage extends React.Component { // eslint-disable-line react/prefer-stateless-function
   render() {
     return (
-      <App>
+      <App style={{maxWidth: 'none'}}>
         <Article>
-          <Header style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0px 15px'}}>
-            <div style={{display: 'flex', flexDirection: 'row', alignItems: 'center'}}>
-              <Title onClick={() => href=""}>C:VS</Title>
-              <Button plain={true} label='제품' href='productAll'/>
-              <Button plain={true} label='레시피' href='recipeAll'/>
-            </div>
-            <div>
-              <Button plain={true} icon={<User size='small'/>} label='로그인' href='#'/>
-            </div>
-          </Header>
-
+          <CustomHeader/>
           <Hero background={<Image src='https://images.pexels.com/photos/811108/pexels-photo-811108.jpeg' fit='cover' full={true} />}
             backgroundColorIndex='dark' size='small'>
             <Box direction='row' justify='center' align='center'>
@@ -57,7 +47,7 @@ export class MainPage extends React.Component { // eslint-disable-line react/pre
                 <Search style={{width: '700px', margin: '20px 0px'}} inline={true} placeHolder='검색' />
               </Section>
               </Box>
-              
+
             </Box>
           </Hero>
           {/* LEGACY CODE
@@ -78,7 +68,6 @@ export class MainPage extends React.Component { // eslint-disable-line react/pre
                 // link={<Anchor href=''
                 // label='Sample anchor' />}
                 colorIndex='light-1' /> </Tile>
-                
           </Tiles>
           </Section>
 
