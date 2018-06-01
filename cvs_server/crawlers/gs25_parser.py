@@ -11,6 +11,7 @@ django.setup()
 
 from cvs_rest.models import Product
 from product_classify import classifyProducts
+from django.core.exceptions import ObjectDoesNotExist
 
 #productSrvFoodCK description
 #FreshFoodKey - fresh food
@@ -88,14 +89,19 @@ def getPBProducts():
 
 # code for registering product to DB
 if __name__ == '__main__':
+    print('GS25 crawler START')
     product_data_dict = getPBProducts()
     for p in product_data_dict:
-        Product(
-            name=p['name'], 
-            price=p['price'], 
-            image=p['img'], 
-            manufacturer=p['manufacturer'],
-            large_category=p['large_category'],
-            small_category=p['small_category'],
-            PB=True,
-        ).save()   
+        try:
+            Product.objects.get(name=p['name'])
+        except ObjectDoesNotExist:
+            print('{} is registed in DB'.format(p['name']))
+            Product(
+                name=p['name'], 
+                price=p['price'], 
+                image=p['img'], 
+                manufacturer=p['manufacturer'],
+                large_category=p['large_category'],
+                small_category=p['small_category'],
+                PB=True,
+            ).save()   

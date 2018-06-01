@@ -11,6 +11,7 @@ import django
 django.setup()
 
 from cvs_rest.models import Product
+from django.core.exceptions import ObjectDoesNotExist
 
 productList = []
 
@@ -68,14 +69,19 @@ lunchboxCrawler()
 
 # code for registering product to DB
 if __name__ == '__main__':
+    print('Seven Eleven crawler START')
     product_data_dict = productList
     for p in product_data_dict:
-        Product(
-            name=p['name'], 
-            price=p['price'], 
-            image=p['img'], 
-            manufacturer='SE',
-            large_category=p['large_category'],
-            small_category=p['small_category'],
-            PB=True,
-        ).save()   
+        try:
+            Product.objects.get(name=p['name'])
+        except ObjectDoesNotExist:
+            print('{} is registed in DB'.format(p['name']))
+            Product(
+                name=p['name'], 
+                price=p['price'], 
+                image=p['img'], 
+                manufacturer='SE',
+                large_category=p['large_category'],
+                small_category=p['small_category'],
+                PB=True,
+            ).save()   
