@@ -12,11 +12,18 @@ import { createStructuredSelector } from 'reselect';
 import makeSelectUserLogin from './selectors';
 import messages from './messages';
 import Grommet from 'grommet'
+import Box from 'grommet/components/Box';
+import CustomHeader from '../../components/CustomHeader'
 
 export class UserLogin extends React.Component { // eslint-disable-line react/prefer-stateless-function
   render() {
     return (
-      <Grommet.LoginForm title='로그인' onSubmit={() => console.log('login')} usernameType='text'/>
+      <Grommet.App>
+      <CustomHeader />
+      <Box align='center' pad='large'>
+      <Grommet.LoginForm align='center' title='C:VS login' onSubmit={() => console.log('login')} usernameType='text'/>
+      </Box>
+      </Grommet.App>
     );
   }
 }

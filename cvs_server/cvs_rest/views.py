@@ -3,12 +3,16 @@ from cvs_rest.serializers import *
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.authtoken.models import Token
 from rest_framework.response import Response
-from rest_framework import status
+
+from rest_framework import status, generics, filters
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework import generics
 #from django_filters.rest_framework import DjangoFilterBackend
 from django.contrib.contenttypes.models import ContentType
+
+from rest_framework.decorators import api_view
+from django_filters.rest_framework import DjangoFilterBackend
 
 
 class CustomAuthToken(ObtainAuthToken):
@@ -75,6 +79,10 @@ class CustomUserDetail(generics.RetrieveAPIView):
 class ProductList(generics.ListAPIView) :
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
+
+    filter_backends = (filters.SearchFilter, DjangoFilterBackend)
+    search_fields = ('name',)
+    filter_fields = ('price', 'large_category', 'small_category', 'manufacturer', 'PB')
 
 #/products/id
 class ProductDetail(generics.RetrieveAPIView) :
