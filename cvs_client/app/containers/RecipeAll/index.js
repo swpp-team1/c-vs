@@ -11,7 +11,7 @@ import { FormattedMessage } from 'react-intl';
 import { createStructuredSelector } from 'reselect';
 import makeSelectRecipeAll from './selectors';
 import messages from './messages';
-import CustomHeader from '../../components/CustomHeader'
+import CustomHeader from '../../components/CustomHeader';
 
 export class RecipeAll extends React.Component { // eslint-disable-line react/prefer-stateless-function
   render() {

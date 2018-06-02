@@ -12,6 +12,10 @@ reference : [virtualenv](https://virtualenv.pypa.io/en/latest/index.html)
  - `pip install pillow` for image field
  - `pip install django-filter` for Filtering
 
+#### For Crawler
+ - `pip install request`
+ - `pip install bs4`
+
 #### For Deploy
  - `pip install uwsgi`
 
@@ -20,6 +24,8 @@ reference : [virtualenv](https://virtualenv.pypa.io/en/latest/index.html)
 #### Debug
  - `python manage.py runserver --settings=config.settings.debug`
 
-### Deploy
+#### Deploy
  - `python manage.py runserver --settings=config.settings.deploy`
 
+#### Setting files
+ - `config/settings/base.py` and `cvs_server/settings.py` should be syncronized

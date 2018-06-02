@@ -2,6 +2,17 @@ import requests
 from bs4 import BeautifulSoup
 from product_classify import classifyProducts
 
+#to import upper folder `cvs_server`
+import sys
+import os
+sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
+#django settings
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "cvs_server.settings")
+import django
+django.setup()
+
+from cvs_rest.models import Product
+from django.core.exceptions import ObjectDoesNotExist
 #PB Product PBG
 #CU Product CUG
 
@@ -17,7 +28,7 @@ def parsePBList(x):
             'small_category': category['small_category'], 
             'name': x.find(class_='prodName').find('a').get_text(), 
             'price': int(x.find(class_='prodPrice').find('span').get_text().replace('\n','').replace(',','')), 
-            'url': x.find('img')['src']
+            'img': x.find('img')['src'], 
         }
 
 def parseProductList(x):
@@ -73,4 +84,23 @@ pbCrawler('PBG')
 pbCrawler('CUG')
 pbList = [x for x in pbList if x is not None]
 
-print(pbList)
+#print(pbList)
+
+# code for registering product to DB
+if __name__ == '__main__':
+    print('CU crawler START')
+    product_data_dict = pbList
+    for p in product_data_dict:
+        try:
+            Product.objects.get(name=p['name'])
+        except ObjectDoesNotExist:
+            print('{} is registed in DB'.format(p['name']))
+            Product(
+                name=p['name'], 
+                price=p['price'], 
+                image=p['img'], 
+                manufacturer='CU',
+                large_category=p['large_category'],
+                small_category=p['small_category'],
+                PB=True,
+            ).save()   
