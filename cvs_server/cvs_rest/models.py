@@ -101,8 +101,12 @@ class Comment(models.Model):
     content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
     object_id = models.PositiveIntegerField()
     belong_to = fields.GenericForeignKey('content_type', 'object_id')
+
     """
     product = models.ForeignKey('Product', related_name='comments', on_delete=models.CASCADE, default=Comment.DEFAULT_PK)
+
+
+    """
 
     class Meta:
         ordering = ('created',)
