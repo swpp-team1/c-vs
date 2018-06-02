@@ -6,6 +6,8 @@ from rest_framework.urlpatterns import format_suffix_patterns
 urlpatterns = [
     url(r'^login/$', views.CustomAuthToken.as_view()),
     url(r'^signup/$', views.sign_up),
+    url(r'^users/$', views.CustomUserList.as_view()),
+    url(r'^users/(?P<pk>[0-9]+)/$', views.CustomUserDetail.as_view()),
     #url(r'products/$', views.ProductList.as_view()),
     #url(r'products/(?P<pk>[0-9]+)/$', views.ProductDetail.as_view()),
     #url(r'^reviews/$', views.ReviewList.as_view()),

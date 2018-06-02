@@ -9,6 +9,9 @@ class ProductSerializer(serializers.ModelSerializer):
 """
 
 class UserSerializer(serializers.ModelSerializer):
+    recipe_set = serializers.PrimaryKeyRelatedField(many=True, queryset=Recipe.objects.all())
+    review_set = serializers.PrimaryKeyRelatedField(many=True, queryset=Review.objects.all())
+    comment_set = serializers.PrimaryKeyRelatedField(many=True, queryset=Comment.objects.all())
     
     class Meta:
         model = CustomUser
@@ -35,27 +38,7 @@ class ReviewSerializer(serializers.ModelSerializer) :
        model = Review
        fields = '__all__'
 
-class CommentRelatedField(serializers.RelatedField) :
-    def to_native(self, value):
-        if isinstance(value, Product):
-            serializer = ProductSerializer(value)
-        elif isinstance(value, Recipe) :
-            serializer = RecipeSerializer(value)
-        else :
-            raise Exception('Unexpected type of comment object')
-        return serializer.data
-    
-    
 
-class CommentIdSerializer(serializers.ModelSerializer) :
-    class Meta :
-        model = Product
-        fields = ('id')
-
-class ReviewIdSerializer(serializers.ModelSerializer) :
-    class Meta :
-        model = Review
-        fields = ('id')
 
 class RatingSerializer(serializers.ModelSerializer) :
 
@@ -79,7 +62,7 @@ class RatingSerializer(serializers.ModelSerializer) :
 #Rating과 Comment모두 수정 가능 
 class CommentSerializer(serializers.ModelSerializer) :
 
-    #user_id = UserIdSerializer()
+    user_id = serializers.ReadOnlyField(source='user_id.username')
     rating = RatingSerializer(required=True, many=True)
 
     def create(self, validated_data) :
@@ -111,6 +94,27 @@ class CommentSerializer(serializers.ModelSerializer) :
         #how to show content type
         fields = '__all__'
 
+
+"""
+class CommentRelatedField(serializers.RelatedField) :
+    def to_native(self, value):
+        if isinstance(value, Product):
+            serializer = ProductSerializer(value)
+        elif isinstance(value, Recipe) :
+            serializer = RecipeSerializer(value)
+        else :
+            raise Exception('Unexpected type of comment object')
+        return serializer.data
+class CommentIdSerializer(serializers.ModelSerializer) :
+    class Meta :
+        model = Product
+        fields = ('id')
+
+class ReviewIdSerializer(serializers.ModelSerializer) :
+    class Meta :
+        model = Review
+        fields = ('id')
+"""
 
 
 

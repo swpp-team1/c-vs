@@ -4,7 +4,8 @@ from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.authtoken.models import Token
 from rest_framework.response import Response
 from rest_framework import status
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework import generics
 #from django_filters.rest_framework import DjangoFilterBackend
 from django.contrib.contenttypes.models import ContentType
@@ -60,19 +61,32 @@ def sign_up(request):
     else:
         return Response(data={'message':'User already exist'}, status=status.HTTP_400_BAD_REQUEST)
 
+
+class CustomUserList(generics.ListAPIView):
+    queryset = CustomUser.objects.all()
+    serializer_class = UserSerializer
+
+
+class CustomUserDetail(generics.RetrieveAPIView):
+    queryset = CustomUser.objects.all()
+    serializer_class = UserSerializer
+
+
 #일단 유저빼고 해봄
 @api_view(['POST'])
+@permission_classes((IsAuthenticatedOrReadOnly,))
 def create_comment(request, format=None) :
 
     #create and save new rating object
     serializer = CommentSerializer(data=request.data)
     if serializer.is_valid() :
-        serializer.save()
+        serializer.save(user_id=request.user)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 @api_view(['GET', 'PUT', 'DELETE'])
+@permission_classes([IsAuthenticatedOrReadOnly,])
 def comment_detail(request, pk, format=None) :
     try:
         comment = Comment.objects.get(pk=pk)

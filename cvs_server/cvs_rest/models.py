@@ -6,6 +6,7 @@ from django.contrib.contenttypes import fields
 class CustomUser(AbstractUser):
     created = models.DateTimeField(auto_now_add=True)
     nickname = models.CharField(max_length=20, unique=True)
+    
 
 class Product(models.Model):
     name = models.CharField(max_length=100)
@@ -82,19 +83,19 @@ class Comment(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     edited = models.DateTimeField(auto_now=True)
     content = models.TextField()
-    """
+    
     user_id = models.ForeignKey(
         'CustomUser',
+        related_name='comments',
         on_delete=models.CASCADE,
     )
-    """
+    
     """
     content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
     object_id = models.PositiveIntegerField()
     belong_to = fields.GenericForeignKey('content_type', 'object_id')
     """
     #product_id = models.ForeignKey('Product', on_delete=models.CASCADE)
-    #rating = fields.GenericRelation(Rating, related_query_name='comment')
 
     class Meta:
         ordering = ('created',)
@@ -116,12 +117,13 @@ class Rating(models.Model) :
     created = models.DateTimeField(auto_now_add=True)
     edited = models.DateTimeField(auto_now=True)
     value = models.PositiveSmallIntegerField(null=False)
-    """
+    
     user_id = models.ForeignKey(
         'CustomUser',
+        related_name='ratings',
         on_delete=models.CASCADE,
     )
-    """
+    
     """
     comment = models.OneToOneField(
         Comment,
