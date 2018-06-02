@@ -93,7 +93,7 @@ class ProductDetailSerializer(serializers.ModelSerializer) :
     comments = serializers.PrimaryKeyRelatedField(many=True, allow_null=True, queryset=Comment)
     class Meta:
         model = Product
-        fields = ('name', 'image', 'price', 'flag', 'manufacturer', 'PB', 'comments')
+        fields = ('name', 'image', 'price', 'flag', 'manufacturer', 'PB', 'large_category', 'small_category', 'comments')
 
 class ProductSerializer(serializers.ModelSerializer) :
     class Meta:
