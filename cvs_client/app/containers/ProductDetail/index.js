@@ -9,18 +9,26 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import makeSelectProductDetail from './selectors';
 import CustomHeader from '../../components/CustomHeader'
-import { requestProductDetail } from './actions'
+import { requestProductDetail, requestRelatedProducts } from './actions'
 import Image from 'grommet/components/Image'
 import Heading from 'grommet/components/Heading'
 
-
+const manufacturer = {'CU': 'CU', 'GS': 'GS25', 'SE': 'SEVEN ELEVEN'}
 export class ProductDetail extends React.Component { // eslint-disable-line react/prefer-stateless-function
   componentWillMount() {
     this.props.requestProductDetail(this.props.params.id)
   }
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.productDetail && !nextProps.relatedProducts) {
+      if (nextProps.productDetail.small_category || nextProps.productDetail.large_category) {
+        nextProps.requestRelatedProducts(nextProps.productDetail.small_category, nextProps.productDetail.large_category)
+      }
+    }
+  }
   render() {
-    console.log(this.props.ProductDetail.productDetail)
-    const productDetail = this.props.ProductDetail.productDetail ? this.props.ProductDetail.productDetail : ''
+    const productDetail = this.props.productDetail ? this.props.productDetail : ''
+    const relatedProducts = this.props.relatedProducts ? this.props.relatedProducts: []
+    console.log(relatedProducts.filter((obj) => obj.manufacturer != productDetail.manufacturer))
     return (
       <div>
         <CustomHeader/>
@@ -29,12 +37,12 @@ export class ProductDetail extends React.Component { // eslint-disable-line reac
             <Image fit='contain' size='large' src={productDetail.image}/>
           </div>
           <div style={{padding: '20px 50px'}}>
-            <h3>{productDetail.manufacturer}</h3>
+            <h3>{manufacturer[productDetail.manufacturer]}</h3>
             <Heading style={{marginBottom: '100px'}}>{productDetail.name}</Heading>
             <div style={{display: 'flex', flexDirection: 'row'}}>
               <div style={{display: 'flex', flexDirection: 'column', marginRight: '30px'}}>
                 <h3 style={{marginBottom: '10px'}}>가격</h3>
-                <h3 style={{marginBottom: '0'}}>{productDetail.price}</h3>
+                <h3 style={{marginBottom: '0'}}>{'￦ '+productDetail.price}</h3>
               </div>
               <div style={{display: 'flex', flexDirection: 'column'}}>
                 <h3 style={{marginBottom: '10px'}}>평점</h3>
@@ -48,13 +56,16 @@ export class ProductDetail extends React.Component { // eslint-disable-line reac
   }
 }
 
-const mapStateToProps = createStructuredSelector({
-  ProductDetail: makeSelectProductDetail(),
-});
+const mapStateToProps = (state) => {
+  return ({
+    productDetail: state.get('productDetail').toJS().productDetail,
+    relatedProducts: state.get('productDetail').toJS().relatedProducts
+  })}
 
 function mapDispatchToProps(dispatch) {
   return {
-    requestProductDetail: (id) => dispatch(requestProductDetail(id))
+    requestProductDetail: (id) => dispatch(requestProductDetail(id)),
+    requestRelatedProducts: (smallCategory, largeCategory) => dispatch(requestRelatedProducts(smallCategory, largeCategory))
   };
 }
 
