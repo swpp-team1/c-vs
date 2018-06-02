@@ -2,6 +2,7 @@ import React from 'react';
 import Header from 'grommet/components/Header';
 import Title from 'grommet/components/Title';
 import Button from 'grommet/components/Button';
+import Anchor from 'grommet/components/Anchor';
 import User from 'grommet/components/icons/base/User';
 import { withRouter } from 'react-router';
 
@@ -16,7 +17,7 @@ class CustomHeader extends React.Component { // eslint-disable-line react/prefer
           <Button plain={true} label='레시피' href='recipeAll'/>
         </div>
         <div>
-          <Button plain={true} icon={<User size='small'/>} label='로그인' href='login'/>
+          <Anchor icon={<User size='small'/>} label='로그인' href='login' animateIcon={false}/>
         </div>
       </Header>
     );
