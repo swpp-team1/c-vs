@@ -13,11 +13,11 @@ class CustomHeader extends React.Component { // eslint-disable-line react/prefer
       <Header style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0px 15px'}}>
         <div style={{display: 'flex', flexDirection: 'row', alignItems: 'center'}}>
           <Title onClick={() => this.props.router.push('/')}>C:VS</Title>
-          <Button plain={true} label='제품' href='productAll'/>
-          <Button plain={true} label='레시피' href='recipeAll'/>
+          <Button plain={true} label='제품' href='/productAll'/>
+          <Button plain={true} label='레시피' href='/recipeAll'/>
         </div>
         <div>
-          <Anchor icon={<User size='small'/>} label='로그인' href='login' animateIcon={false}/>
+          <Anchor icon={<User size='small'/>} label='로그인' href='/login' animateIcon={false}/>
         </div>
       </Header>
     );
