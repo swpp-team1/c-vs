@@ -20,6 +20,10 @@ class Product(models.Model):
         max_length=10
     )
     PB = models.BooleanField()
+
+    #comments = fields.GenericRelation('Comment', related_query_name='products')
+    #reviews = fields.GenericRelation('Review', related_query_name='products') 
+
     large_category = models.CharField(
         max_length=10,
         null=True,
@@ -28,9 +32,6 @@ class Product(models.Model):
         max_length=10,
         null=True,
     )
-    comments = fields.GenericRelation('Comment', related_query_name='products')
-    reviews = fields.GenericRelation('Review', related_query_name='products') 
-
 
     class Meta:
         ordering = ('manufacturer', 'name',)
@@ -103,6 +104,8 @@ class Comment(models.Model):
     object_id = models.PositiveIntegerField()
     belong_to = fields.GenericForeignKey('content_type', 'object_id')
  
+
+    """
 
     class Meta:
         ordering = ('created',)
