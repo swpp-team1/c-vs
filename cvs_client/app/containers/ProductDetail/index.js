@@ -15,6 +15,12 @@ import Heading from 'grommet/components/Heading'
 
 const manufacturer = {'CU': 'CU', 'GS': 'GS25', 'SE': 'SEVEN ELEVEN'}
 export class ProductDetail extends React.Component { // eslint-disable-line react/prefer-stateless-function
+  constructor() {
+    super()
+    this.state = {
+      relatedRequestDone: false
+    }
+  }
   componentWillMount() {
     this.props.requestProductDetail(this.props.params.id)
   }
@@ -22,13 +28,17 @@ export class ProductDetail extends React.Component { // eslint-disable-line reac
     if (nextProps.productDetail && !nextProps.relatedProducts) {
       if (nextProps.productDetail.small_category || nextProps.productDetail.large_category) {
         nextProps.requestRelatedProducts(nextProps.productDetail.small_category, nextProps.productDetail.large_category)
+        console.log('!!!!')
       }
+    }
+    if(nextProps.relatedProducts) {
+      this.setState({relatedRequestDone: true})
     }
   }
   render() {
     const productDetail = this.props.productDetail ? this.props.productDetail : ''
     const relatedProducts = this.props.relatedProducts ? this.props.relatedProducts: []
-    console.log(relatedProducts.filter((obj) => obj.manufacturer != productDetail.manufacturer))
+    const relatedProductsList = (relatedProducts.filter((obj) => (obj.manufacturer !== productDetail.manufacturer && obj.name !== productDetail.name)).concat(relatedProducts.filter((obj) => (obj.manufacturer === productDetail.manufacturer && obj.name !== productDetail.name))))
     return (
       <div>
         <CustomHeader/>
@@ -51,6 +61,9 @@ export class ProductDetail extends React.Component { // eslint-disable-line reac
             </div>
           </div>
         </div>
+        {
+          (this.state && this.state.relatedRequestDone || (productDetail !== '' && !(productDetail.small_category || productDetail.large_category))) ? <h3>{relatedProducts.length === 0 ? '인기 상품' : '유사 상품'}</h3> : <div/>
+        }
       </div>
     );
   }
