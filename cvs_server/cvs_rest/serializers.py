@@ -23,11 +23,6 @@ class UserIdSerializer(serializers.ModelSerializer) :
         model = CustomUser
         fields = ('id')
 
-class ProductSerializer(serializers.ModelSerializer) :
-    class Meta:
-        model = Product
-        fields = '__all__'
-
 class RecipeSerializer(serializers.ModelSerializer) :
     class Meta:
         model = Recipe
@@ -86,7 +81,6 @@ class CommentSerializer(serializers.ModelSerializer) :
         rating.save()
         return instance
     
-
     #product id랑 recipe id 둘다 빈칸 아닌지 체크 
     #def validate(self, data) :
     class Meta:
@@ -94,6 +88,16 @@ class CommentSerializer(serializers.ModelSerializer) :
         #how to show content type
         fields = '__all__'
 
+class ProductDetailSerializer(serializers.ModelSerializer) :
+    comments = serializers.PrimaryKeyRelatedField(many=True, allow_null=True, queryset=Comment)
+    class Meta:
+        model = Product
+        fields = ('name', 'image', 'price', 'flag', 'manufacturer', 'PB', 'comments')
+
+class ProductSerializer(serializers.ModelSerializer) :
+    class Meta:
+        model = Product
+        fields = '__all__'
 
 """
 class CommentRelatedField(serializers.RelatedField) :

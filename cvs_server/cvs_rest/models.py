@@ -9,6 +9,7 @@ class CustomUser(AbstractUser):
     
 
 class Product(models.Model):
+    DEFAULT_PK = 1
     name = models.CharField(max_length=100)
     image = models.URLField()
     price = models.IntegerField()
@@ -95,7 +96,7 @@ class Comment(models.Model):
     object_id = models.PositiveIntegerField()
     belong_to = fields.GenericForeignKey('content_type', 'object_id')
     """
-    #product_id = models.ForeignKey('Product', on_delete=models.CASCADE)
+    product = models.ForeignKey('Product', related_name='comments', on_delete=models.CASCADE, default=Comment.DEFAULT_PK)
 
     class Meta:
         ordering = ('created',)

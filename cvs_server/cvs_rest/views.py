@@ -61,15 +61,25 @@ def sign_up(request):
     else:
         return Response(data={'message':'User already exist'}, status=status.HTTP_400_BAD_REQUEST)
 
-
+#/users
 class CustomUserList(generics.ListAPIView):
     queryset = CustomUser.objects.all()
     serializer_class = UserSerializer
 
-
+#/users/id
 class CustomUserDetail(generics.RetrieveAPIView):
     queryset = CustomUser.objects.all()
     serializer_class = UserSerializer
+
+#/products
+class ProductList(generics.ListAPIView) :
+    queryset = Product.objects.all()
+    serializer_class = ProductSerializer
+
+#/products/id
+class ProductDetail(generics.RetrieveAPIView) :
+    queryset = Product.objects.all()
+    serializer_class = ProductDetailSerializer
 
 
 #일단 유저빼고 해봄
@@ -134,18 +144,7 @@ def comment_detail(request, pk, format=None) :
     
 
 """
-#/products
-class ProductList(generics.ListAPIView) :
-    queryset = Product.objects.all()
-    serializer_class = ProductSerializer
-    filter_backends = (DjangoFilterBackend,)
-    filter_fields = ('manufacturer', 'PB')
 
-
-#/products/pk
-class ProductDetail(generics.RetrieveAPIView) :
-    queryset = Product.objects.all()
-    serializer_class = ProductSerializer
 
 
 #/reviews
