@@ -67,10 +67,6 @@ export class ProductAll extends React.Component { // eslint-disable-line react/p
   }
 }
 
-ProductAll.propTypes = {
-  dispatch: PropTypes.func.isRequired,
-};
-
 const mapStateToProps = createStructuredSelector({
   ProductAll: makeSelectProductAll(),
 });
