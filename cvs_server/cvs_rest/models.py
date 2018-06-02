@@ -3,13 +3,8 @@ from django.contrib.auth.models import AbstractUser
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes import fields
 
-class CustomUser(AbstractUser):
-    created = models.DateTimeField(auto_now_add=True)
-    nickname = models.CharField(max_length=20, unique=True)
-    
 
 class Product(models.Model):
-    DEFAULT_PK = 1
     name = models.CharField(max_length=100)
     image = models.URLField()
     price = models.IntegerField()
@@ -25,10 +20,6 @@ class Product(models.Model):
         max_length=10
     )
     PB = models.BooleanField()
-
-    #comments = fields.GenericRelation('Comment', related_query_name='products')
-    #reviews = fields.GenericRelation('Review', related_query_name='products') 
-
     large_category = models.CharField(
         max_length=10,
         null=True,
@@ -44,21 +35,37 @@ class Product(models.Model):
     class Meta:
         ordering = ('manufacturer', 'name',)
 
+class CustomUser(AbstractUser):
+    created = models.DateTimeField(auto_now_add=True)
+    nickname = models.CharField(max_length=20, unique=True)
 
 class Recipe(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     edited = models.DateTimeField(auto_now=True)
-    title = models.CharField(max_length=100, null=False)
-    #ingredients = models.TextField()
+    title = models.CharField(max_length=100) 
     ingredients = models.ManyToManyField('Product')
     user_id = models.ForeignKey(
         'CustomUser',
         on_delete=models.CASCADE,
     )
-    post = fields.GenericRelation('Post', related_query_name='recipes') 
+    posts = fields.GenericRelation('Post', related_query_name='recipes') 
     comments = fields.GenericRelation('Comment', related_query_name='recipes')
     reviews = fields.GenericRelation('Review', related_query_name='recipes')
     
+
+    class Meta:
+        ordering = ('created',)
+
+class Rating(models.Model) :
+    created = models.DateTimeField(auto_now_add=True)
+    value = models.PositiveSmallIntegerField()
+    user_id = models.ForeignKey(
+        'CustomUser',
+        on_delete=models.CASCADE,
+    )
+    content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
+    object_id = models.PositiveIntegerField()
+    belong_to = fields.GenericForeignKey('content_type', 'object_id')
 
     class Meta:
         ordering = ('created',)
@@ -68,47 +75,34 @@ class Review(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     edited = models.DateTimeField(auto_now=True)
     title = models.CharField(max_length=100)
-    #rating = models.PositiveIntegerField()
     user_id = models.ForeignKey(
         'CustomUser',
         on_delete=models.CASCADE,
     )
-    """
     content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
     object_id = models.PositiveIntegerField()
     belong_to = fields.GenericForeignKey('content_type', 'object_id') 
-    """
-    product_id = models.ForeignKey('Product', on_delete=models.CASCADE)
-    #rating = fields.GenericRelation('Rating', related_query_name='review')
     
-    post = fields.GenericRelation('Post', related_query_name='review')    
-    
+    posts = fields.GenericRelation('Post', related_query_name='reviews')    
+    ratings = fields.GenericRelation('Rating', related_query_name='reviews')
     
     class Meta:
         ordering = ('created',)
 
-    
 
 class Comment(models.Model):
-    DEFAULT_PK = 1
     created = models.DateTimeField(auto_now_add=True)
     edited = models.DateTimeField(auto_now=True)
     content = models.TextField()
-    
+    rating = fields.GenericRelation('Rating', related_query_name='comments')
     user_id = models.ForeignKey(
         'CustomUser',
-        related_name='comments',
         on_delete=models.CASCADE,
     )
-    
-    """
     content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
     object_id = models.PositiveIntegerField()
     belong_to = fields.GenericForeignKey('content_type', 'object_id')
-
-    """
-    product = models.ForeignKey('Product', related_name='comments', on_delete=models.CASCADE, default=Comment.DEFAULT_PK)
-
+ 
 
     class Meta:
         ordering = ('created',)
@@ -124,26 +118,3 @@ class Post(models.Model):
     
     class Meta:
         ordering = ('created',)
-
-
-class Rating(models.Model) :
-    created = models.DateTimeField(auto_now_add=True)
-    edited = models.DateTimeField(auto_now=True)
-    value = models.PositiveSmallIntegerField(null=False)
-    
-    user_id = models.ForeignKey(
-        'CustomUser',
-        related_name='ratings',
-        on_delete=models.CASCADE,
-    )
-    
-    """
-    comment = models.OneToOneField(
-        Comment,
-        on_delete=models.CASCADE
-        )"""
-    comment = models.ForeignKey('Comment', related_name='rating',  on_delete=models.CASCADE, default=Comment.DEFAULT_PK)
-    #review = models.ForeignKey('Review', on_delete=models.CASCADE, null=True)
-    class Meta:
-        ordering = ('created',)
-    
