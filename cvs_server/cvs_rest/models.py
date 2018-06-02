@@ -67,7 +67,7 @@ class Review(models.Model):
     belong_to = fields.GenericForeignKey('content_type', 'object_id') 
     """
     product_id = models.ForeignKey('Product', on_delete=models.CASCADE)
-    rating = fields.GenericRelation(Rating, related_query_name='review')
+    #rating = fields.GenericRelation('Rating', related_query_name='review')
     
     post = fields.GenericRelation('Post', related_query_name='review')    
     
@@ -75,22 +75,25 @@ class Review(models.Model):
     class Meta:
         ordering = ('created',)
 
+    
+
 class Comment(models.Model):
+    DEFAULT_PK = 1
     created = models.DateTimeField(auto_now_add=True)
     edited = models.DateTimeField(auto_now=True)
     content = models.TextField()
-    #rating = models.PositiveIntegerField()
-    """user_id = models.ForeignKey(
+    """
+    user_id = models.ForeignKey(
         'CustomUser',
         on_delete=models.CASCADE,
-    )"""
-
+    )
+    """
     """
     content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
     object_id = models.PositiveIntegerField()
     belong_to = fields.GenericForeignKey('content_type', 'object_id')
     """
-    product_id = models.ForeignKey('Product', on_delete=models.CASCADE)
+    #product_id = models.ForeignKey('Product', on_delete=models.CASCADE)
     #rating = fields.GenericRelation(Rating, related_query_name='comment')
 
     class Meta:
@@ -113,16 +116,19 @@ class Rating(models.Model) :
     created = models.DateTimeField(auto_now_add=True)
     edited = models.DateTimeField(auto_now=True)
     value = models.PositiveSmallIntegerField(null=False)
-    
+    """
     user_id = models.ForeignKey(
         'CustomUser',
         on_delete=models.CASCADE,
     )
-    
-    #comment = models.ForeignKey('Comment', on_delete=models.CASCADE)
-    #review = models.ForeignKey('Review', on_delete=models.CASCADE)
+    """
+    """
+    comment = models.OneToOneField(
+        Comment,
+        on_delete=models.CASCADE
+        )"""
+    comment = models.ForeignKey('Comment', related_name='rating',  on_delete=models.CASCADE, default=Comment.DEFAULT_PK)
+    #review = models.ForeignKey('Review', on_delete=models.CASCADE, null=True)
     class Meta:
         ordering = ('created',)
     
-    def __unicode__(self) :
-        return '%d' % self.value

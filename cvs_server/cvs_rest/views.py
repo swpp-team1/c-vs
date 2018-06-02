@@ -6,11 +6,12 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework import generics
-from django_filters.rest_framework import DjangoFilterBackend
-import re
+#from django_filters.rest_framework import DjangoFilterBackend
+from django.contrib.contenttypes.models import ContentType
+
 
 class CustomAuthToken(ObtainAuthToken):
-    def post(self, request,*args, **kwargs):
+    def post(self, request, *args, **kwargs):
         serializer = self.serializer_class(data=request.data, context={'request': request})
         serializer.is_valid(raise_exception=True)
         user = serializer.validated_data.get('user')
@@ -59,7 +60,66 @@ def sign_up(request):
     else:
         return Response(data={'message':'User already exist'}, status=status.HTTP_400_BAD_REQUEST)
 
+#일단 유저빼고 해봄
+@api_view(['POST'])
+def create_comment(request, format=None) :
 
+    #create and save new rating object
+    serializer = CommentSerializer(data=request.data)
+    if serializer.is_valid() :
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['GET', 'PUT', 'DELETE'])
+def comment_detail(request, pk, format=None) :
+    try:
+        comment = Comment.objects.get(pk=pk)
+    except Comment.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+    
+    if request.method == 'GET' :
+        serializer = CommentSerializer(comment)
+        return Response(serializer.data)
+    
+    elif request.method == 'PUT' :
+        serializer = CommentSerializer(comment, data=request.data)
+        if serializer.is_valid() :
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    elif request.method == 'DELETE' :
+        comment.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+    """
+    ratingSerializer = RatingSerializer(data=request.data)
+    ratingSerializer.is_valid(raise_exception=True)
+    ratingData = ratingSerializer.validated_data.get('')
+
+    serializer = CommentSerializer(dvata=request.data, context={'request':request})
+    serializer.is_valid(raise_exception=True)
+    data = serializer.validated_data
+    content = data.get('content')
+    rating = data.get('rating')
+    user = data.get('user')
+
+    #rating, user_id, 
+    if 'created' in kwargs :
+        if kwargs['created'] :
+            instance = kwargs['instance']
+            ctype = ContentType.objects.get_for_model(instance)
+            entry = Entry.objects.get_or_create(content_type=ctype, object_id=instance.id, pub_date=instance.pub_date)
+    """
+
+    
+
+    
+
+"""
 #/products
 class ProductList(generics.ListAPIView) :
     queryset = Product.objects.all()
@@ -88,25 +148,6 @@ class ReviewDetail(generics.RetrieveUpdateDestroyAPIView) :
     serializer_class = ReviewSerializer
 
 
-"""
-#review filtered by user
-class ReviewListByUser(generics.ListAPIView) :
-    serializer_class = ReviewSerializer
-
-    def get_queryset(self) :
-        user = self.request.user
-        return Review.objects.filter(user_id=user)
-"""
-
-
-#/comments
-class CommentList(generics.ListCreateAPIView) :
-    queryset = Comment.objects.all()
-    serializer_class = CommentSerializer
-    filter_backends = (DjangoFilterBackend,)
-    filter_fields = ('user_id',)
-
-
 #/comments/pk
 class CommentDetail(generics.RetrieveUpdateDestroyAPIView) :
     queryset = Comment.objects.all()
@@ -132,3 +173,4 @@ class RecipeDetail(generics.RetrieveUpdateDestroyAPIView) :
     queryset = Recipe.objects.all()
     serializer_class = RecipeSerializer
 
+"""
