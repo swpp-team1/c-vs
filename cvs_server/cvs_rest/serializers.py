@@ -9,13 +9,14 @@ class ProductSerializer(serializers.ModelSerializer):
 """
 
 class UserSerializer(serializers.ModelSerializer):
-    recipe_set = serializers.PrimaryKeyRelatedField(many=True, queryset=Recipe.objects.all())
-    review_set = serializers.PrimaryKeyRelatedField(many=True, queryset=Review.objects.all())
+    #recipe_set = serializers.PrimaryKeyRelatedField(many=True, queryset=Recipe.objects.all())
+    #review_set = serializers.PrimaryKeyRelatedField(many=True, queryset=Review.objects.all())
     comment_set = serializers.PrimaryKeyRelatedField(many=True, queryset=Comment.objects.all())
     
     class Meta:
         model = CustomUser
-        fields = ('id', 'username', 'nickname', 'created', 'email', 'recipe_set', 'review_set', 'comment_set')
+        fields = ('id', 'username', 'nickname', 'created', 'email', 'comment_set')
+        #fields = ('id', 'username', 'nickname', 'created', 'email', 'recipe_set', 'review_set', 'comment_set')
 
 
 class UserIdSerializer(serializers.ModelSerializer) :
