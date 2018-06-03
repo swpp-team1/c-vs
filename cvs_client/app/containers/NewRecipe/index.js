@@ -15,11 +15,26 @@ import Search from 'grommet/components/Search'
 
 
 export class NewRecipe extends React.Component { // eslint-disable-line react/prefer-stateless-function
+  constructor(props) {
+    super(props)
+    this.state = {
+      selectedItem: null,
+      searchText: ''
+    }
+  }
   render() {
-    console.log(this.props.productList)
     return (
       <div>
-        <Search inline={true} onDOMChange={(event) => this.props.requestProductList(event.srcElement.value)} suggestions={this.props.productList && this.props.productList.map((item) => item.name)}/>
+        <Search inline={true}
+                value={(this.state.selectedItem) ? this.state.selectedItem : this.state.searchText}
+                onSelect={(item, selected) => {
+                  this.setState({selectedItem: item.suggestion})
+                }}
+                onDOMChange={(event) => {
+                  this.props.requestProductList(event.srcElement.value)
+                  this.setState({searchText: event.srcElement.value, selectedItem: null})
+                }}
+                suggestions={this.props.productList && this.props.productList.slice(1,10).map((item) => item.name)}/>
       </div>
     );
   }

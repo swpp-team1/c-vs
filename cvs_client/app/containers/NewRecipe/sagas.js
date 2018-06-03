@@ -6,8 +6,10 @@ import request from 'utils/request'
 const url = 'http://13.209.25.111:8000/products/'
 
 export function* requestProductList(searchText) {
-  if(searchText === '')
+  if(searchText === '') {
     yield put(actions.receivedProductList())
+    return
+  }
   try {
     const data = yield call(request, url + '?search=' + searchText)
     yield put(actions.receivedProductList(data))
