@@ -10,28 +10,30 @@ import { FormattedMessage } from 'react-intl';
 import { createStructuredSelector } from 'reselect';
 import makeSelectNewRecipe from './selectors';
 import messages from './messages';
+import { requestProductList } from './actions'
+import Search from 'grommet/components/Search'
+
 
 export class NewRecipe extends React.Component { // eslint-disable-line react/prefer-stateless-function
   render() {
+    console.log(this.props.productList)
     return (
       <div>
-        <FormattedMessage {...messages.header} />
+        <Search inline={true} onDOMChange={(event) => this.props.requestProductList(event.srcElement.value)} suggestions={this.props.productList && this.props.productList.map((item) => item.name)}/>
       </div>
     );
   }
 }
 
-NewRecipe.propTypes = {
-  dispatch: PropTypes.func.isRequired,
-};
 
-const mapStateToProps = createStructuredSelector({
-  NewRecipe: makeSelectNewRecipe(),
-});
+const mapStateToProps = (state) => {
+  return ({
+    productList: state.get('newRecipe').toJS().productList,
+  })}
 
 function mapDispatchToProps(dispatch) {
   return {
-    dispatch,
+    requestProductList: (searchText) => dispatch(requestProductList(searchText)),
   };
 }
 
