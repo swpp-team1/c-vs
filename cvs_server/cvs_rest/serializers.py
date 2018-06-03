@@ -19,11 +19,6 @@ class UserSerializer(serializers.ModelSerializer):
         #fields = ('id', 'username', 'nickname', 'created', 'email', 'recipe_set', 'review_set', 'comment_set')
 
 
-class UserIdSerializer(serializers.ModelSerializer) :
-    class Meta :
-        model = CustomUser
-        fields = ('id')
-
 class RecipeSerializer(serializers.ModelSerializer) :
     class Meta:
         model = Recipe
@@ -62,9 +57,7 @@ class CommentSerializer(serializers.ModelSerializer) :
     rating = RatingSerializer(required=True, many=True)
 
     def create(self, validated_data) :
-        #rating data를 일단 뽑아낸다 
         rating_data = validated_data.pop('rating')
-        #comment data로 comment 모델을 만듦 
         comment = Comment.objects.create(**validated_data)
         Rating.objects.create(comment=comment, **rating_data)
         return comment
@@ -82,11 +75,8 @@ class CommentSerializer(serializers.ModelSerializer) :
         rating.save()
         return instance
     
-    #product id랑 recipe id 둘다 빈칸 아닌지 체크 
-    #def validate(self, data) :
     class Meta:
         model = Comment
-        #how to show content type
         fields = '__all__'
 
 class ProductDetailSerializer(serializers.ModelSerializer) :

@@ -103,7 +103,7 @@ class Comment(models.Model):
     belong_to = fields.GenericForeignKey('content_type', 'object_id')
 
     """
-    product = models.ForeignKey('Product', related_name='comments', on_delete=models.CASCADE, default=Comment.DEFAULT_PK)
+    product = models.ForeignKey('Product', related_name='comments', on_delete=models.CASCADE, default=Product.DEFAULT_PK)
 
 
     
@@ -123,3 +123,24 @@ class Post(models.Model):
     class Meta:
         ordering = ('created',)
 
+
+class Rating(models.Model) :
+    created = models.DateTimeField(auto_now_add=True)
+    edited = models.DateTimeField(auto_now=True)
+    value = models.PositiveSmallIntegerField(null=False)
+    
+    user_id = models.ForeignKey(
+        'CustomUser',
+        related_name='ratings',
+        on_delete=models.CASCADE,
+    )
+    
+    """
+    comment = models.OneToOneField(
+        Comment,
+        on_delete=models.CASCADE
+        )"""
+    comment = models.ForeignKey('Comment', related_name='rating',  on_delete=models.CASCADE, default=Comment.DEFAULT_PK)
+    #review = models.ForeignKey('Review', on_delete=models.CASCADE, null=True)
+    class Meta:
+        ordering = ('created',)
