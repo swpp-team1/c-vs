@@ -33,14 +33,15 @@ export class NewRecipe extends React.Component { // eslint-disable-line react/pr
         <Search inline={true}
                 value={(this.state.selectedItem) ? this.state.selectedItem[0].name : this.state.searchText}
                   onSelect={(item, selected) => {
-                  this.setState({selectedItem: this.props.productList.filter((product) => product.name === item.suggestion)})
+                    if(selected)
+                      this.setState({selectedItem: this.props.productList.filter((product) => product.name === item.suggestion)})
                 }}
                 onDOMChange={(event) => {
                   this.props.requestProductList(event.srcElement.value)
                   this.setState({searchText: event.srcElement.value, selectedItem: null})
                 }}
                 suggestions={this.props.productList && this.props.productList.slice(1,10).map((item) => item.name)}/>
-        <Button plain={false} style={{borderColor: this.state.selectedItem ? 'red' : 'gray'}} label={'ADD'} onClick={() => {
+        <Button plain={false} style={{borderColor: !this.state.selectedItem && 'gray'}} label={'ADD'} onClick={() => {
           if(this.state.selectedItem) {
             const array = (this.state.selectedItems.concat(this.state.selectedItem))
             this.setState({selectedItems: array.filter((item, i) => {
