@@ -3,17 +3,14 @@ from cvs_rest.serializers import *
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.authtoken.models import Token
 from rest_framework.response import Response
-
 from rest_framework import status, generics, filters
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
-from rest_framework import generics
 from django.contrib.contenttypes.models import ContentType
 from django_filters.rest_framework import DjangoFilterBackend
 from django.core.validators import validate_email
-from django.core.exceptions import ValidationError
+from django.core.exceptions import ValidationError, ObjectDoesNotExist
 import re
-import ast
 
 class CustomAuthToken(ObtainAuthToken):
     def post(self, request, *args, **kwargs):
@@ -102,29 +99,36 @@ def create_comment(request, format=None) :
         
     if not (rating and content and product):
         return Response(data={'message':'content or product or rating Field is not existed'}, status=status.HTTP_400_BAD_REQUEST)
-
-    data['rating'] = {'value':rating, 'user_id':request.user.id, 'comment':1}
-    serializer = CommentSerializer(data=data) 
     
-    if serializer.is_valid():
-        serializer.save(user_id=request.user)
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
-    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    try:
+        product_obj = Product.objects.get(id=product)
+    except ObjectDoesNotExist:    
+        return Response(data={'message':'Wrong Product ID'}, status=status.HTTP_400_BAD_REQUEST)
+   
+    comment_obj = Comment.objects.create(content=content, product=product_obj, user_id=request.user)
+    Rating.objects.create(comment=comment_obj, value=rating, user_id=request.user)
+    
+    serializer = CommentSerializer(comment_obj) 
+    #if serializer.is_valid():
+        #serializer.save()
+    return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
 
 @api_view(['GET', 'PUT', 'DELETE'])
-@permission_classes([IsAuthenticatedOrReadOnly,])
+@permission_classes((IsAuthenticatedOrReadOnly,))
 def comment_detail(request, pk, format=None) :
     try:
         comment = Comment.objects.get(pk=pk)
     except Comment.DoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND)
-    
+
     if request.method == 'GET' :
         serializer = CommentSerializer(comment)
         return Response(serializer.data)
     
+    elif comment.user_id != request.user:
+        return Response(data={'message':'You are not owner'}, status=status.HTTP_400_BAD_REQUEST)
     elif request.method == 'PUT' :
         serializer = CommentSerializer(comment, data=request.data)
         if serializer.is_valid() :

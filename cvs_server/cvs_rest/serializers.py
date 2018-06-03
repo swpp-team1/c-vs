@@ -53,7 +53,6 @@ class RatingSerializer(serializers.ModelSerializer) :
 #Rating과 Comment모두 수정 가능 
 class CommentSerializer(serializers.ModelSerializer) :
 
-    user_id = serializers.ReadOnlyField(source='user_id.username')
     rating = RatingSerializer()
 
     def create(self, validated_data) :
