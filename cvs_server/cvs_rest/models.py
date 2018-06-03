@@ -37,7 +37,7 @@ class Product(models.Model):
 
 class CustomUser(AbstractUser):
     created = models.DateTimeField(auto_now_add=True)
-    nickname = models.CharField(max_length=20, unique=True)
+
 
 class Recipe(models.Model):
     created = models.DateTimeField(auto_now_add=True)
