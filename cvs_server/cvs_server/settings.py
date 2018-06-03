@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'cvs_rest.apps.CvsRestConfig',
     'rest_framework.authtoken',
+    'django_filters',
 ]
 
 
