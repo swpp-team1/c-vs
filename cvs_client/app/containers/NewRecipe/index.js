@@ -13,8 +13,9 @@ import messages from './messages';
 import { requestProductList } from './actions'
 import Search from 'grommet/components/Search'
 import Button from 'grommet/components/Button'
-
-
+import List from 'grommet/components/List'
+import ListItem from 'grommet/components/List'
+import Image from 'grommet/components/Image'
 
 export class NewRecipe extends React.Component { // eslint-disable-line react/prefer-stateless-function
   constructor(props) {
@@ -48,6 +49,18 @@ export class NewRecipe extends React.Component { // eslint-disable-line react/pr
               }) === i;
             })})}
         }}/>
+        <List>
+          {
+            this.state.selectedItems.map((item, key) => {
+              return (
+                <ListItem key={key} separator='horizontal' style={{borderBottom: '0.5px solid black', padding: 3}}>
+                  <Image style={{height: '50px', width: '50px'}} fit='contain' size='small' src={item.image}/>
+                  <span>{item.name}</span>
+                </ListItem>
+              )
+            })
+          }
+        </List>
       </div>
     );
   }
