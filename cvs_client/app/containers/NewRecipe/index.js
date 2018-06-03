@@ -12,6 +12,8 @@ import makeSelectNewRecipe from './selectors';
 import messages from './messages';
 import { requestProductList } from './actions'
 import Search from 'grommet/components/Search'
+import Button from 'grommet/components/Button'
+
 
 
 export class NewRecipe extends React.Component { // eslint-disable-line react/prefer-stateless-function
@@ -19,22 +21,33 @@ export class NewRecipe extends React.Component { // eslint-disable-line react/pr
     super(props)
     this.state = {
       selectedItem: null,
-      searchText: ''
+      searchText: '',
+      selectedItems: [],
     }
   }
   render() {
+    console.log(this.state.selectedItems)
     return (
       <div>
         <Search inline={true}
-                value={(this.state.selectedItem) ? this.state.selectedItem : this.state.searchText}
-                onSelect={(item, selected) => {
-                  this.setState({selectedItem: item.suggestion})
+                value={(this.state.selectedItem) ? this.state.selectedItem[0].name : this.state.searchText}
+                  onSelect={(item, selected) => {
+                  this.setState({selectedItem: this.props.productList.filter((product) => product.name === item.suggestion)})
                 }}
                 onDOMChange={(event) => {
                   this.props.requestProductList(event.srcElement.value)
                   this.setState({searchText: event.srcElement.value, selectedItem: null})
                 }}
                 suggestions={this.props.productList && this.props.productList.slice(1,10).map((item) => item.name)}/>
+        <Button plain={false} style={{borderColor: this.state.selectedItem ? 'red' : 'gray'}} label={'ADD'} onClick={() => {
+          if(this.state.selectedItem) {
+            const array = (this.state.selectedItems.concat(this.state.selectedItem))
+            this.setState({selectedItems: array.filter((item, i) => {
+              return array.findIndex((item2) => {
+                return item.id === item2.id;
+              }) === i;
+            })})}
+        }}/>
       </div>
     );
   }
