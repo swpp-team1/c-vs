@@ -135,12 +135,12 @@ class Rating(models.Model) :
         on_delete=models.CASCADE,
     )
     
-    """
     comment = models.OneToOneField(
         Comment,
         on_delete=models.CASCADE
-        )"""
-    comment = models.ForeignKey('Comment', related_name='rating',  on_delete=models.CASCADE, default=Comment.DEFAULT_PK)
+        )
+        
+    #comment = models.ForeignKey('Comment', related_name='rating',  on_delete=models.CASCADE, default=Comment.DEFAULT_PK)
     #review = models.ForeignKey('Review', on_delete=models.CASCADE, null=True)
     class Meta:
         ordering = ('created',)

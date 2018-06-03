@@ -11,11 +11,11 @@ class ProductSerializer(serializers.ModelSerializer):
 class UserSerializer(serializers.ModelSerializer):
     #recipe_set = serializers.PrimaryKeyRelatedField(many=True, queryset=Recipe.objects.all())
     #review_set = serializers.PrimaryKeyRelatedField(many=True, queryset=Review.objects.all())
-    comment_set = serializers.PrimaryKeyRelatedField(many=True, queryset=Comment.objects.all())
+    #comment_set = serializers.PrimaryKeyRelatedField(many=True, queryset=Comment.objects.all())
     
     class Meta:
         model = CustomUser
-        fields = ('id', 'username', 'nickname', 'created', 'email', 'comment_set')
+        fields = ('id', 'username', 'created', 'email', 'comment_set')
         #fields = ('id', 'username', 'nickname', 'created', 'email', 'recipe_set', 'review_set', 'comment_set')
 
 
@@ -47,19 +47,20 @@ class RatingSerializer(serializers.ModelSerializer) :
     
     class Meta:
         model = Rating
-        fields = '__all__'
+        fields = ('id', 'created', 'edited', 'value', 'user_id', 'comment')
 
 #Comment - Rating은 1:1 연결
 #Rating과 Comment모두 수정 가능 
 class CommentSerializer(serializers.ModelSerializer) :
 
     user_id = serializers.ReadOnlyField(source='user_id.username')
-    rating = RatingSerializer(required=True, many=True)
+    rating = RatingSerializer()
 
     def create(self, validated_data) :
         rating_data = validated_data.pop('rating')
         comment = Comment.objects.create(**validated_data)
-        Rating.objects.create(comment=comment, **rating_data)
+        rating_data['comment']=comment
+        Rating.objects.create(**rating_data)
         return comment
 
     def update(self, instance, validated_data) :
@@ -77,7 +78,7 @@ class CommentSerializer(serializers.ModelSerializer) :
     
     class Meta:
         model = Comment
-        fields = '__all__'
+        fields = ('id', 'created', 'edited', 'content', 'user_id', 'product', 'rating')
 
 class ProductDetailSerializer(serializers.ModelSerializer) :
     comments = serializers.PrimaryKeyRelatedField(many=True, allow_null=True, queryset=Comment)

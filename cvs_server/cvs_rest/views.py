@@ -13,6 +13,7 @@ from django_filters.rest_framework import DjangoFilterBackend
 from django.core.validators import validate_email
 from django.core.exceptions import ValidationError
 import re
+import ast
 
 class CustomAuthToken(ObtainAuthToken):
     def post(self, request, *args, **kwargs):
@@ -53,10 +54,9 @@ def sign_up(request):
     if len(password) < 6:
         return Response(data={'message':'Password should be at least 6.'}, status=status.HTTP_400_BAD_REQUEST)
         
-    user, created = CustomUser.objects.get_or_create(username=name)
+    user, created = CustomUser.objects.get_or_create(username=name, email=email)
     if created:
         user.set_password(password)
-        user['email'] = email
         token, created = Token.objects.get_or_create(user=user)
         response_json = UserSerializer(user).data
         response_json['token'] = token.key
@@ -95,11 +95,22 @@ class ProductDetail(generics.RetrieveAPIView) :
 def create_comment(request, format=None) :
 
     #create and save new rating object
-    serializer = CommentSerializer(data=request.data)
-    if serializer.is_valid() :
+    data = request.data
+    rating = data.get('rating')
+    content = data.get('content')
+    product = data.get('product')
+        
+    if not (rating and content and product):
+        return Response(data={'message':'content or product or rating Field is not existed'}, status=status.HTTP_400_BAD_REQUEST)
+
+    data['rating'] = {'value':rating, 'user_id':request.user.id, 'comment':1}
+    serializer = CommentSerializer(data=data) 
+    
+    if serializer.is_valid():
         serializer.save(user_id=request.user)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 
 @api_view(['GET', 'PUT', 'DELETE'])
