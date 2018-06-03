@@ -12,6 +12,10 @@ import CustomHeader from '../../components/CustomHeader'
 import { requestProductDetail, requestRelatedProducts } from './actions'
 import Image from 'grommet/components/Image'
 import Heading from 'grommet/components/Heading'
+import Form from 'grommet/components/Form'
+import FormField from 'grommet/components/FormField'
+import TextInput from 'grommet/components/TextInput'
+
 
 const manufacturer = {'CU': 'CU', 'GS': 'GS25', 'SE': 'SEVEN ELEVEN'}
 export class ProductDetail extends React.Component { // eslint-disable-line react/prefer-stateless-function
@@ -64,6 +68,11 @@ export class ProductDetail extends React.Component { // eslint-disable-line reac
         {
           (this.state && this.state.relatedRequestDone || (productDetail !== '' && !(productDetail.small_category || productDetail.large_category))) ? <h3>{relatedProducts.length === 0 ? '인기 상품' : '유사 상품'}</h3> : <div/>
         }
+        <Form>
+          <FormField label='짧은 상품평'>
+            <TextInput/>
+          </FormField>
+        </Form>
       </div>
     );
   }
