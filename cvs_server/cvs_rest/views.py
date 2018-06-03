@@ -4,12 +4,16 @@ from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.authtoken.models import Token
 from rest_framework.response import Response
 from rest_framework import status, generics, filters
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
+from django.contrib.contenttypes.models import ContentType
 from django_filters.rest_framework import DjangoFilterBackend
+from django.core.validators import validate_email
+from django.core.exceptions import ValidationError, ObjectDoesNotExist
 import re
 
 class CustomAuthToken(ObtainAuthToken):
-    def post(self, request,*args, **kwargs):
+    def post(self, request, *args, **kwargs):
         serializer = self.serializer_class(data=request.data, context={'request': request})
         serializer.is_valid(raise_exception=True)
         user = serializer.validated_data.get('user')
@@ -26,28 +30,28 @@ def sign_up(request):
     data = request.data
     name = data.get('username')
     password = data.get('password')
-    nickname = data.get('nickname')
+    email = data.get('email')
     name_regex = re.compile(r'^[A-Za-z]{1}[A-Za-z0-9_]{3,19}$') 
     
-    if not (name and password and nickname):
-        return Response(data={'message':'username or password or nickname field is missing.'}, status=status.HTTP_400_BAD_REQUEST)
+    if not (name and password and email):
+        return Response(data={'message':'username or password or email field is missing.'}, status=status.HTTP_400_BAD_REQUEST)
     
     if not name_regex.match(name):
         return Response(data={'message':'username is at least 4 to 20 only with alaphabet, number and under score'}, status=status.HTTP_400_BAD_REQUEST)
     
-    if len(nickname) < 2 or len(nickname) > 10:
-        return Response(data={'message':'nickname is at least 2 to 10.'}, status=status.HTTP_400_BAD_REQUEST) 
+    if email :
+        try:
+            validate_email(email)
+        except ValidationError:
+            return Response(data={'message':'email is not validated.'}, status=status.HTTP_400_BAD_REQUEST) 
 
     if CustomUser.objects.filter(username=name):
         return Response(data={'message':'User name aleady exists.'}, status=status.HTTP_400_BAD_REQUEST)
-    
-    if CustomUser.objects.filter(nickname=nickname):
-        return Response(data={'message':'Nick name already exists.'}, status=status.HTTP_400_BAD_REQUEST)
-        
+            
     if len(password) < 6:
         return Response(data={'message':'Password should be at least 6.'}, status=status.HTTP_400_BAD_REQUEST)
         
-    user, created = CustomUser.objects.get_or_create(username=name, nickname=nickname)
+    user, created = CustomUser.objects.get_or_create(username=name, email=email)
     if created:
         user.set_password(password)
         token, created = Token.objects.get_or_create(user=user)
@@ -58,6 +62,15 @@ def sign_up(request):
     else:
         return Response(data={'message':'User already exist'}, status=status.HTTP_400_BAD_REQUEST)
 
+#/users
+class CustomUserList(generics.ListAPIView):
+    queryset = CustomUser.objects.all()
+    serializer_class = UserSerializer
+
+#/users/id
+class CustomUserDetail(generics.RetrieveAPIView):
+    queryset = CustomUser.objects.all()
+    serializer_class = UserSerializer
 
 #/products
 class ProductList(generics.ListAPIView) :
@@ -67,11 +80,93 @@ class ProductList(generics.ListAPIView) :
     search_fields = ('name',)
     filter_fields = ('price', 'large_category', 'small_category', 'manufacturer', 'PB')
 
-
-#/products/pk
+#/products/id
 class ProductDetail(generics.RetrieveAPIView) :
     queryset = Product.objects.all()
-    serializer_class = ProductSerializer
+    serializer_class = ProductDetailSerializer
+
+
+#일단 유저빼고 해봄
+@api_view(['POST'])
+@permission_classes((IsAuthenticatedOrReadOnly,))
+def create_comment(request, format=None) :
+
+    #create and save new rating object
+    data = request.data
+    rating = data.get('rating')
+    content = data.get('content')
+    product = data.get('product')
+        
+    if not (rating and content and product):
+        return Response(data={'message':'content or product or rating Field is not existed'}, status=status.HTTP_400_BAD_REQUEST)
+    
+    try:
+        product_obj = Product.objects.get(id=product)
+    except ObjectDoesNotExist:    
+        return Response(data={'message':'Wrong Product ID'}, status=status.HTTP_400_BAD_REQUEST)
+   
+    comment_obj = Comment.objects.create(content=content, product=product_obj, user_id=request.user)
+    Rating.objects.create(comment=comment_obj, value=rating, user_id=request.user)
+    
+    serializer = CommentSerializer(comment_obj) 
+    #if serializer.is_valid():
+        #serializer.save()
+    return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+
+
+@api_view(['GET', 'PUT', 'DELETE'])
+@permission_classes((IsAuthenticatedOrReadOnly,))
+def comment_detail(request, pk, format=None) :
+    try:
+        comment = Comment.objects.get(pk=pk)
+    except Comment.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    if request.method == 'GET' :
+        serializer = CommentSerializer(comment)
+        return Response(serializer.data)
+    
+    elif comment.user_id != request.user:
+        return Response(data={'message':'You are not owner'}, status=status.HTTP_400_BAD_REQUEST)
+    elif request.method == 'PUT' :
+        serializer = CommentSerializer(comment, data=request.data)
+        if serializer.is_valid() :
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    elif request.method == 'DELETE' :
+        comment.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+    """
+    ratingSerializer = RatingSerializer(data=request.data)
+    ratingSerializer.is_valid(raise_exception=True)
+    ratingData = ratingSerializer.validated_data.get('')
+
+    serializer = CommentSerializer(dvata=request.data, context={'request':request})
+    serializer.is_valid(raise_exception=True)
+    data = serializer.validated_data
+    content = data.get('content')
+    rating = data.get('rating')
+    user = data.get('user')
+
+    #rating, user_id, 
+    if 'created' in kwargs :
+        if kwargs['created'] :
+            instance = kwargs['instance']
+            ctype = ContentType.objects.get_for_model(instance)
+            entry = Entry.objects.get_or_create(content_type=ctype, object_id=instance.id, pub_date=instance.pub_date)
+    """
+
+    
+
+    
+
+"""
+
 
 
 #/reviews
@@ -86,25 +181,6 @@ class ReviewList(generics.ListCreateAPIView) :
 class ReviewDetail(generics.RetrieveUpdateDestroyAPIView) :
     queryset = Review.objects.all()
     serializer_class = ReviewSerializer
-
-
-"""
-#review filtered by user
-class ReviewListByUser(generics.ListAPIView) :
-    serializer_class = ReviewSerializer
-
-    def get_queryset(self) :
-        user = self.request.user
-        return Review.objects.filter(user_id=user)
-"""
-
-
-#/comments
-class CommentList(generics.ListCreateAPIView) :
-    queryset = Comment.objects.all()
-    serializer_class = CommentSerializer
-    filter_backends = (DjangoFilterBackend,)
-    filter_fields = ('user_id',)
 
 
 #/comments/pk
@@ -132,3 +208,4 @@ class RecipeDetail(generics.RetrieveUpdateDestroyAPIView) :
     queryset = Recipe.objects.all()
     serializer_class = RecipeSerializer
 
+"""
