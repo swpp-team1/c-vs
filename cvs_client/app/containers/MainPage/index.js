@@ -8,6 +8,8 @@ import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
 import { createStructuredSelector } from 'reselect';
+import {bindActionCreators} from 'redux';
+import {searchProduct} from './actions'
 import makeSelectMainPage from './selectors';
 import messages from './messages';
 import App from 'grommet/components/App';
@@ -32,7 +34,29 @@ import MediaQuery from 'react-responsive';
 // How to load image?
 
 
-export class MainPage extends React.Component { // eslint-disable-line react/prefer-stateless-function
+export class MainPage extends React.Component {
+  constructor(props){
+    super(props);
+
+    this.state = {term: ''};
+    this.onInputChange = this.onInputChange.bind(this);
+    this.onEnter = this.onEnter.bind(this);
+  }
+  
+  onInputChange(event){
+    this.setState({term: event.target.value});
+    console.log(event.target.value);
+    //this.props.searchProduct(this.state.term);
+  }
+
+  onEnter(item, selected){
+    if(!selected){
+      alert("RETURN PRESSED")
+      this.props.router.push(`/search/${this.state.term}`)
+    }
+  }
+  
+  // eslint-disable-line react/prefer-stateless-function
   render() {
     return (
       <App style={{maxWidth: 'none'}}>
@@ -43,10 +67,10 @@ export class MainPage extends React.Component { // eslint-disable-line react/pre
             <Box direction='row' justify='center' align='center'>
               <Section align='center' style={{alignItems: 'center', justifyContent: 'center', height: 300}}>
               <Heading margin='none' strong = {true} tag = 'h2'>제품 및 레시피 검색</Heading>
-                {/* HEADING? TITLE? <Title>제품 및 레시피 검색</Title> */}
                 <Box colorIndex='light-1' style={{margin: '20px 0px'}}>
                 <MediaQuery query="(min-device-width: 1024px)">
-                <Search style={{width: '700px'}} inline={true} placeHolder='검색' />
+                <Search style={{width: '700px'}} inline={true} placeHolder='검색' value={this.state.term} onDOMChange={this.onInputChange} 
+                onSelect={this.onEnter} suggestions={['Suggestion is not yet implemented.']}/>
                 </MediaQuery>
                 <MediaQuery query="(max-device-width: 1023px)">
                 <Search inline={true} placeHolder='검색' />
@@ -55,18 +79,12 @@ export class MainPage extends React.Component { // eslint-disable-line react/pre
               </Section>
             </Box>
           </Hero>
-          {/* LEGACY CODE
-          <Section style={{alignItems: 'center', justifyContent: 'center', height: 300, backgroundColor: '#f6f6f6'}}>
-            <Title>제품 및 레시피 검색</Title>
-            <Search style={{width: '700px', margin: '20px 0px'}} inline={true} placeHolder='검색'/>
-          </Section> */}
 
           <Box colorIndex='light-2'>
           <Heading align = 'start' tag='h2' style={{margin: '40px 40px 20px', color: '#383838'}}>인기 제품</Heading>
           <Tiles fill={false} flush={false} size='small'>
           <Tile> <Card thumbnail='http://cdn2.bgfretail.com/bgfbrand/files/product/5D8998FE3B78430B99641CCA0C3F3506.jpg'
                 label='Sample Label' heading='Sample Heading' description='Sample description providing more details.' onClick = {() => alert("clicked")} colorIndex = 'light-1'
-                // link={<Anchor href='' label='Sample anchor' />}
                 /> </Tile>
           </Tiles>
           <Anchor align='end' label='Label' primary={true} reverse={true} path='/productAll' style={{margin : '20px 40px', color: '#383838'}}>전체 제품 보기</Anchor>
@@ -89,6 +107,10 @@ MainPage.propTypes = {
 const mapStateToProps = createStructuredSelector({
   MainPage: makeSelectMainPage(),
 });
+
+// function mapStateToProps(state){
+//   return {products: state.products};
+// }
 
 function mapDispatchToProps(dispatch) {
   return {
