@@ -51,7 +51,6 @@ export class MainPage extends React.Component {
 
   onEnter(item, selected){
     if(!selected){
-      alert("RETURN PRESSED")
       this.props.router.push(`/search/${this.state.term}`)
     }
   }
