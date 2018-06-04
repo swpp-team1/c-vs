@@ -17,6 +17,9 @@ import Search from 'grommet/components/Search';
 import MediaQuery from 'react-responsive';
 import Article from 'grommet/components/Article';
 import Section from 'grommet/components/Section';
+import {searchProduct} from './actions'
+import Heading from 'grommet/components/Heading';
+
 
 export class SearchPage extends React.Component { // eslint-disable-line react/prefer-stateless-function
   constructor(props){
@@ -49,6 +52,7 @@ export class SearchPage extends React.Component { // eslint-disable-line react/p
               <Section align='center' style={{alignItems: 'center', justifyContent: 'center', height: 100}}>
 
         <Box colorIndex='light-1' style={{margin: '20px 0px'}}>
+        <Heading margin='none' strong = {true} tag = 'h3'>제품 및 레시피 검색</Heading>
         <MediaQuery query="(min-device-width: 1024px)">
         <Search style={{width: '700px'}} inline={true} placeHolder='검색' value={this.state.term} onDOMChange={this.onInputChange} 
         onSelect={this.onEnter} suggestions={['Suggestion is not yet implemented.']}/>
