@@ -7,6 +7,7 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import Helmet from 'react-helmet';
+import {bindActionCreators} from 'redux';
 import { FormattedMessage } from 'react-intl';
 import { createStructuredSelector } from 'reselect';
 import makeSelectSearchPage from './selectors';
@@ -17,7 +18,7 @@ import Search from 'grommet/components/Search';
 import MediaQuery from 'react-responsive';
 import Article from 'grommet/components/Article';
 import Section from 'grommet/components/Section';
-import {searchProduct} from './actions'
+import { searchProduct, receivedSearchResult } from './actions';
 import Heading from 'grommet/components/Heading';
 
 
@@ -30,19 +31,32 @@ export class SearchPage extends React.Component { // eslint-disable-line react/p
     this.onEnter = this.onEnter.bind(this);
   }
 
+  componentWillMount(){
+    console.log("PARAM ID:", this.props.params.id);
+    if(this.props.params.id === undefined){
+      console.log("UNDEFINED PARAMETER ID")
+    }
+    else{ 
+      console.log("PARAM: ", this.props.params.id);
+      this.props.searchProduct(this.props.params.id);
+    }
+  }
+
   onInputChange(event){
     this.setState({term: event.target.value});
     console.log(event.target.value);
-    //this.props.searchProduct(this.state.term);
   }
 
   onEnter(item, selected){
     if(!selected){
       this.props.router.push(`/search/${this.state.term}`)
+      location.reload();
     }
   }
   
   render() {
+    console.log("RESULT: ", this.props.searchResult);
+
     return (
       <div>
         SEARCH KEYWORD : {this.props.params.id}
@@ -70,18 +84,16 @@ export class SearchPage extends React.Component { // eslint-disable-line react/p
   }
 }
 
-SearchPage.propTypes = {
-  dispatch: PropTypes.func.isRequired,
-};
 
-const mapStateToProps = createStructuredSelector({
-  SearchPage: makeSelectSearchPage(),
-});
+const mapStateToProps = (state) => {
+  return ({
+    searchResult: state.get('searchPage').toJS().searchResult
+  })
+}
+
 
 function mapDispatchToProps(dispatch) {
-  return {
-    dispatch,
-  };
+  return { searchProduct: (searchKey) => dispatch(searchProduct(searchKey))}
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(SearchPage);

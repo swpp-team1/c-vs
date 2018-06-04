@@ -42,7 +42,7 @@ export class MainPage extends React.Component {
     this.onInputChange = this.onInputChange.bind(this);
     this.onEnter = this.onEnter.bind(this);
   }
-  
+
   onInputChange(event){
     this.setState({term: event.target.value});
     console.log(event.target.value);
