@@ -2,7 +2,6 @@ from rest_framework import serializers
 from cvs_rest.models import *
 from django.db.models import Avg
 
-
 class UserSerializer(serializers.ModelSerializer):
     #recipe_set = serializers.PrimaryKeyRelatedField(many=True, queryset=Recipe.objects.all())
     #review_set = serializers.PrimaryKeyRelatedField(many=True, queryset=Review.objects.all())
@@ -24,7 +23,23 @@ class ReviewSerializer(serializers.ModelSerializer) :
        model = Review
        fields = ('id', 'created', 'edited', 'title', 'user_id', 'product')
 
+class RatingSerializer(serializers.ModelSerializer) :
 
+    #override
+    def create(self, validated_data) :
+        return Rating.objects.create(**validated_data)
+    
+    #override
+    def update(self, instance, validated_data) :
+        instance.edited = validated_data.get('edited', instance.edited)
+        instance.value = validated_data.get('value', instance.value)
+        instance.save()
+        return instance
+    
+    
+    class Meta:
+        model = Rating
+        fields = ('id', 'created', 'edited', 'value', 'user_id', 'comment')
 
 class RatingSerializer(serializers.ModelSerializer) :
 
@@ -44,8 +59,6 @@ class RatingSerializer(serializers.ModelSerializer) :
         model = Rating
         fields = ('id', 'created', 'edited', 'value', 'user_id', 'comment')
 
-#Comment - Rating은 1:1 연결
-#Rating과 Comment모두 수정 가능 
 class CommentSerializer(serializers.ModelSerializer) :
 
     #rating = RatingSerializer()
@@ -75,10 +88,8 @@ class CommentSerializer(serializers.ModelSerializer) :
         return 0
 
 class ProductDetailSerializer(serializers.ModelSerializer) :
+        rating = serializers.SerializerMethodField()
 
-    rating = serializers.SerializerMethodField()
-    
-    class Meta:
         model = Product
         fields = ('id', 'name', 'image', 'price', 'manufacturer', 'PB', 'large_category', 'small_category', 'rating', 'comment_set')
     
@@ -99,44 +110,4 @@ class ProductSerializer(serializers.ModelSerializer) :
         return ratings.aggregate(Avg('value'))['value__avg'] or 0
         
 
-"""
-class CommentRelatedField(serializers.RelatedField) :
-    def to_native(self, value):
-        if isinstance(value, Product):
-            serializer = ProductSerializer(value)
-        elif isinstance(value, Recipe) :
-            serializer = RecipeSerializer(value)
-        else :
-            raise Exception('Unexpected type of comment object')
-        return serializer.data
-class CommentIdSerializer(serializers.ModelSerializer) :
-    class Meta :
-        model = Product
-        fields = ('id')
 
-class ReviewIdSerializer(serializers.ModelSerializer) :
-    class Meta :
-        model = Review
-        fields = ('id')
-"""
-
-
-
-"""
-class RatingObjectRelatedField(serializers.RelatedField) :
-
-    def to_native(self, value) :
-        #ratingValue = 
-
-    def to_native(self, value) :
-        if isinstance(value, models.Comment) :
-            serializer = CommentSerializer(value)
-        elif isinstance(value, models.Review) :
-            serializer = ReviewSerializer(value)
-        else :
-            raise Exception('Unexpected type of comment object')
-        return serializer.data
-
-
-class PostSerializer(serializers.ModelSerializer) :
-    #something"""

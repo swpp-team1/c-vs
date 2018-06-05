@@ -157,34 +157,7 @@ def comment_detail(request, pk, format=None) :
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
-    """
-    ratingSerializer = RatingSerializer(data=request.data)
-    ratingSerializer.is_valid(raise_exception=True)
-    ratingData = ratingSerializer.validated_data.get('')
-
-    serializer = CommentSerializer(dvata=request.data, context={'request':request})
-    serializer.is_valid(raise_exception=True)
-    data = serializer.validated_data
-    content = data.get('content')
-    rating = data.get('rating')
-    user = data.get('user')
-
-    #rating, user_id, 
-    if 'created' in kwargs :
-        if kwargs['created'] :
-            instance = kwargs['instance']
-            ctype = ContentType.objects.get_for_model(instance)
-            entry = Entry.objects.get_or_create(content_type=ctype, object_id=instance.id, pub_date=instance.pub_date)
-    """
-
-    
-
-    
-
 """
-
-
-
 #/reviews
 class ReviewList(generics.ListCreateAPIView) :
     queryset = Review.objects.all()
