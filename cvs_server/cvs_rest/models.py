@@ -2,11 +2,7 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes import fields
-
-class CustomUser(AbstractUser):
-    created = models.DateTimeField(auto_now_add=True)
-    nickname = models.CharField(max_length=20, unique=True)
-    
+   
 
 class Product(models.Model):
     DEFAULT_PK = 1
@@ -39,6 +35,10 @@ class Product(models.Model):
 
     class Meta:
         ordering = ('manufacturer', 'name',)
+
+
+class CustomUser(AbstractUser):
+    created = models.DateTimeField(auto_now_add=True)
 
 
 class Recipe(models.Model):
@@ -135,12 +135,12 @@ class Rating(models.Model) :
         on_delete=models.CASCADE,
     )
     
-    """
     comment = models.OneToOneField(
         Comment,
         on_delete=models.CASCADE
-        )"""
-    comment = models.ForeignKey('Comment', related_name='rating',  on_delete=models.CASCADE, default=Comment.DEFAULT_PK)
+        )
+        
+    #comment = models.ForeignKey('Comment', related_name='rating',  on_delete=models.CASCADE, default=Comment.DEFAULT_PK)
     #review = models.ForeignKey('Review', on_delete=models.CASCADE, null=True)
     class Meta:
         ordering = ('created',)

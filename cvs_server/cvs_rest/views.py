@@ -7,10 +7,11 @@ from rest_framework.response import Response
 from rest_framework import status, generics, filters
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
-from rest_framework import generics
 from django.contrib.contenttypes.models import ContentType
 from django_filters.rest_framework import DjangoFilterBackend
-
+from django.core.validators import validate_email
+from django.core.exceptions import ValidationError, ObjectDoesNotExist
+import re
 
 class CustomAuthToken(ObtainAuthToken):
     def post(self, request, *args, **kwargs):
@@ -30,28 +31,28 @@ def sign_up(request):
     data = request.data
     name = data.get('username')
     password = data.get('password')
-    nickname = data.get('nickname')
+    email = data.get('email')
     name_regex = re.compile(r'^[A-Za-z]{1}[A-Za-z0-9_]{3,19}$') 
     
-    if not (name and password and nickname):
-        return Response(data={'message':'username or password or nickname field is missing.'}, status=status.HTTP_400_BAD_REQUEST)
+    if not (name and password and email):
+        return Response(data={'message':'username or password or email field is missing.'}, status=status.HTTP_400_BAD_REQUEST)
     
     if not name_regex.match(name):
         return Response(data={'message':'username is at least 4 to 20 only with alaphabet, number and under score'}, status=status.HTTP_400_BAD_REQUEST)
     
-    if len(nickname) < 2 or len(nickname) > 10:
-        return Response(data={'message':'nickname is at least 2 to 10.'}, status=status.HTTP_400_BAD_REQUEST) 
+    if email :
+        try:
+            validate_email(email)
+        except ValidationError:
+            return Response(data={'message':'email is not validated.'}, status=status.HTTP_400_BAD_REQUEST) 
 
     if CustomUser.objects.filter(username=name):
         return Response(data={'message':'User name aleady exists.'}, status=status.HTTP_400_BAD_REQUEST)
-    
-    if CustomUser.objects.filter(nickname=nickname):
-        return Response(data={'message':'Nick name already exists.'}, status=status.HTTP_400_BAD_REQUEST)
-        
+            
     if len(password) < 6:
         return Response(data={'message':'Password should be at least 6.'}, status=status.HTTP_400_BAD_REQUEST)
         
-    user, created = CustomUser.objects.get_or_create(username=name, nickname=nickname)
+    user, created = CustomUser.objects.get_or_create(username=name, email=email)
     if created:
         user.set_password(password)
         token, created = Token.objects.get_or_create(user=user)
@@ -92,25 +93,42 @@ class ProductDetail(generics.RetrieveAPIView) :
 def create_comment(request, format=None) :
 
     #create and save new rating object
-    serializer = CommentSerializer(data=request.data)
-    if serializer.is_valid() :
-        serializer.save(user_id=request.user)
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
-    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    data = request.data
+    rating = data.get('rating')
+    content = data.get('content')
+    product = data.get('product')
+        
+    if not (rating and content and product):
+        return Response(data={'message':'content or product or rating Field is not existed'}, status=status.HTTP_400_BAD_REQUEST)
+    
+    try:
+        product_obj = Product.objects.get(id=product)
+    except ObjectDoesNotExist:    
+        return Response(data={'message':'Wrong Product ID'}, status=status.HTTP_400_BAD_REQUEST)
+   
+    comment_obj = Comment.objects.create(content=content, product=product_obj, user_id=request.user)
+    Rating.objects.create(comment=comment_obj, value=rating, user_id=request.user)
+    
+    serializer = CommentSerializer(comment_obj) 
+    #if serializer.is_valid():
+        #serializer.save()
+    return Response(serializer.data, status=status.HTTP_201_CREATED)
+
 
 
 @api_view(['GET', 'PUT', 'DELETE'])
-@permission_classes([IsAuthenticatedOrReadOnly,])
+@permission_classes((IsAuthenticatedOrReadOnly,))
 def comment_detail(request, pk, format=None) :
     try:
         comment = Comment.objects.get(pk=pk)
     except Comment.DoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND)
-    
     if request.method == 'GET' :
         serializer = CommentSerializer(comment)
         return Response(serializer.data)
     
+    elif comment.user_id != request.user:
+        return Response(data={'message':'You are not owner'}, status=status.HTTP_400_BAD_REQUEST)
     elif request.method == 'PUT' :
         serializer = CommentSerializer(comment, data=request.data)
         if serializer.is_valid() :
