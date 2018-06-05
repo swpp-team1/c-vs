@@ -88,8 +88,9 @@ class CommentSerializer(serializers.ModelSerializer) :
         return 0
 
 class ProductDetailSerializer(serializers.ModelSerializer) :
-        rating = serializers.SerializerMethodField()
+    rating = serializers.SerializerMethodField()
 
+    class Meta:
         model = Product
         fields = ('id', 'name', 'image', 'price', 'manufacturer', 'PB', 'large_category', 'small_category', 'rating', 'comment_set')
     
