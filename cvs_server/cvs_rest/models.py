@@ -74,7 +74,7 @@ class Review(models.Model):
     object_id = models.PositiveIntegerField()
     belong_to = fields.GenericForeignKey('content_type', 'object_id') 
     """
-    product_id = models.ForeignKey('Product', on_delete=models.CASCADE)
+    product = models.ForeignKey('Product', on_delete=models.CASCADE)
     #rating = fields.GenericRelation('Rating', related_query_name='review')
     
     post = fields.GenericRelation('Post', related_query_name='review')    
@@ -90,12 +90,12 @@ class Comment(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     edited = models.DateTimeField(auto_now=True)
     content = models.TextField()
-    
+    rating = fields.GenericRelation('Rating')
     user_id = models.ForeignKey(
         'CustomUser',
         on_delete=models.CASCADE,
     )
-    
+
     """
     content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
     object_id = models.PositiveIntegerField()
@@ -103,8 +103,6 @@ class Comment(models.Model):
 
     """
     product = models.ForeignKey('Product', on_delete=models.CASCADE, default=Product.DEFAULT_PK)
-
-
     
 
     class Meta:
@@ -133,13 +131,19 @@ class Rating(models.Model) :
         related_name='ratings',
         on_delete=models.CASCADE,
     )
-    
+    """
     comment = models.OneToOneField(
         Comment,
         on_delete=models.CASCADE
         )
-        
-    #comment = models.ForeignKey('Comment', related_name='rating',  on_delete=models.CASCADE, default=Comment.DEFAULT_PK)
-    #review = models.ForeignKey('Review', on_delete=models.CASCADE, null=True)
+    """
+    product = models.ForeignKey(
+        'Product',
+        on_delete=models.CASCADE,     
+    )
+    content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
+    object_id = models.PositiveIntegerField()
+    belong_to = fields.GenericForeignKey('content_type', 'object_id')
+
     class Meta:
         ordering = ('created',)

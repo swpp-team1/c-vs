@@ -1,12 +1,6 @@
 from rest_framework import serializers
 from cvs_rest.models import *
 
-"""
-class ProductSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = models.Product
-        fields = ('id', 'name', 'image', 'price', 'flag', 'manufacturer', 'review_set', 'comment_set')
-"""
 
 class UserSerializer(serializers.ModelSerializer):
     #recipe_set = serializers.PrimaryKeyRelatedField(many=True, queryset=Recipe.objects.all())
@@ -27,7 +21,7 @@ class RecipeSerializer(serializers.ModelSerializer) :
 class ReviewSerializer(serializers.ModelSerializer) :
    class Meta:
        model = Review
-       fields = '__all__'
+       fields = ('id', 'created', 'edited', 'title', 'user_id', 'product')
 
 
 
@@ -53,8 +47,9 @@ class RatingSerializer(serializers.ModelSerializer) :
 #Rating과 Comment모두 수정 가능 
 class CommentSerializer(serializers.ModelSerializer) :
 
-    rating = RatingSerializer()
-
+    #rating = RatingSerializer()
+    rating = serializers.SerializerMethodField()
+    '''
     def create(self, validated_data) :
         rating_data = validated_data.pop('rating')
         comment = Comment.objects.create(**validated_data)
@@ -74,10 +69,16 @@ class CommentSerializer(serializers.ModelSerializer) :
         rating.value = rating_data.get('value', raing.value)
         rating.save()
         return instance
-    
+    '''    
     class Meta:
         model = Comment
         fields = ('id', 'created', 'edited', 'content', 'user_id', 'product', 'rating')
+    
+    def get_rating(self, obj):
+        rat = obj.rating.get()
+        if rat:
+            return rat.value
+        return 0
 
 class ProductDetailSerializer(serializers.ModelSerializer) :
     class Meta:

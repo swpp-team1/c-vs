@@ -111,14 +111,19 @@ def create_comment(request, format=None) :
         
         if not (rating and content and product):
             return Response(data={'message':'content or product or rating Field is not existed'}, status=status.HTTP_400_BAD_REQUEST)
-    
+        
+        rating = int(rating)
+        
+        if rating < 1 or rating > 5:
+            return Response(data={'message':'rating should be 1 to 5'}, status=status.HTTP_400_BAD_REQUEST)
+
         try:
             product_obj = Product.objects.get(id=product)
         except ObjectDoesNotExist:    
             return Response(data={'message':'Wrong Product ID'}, status=status.HTTP_400_BAD_REQUEST)
    
         comment_obj = Comment.objects.create(content=content, product=product_obj, user_id=request.user)
-        Rating.objects.create(comment=comment_obj, value=rating, user_id=request.user)
+        Rating.objects.create(belong_to=comment_obj, value=rating, user_id=request.user, product=product_obj)
     
         serializer = CommentSerializer(comment_obj) 
         return Response(serializer.data, status=status.HTTP_201_CREATED)
