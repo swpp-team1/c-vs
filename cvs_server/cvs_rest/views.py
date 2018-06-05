@@ -87,6 +87,7 @@ class ProductDetail(generics.RetrieveAPIView) :
     serializer_class = ProductDetailSerializer
 
 
+
 #일단 유저빼고 해봄
 @api_view(['POST'])
 @permission_classes((IsAuthenticatedOrReadOnly,))
@@ -99,7 +100,7 @@ def create_comment(request, format=None) :
     product = data.get('product')
         
     if not (rating and content and product):
-        return Response(data={'message':'content or product or rating Field is not existed'}, status=status.HTTP_400_BAD_REQUEST)
+        return Response(data={'message':'content or product or rating Field does not exist'}, status=status.HTTP_400_BAD_REQUEST)
     
     try:
         product_obj = Product.objects.get(id=product)
@@ -140,34 +141,56 @@ def comment_detail(request, pk, format=None) :
         comment.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
-
-    """
-    ratingSerializer = RatingSerializer(data=request.data)
-    ratingSerializer.is_valid(raise_exception=True)
-    ratingData = ratingSerializer.validated_data.get('')
-
-    serializer = CommentSerializer(dvata=request.data, context={'request':request})
-    serializer.is_valid(raise_exception=True)
-    data = serializer.validated_data
-    content = data.get('content')
-    rating = data.get('rating')
-    user = data.get('user')
-
-    #rating, user_id, 
-    if 'created' in kwargs :
-        if kwargs['created'] :
-            instance = kwargs['instance']
-            ctype = ContentType.objects.get_for_model(instance)
-            entry = Entry.objects.get_or_create(content_type=ctype, object_id=instance.id, pub_date=instance.pub_date)
-    """
-
     
 
+#/reviews/
+@api_view(['GET', 'POST'])
+@permission_classes((IsAuthenticatedOrReadOnly,))
+def get_create_review(request, format=None) :
+    if request.method == 'GET' :
+        try :
+            reviews = Review.objects.all()
+        except Review.DoesNotExist:
+            return Response(data={'message':'No reviews to show'}, status=status.HTTP_404_NOT_FOUND)
+        serializer = ReviewListSerializer(reviews, many=True)
+        return Response(serializer.data)
+    
+    elif request.method == 'POST' :
+        data = request.data
+        title = data.get('title')
+        product_id = data.get('product_id')
+
+        #에러메세지 나중에 세분화할 것 
+        if not (title and product_id) :
+            return Response(data={'message':'title or rating Field does not exist'}, status=status.HTTP_400_BAD_REQUEST)
+        
+        try:
+            product_obj = Product.objects.get(id=product_id)
+        except ObjectDoesNotExist :
+            return Response(data={'message':'Wrong Product ID'}, status=status.HTTP_400_BAD_REQUEST)
+        
+        review_obj = Review.objects.create(title=title, user_id=request.user, product_id=product_obj)
+        Post.objects.create(belong_to=review_obj, image=data.get('image'), content=data.get('content'))
+        serializer = ReviewDetailSerializer(review_obj)
+
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+"""
 
 class ReviewList(generics.ListCreateAPIView) :
     queryset = Review.objects.all()
-    serializer_class = ReviewSerializer
+    serializer_class = ReviewListSerializer
 
+"""
+#/reviews/pk
+class ReviewDetail(generics.RetrieveUpdateDestroyAPIView) :
+    queryset = Review.objects.all()
+    serializer_class = ReviewDetailSerializer
+
+##for check
+class PostList(generics.ListAPIView) :
+    queryset = Post.objects.all()
+    serializer_class = PostSerializer
 
 
 """

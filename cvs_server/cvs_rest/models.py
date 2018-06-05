@@ -52,8 +52,6 @@ class Recipe(models.Model):
         on_delete=models.CASCADE,
     )
     post = fields.GenericRelation('Post', related_query_name='recipes') 
-    comments = fields.GenericRelation('Comment', related_query_name='recipes')
-    reviews = fields.GenericRelation('Review', related_query_name='recipes')
     
 
     class Meta:
@@ -79,7 +77,6 @@ class Review(models.Model):
     
     post = fields.GenericRelation('Post', related_query_name='review')    
     
-    
     class Meta:
         ordering = ('created',)
 
@@ -93,7 +90,6 @@ class Comment(models.Model):
     
     user_id = models.ForeignKey(
         'CustomUser',
-        related_name='comments',
         on_delete=models.CASCADE,
     )
     

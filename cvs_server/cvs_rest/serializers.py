@@ -24,10 +24,12 @@ class RecipeSerializer(serializers.ModelSerializer) :
         model = Recipe
         fields = '__all__'
 
-class ReviewSerializer(serializers.ModelSerializer) :
+class ReviewListSerializer(serializers.ModelSerializer) :
     class Meta:
        model = Review
        fields = ('id', 'created', 'edited', 'title', 'user_id', 'product_id')
+
+
 
 
 
@@ -89,20 +91,60 @@ class ProductSerializer(serializers.ModelSerializer) :
     class Meta:
         model = Product
         fields = '__all__'
-
+"""
 class PostRelatedField(serializers.RelatedField) :
 
     created = serializers.DateTimeField()
     image = serializers.ImageField()
     content = serializers.CharField()
-    
+
     
     def to_representation(self, value) :
         if isinstance(value, Review) :
-            return 'review_id: ' + value.id
+            return 'post: ' + value.id
         elif isinstance(value, Recipe) :
-            return 'recipe_id: ' + value.id
+            return 'post: ' + value.id
         raise Exception('Unexpected type of Post object')
+
+"""
+class PostSerializer(serializers.ModelSerializer) :
+    class Meta :
+        model = Post
+        fields = ('created', 'image', 'content')
+    
+
+class ReviewDetailSerializer(serializers.ModelSerializer) :
+
+    post = PostSerializer(many=True)
+    """
+    def create(self, validated_data) :
+        post_image = validated_data.pop('image')
+        post_content = validated_data.pop('content')
+
+        review = Review.objects.create(**validated_data)
+        post_data = {}
+        post_data['belong_to'] = review
+        post_data['image'] = post_image
+        post_data['content'] = post_content
+        Post.objects.create(**post_data)
+        return review
+    
+    def update(self, instance, validated_data) :
+        post_data = validated_data.pop('post')
+        post = instance.post
+        instance.edited = validated_data.get('edited', instance.edited)
+        instance.title = validated_data.get('title', instance.title)
+        instance.save()
+
+        post.image = post_data.get('image', post.image)
+        post.content = post_data.get('content', post.content)
+        post.save()
+        return instance
+"""
+    class Meta :
+        model = Review
+        fields = ('created', 'edited', 'title', 'user_id', 'product_id', 'post')
+
 
 
 """
