@@ -14,14 +14,16 @@ import messages from './messages';
 import Grommet from 'grommet'
 import Box from 'grommet/components/Box';
 import CustomHeader from '../../components/CustomHeader'
+import Anchor from 'grommet/components/Anchor'
 
 export class UserLogin extends React.Component { // eslint-disable-line react/prefer-stateless-function
   render() {
     return (
       <Grommet.App>
-      <CustomHeader />
+      <CustomHeader/>
       <Box align='center' pad='large'>
-      <Grommet.LoginForm align='center' title='C:VS login' onSubmit={() => console.log('login')} usernameType='text'/>
+        <Grommet.LoginForm align='center' title='C:VS login' onSubmit={() => console.log('login')} usernameType='text'/>
+        <Anchor align='right' label='회원이 아니신가요?' href='signUp'/>
       </Box>
       </Grommet.App>
     );
