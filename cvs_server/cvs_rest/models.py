@@ -102,7 +102,7 @@ class Comment(models.Model):
     belong_to = fields.GenericForeignKey('content_type', 'object_id')
 
     """
-    product = models.ForeignKey('Product', related_name='comments', on_delete=models.CASCADE, default=Product.DEFAULT_PK)
+    product = models.ForeignKey('Product', on_delete=models.CASCADE, default=Product.DEFAULT_PK)
 
 
     
