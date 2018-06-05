@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from cvs_rest.models import *
+from django.db.models import Avg
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -50,13 +51,6 @@ class CommentSerializer(serializers.ModelSerializer) :
     #rating = RatingSerializer()
     rating = serializers.SerializerMethodField()
     '''
-    def create(self, validated_data) :
-        rating_data = validated_data.pop('rating')
-        comment = Comment.objects.create(**validated_data)
-        rating_data['comment']=comment
-        Rating.objects.create(**rating_data)
-        return comment
-
     def update(self, instance, validated_data) :
 
         rating_data = validated_data.pop('rating')
@@ -81,14 +75,29 @@ class CommentSerializer(serializers.ModelSerializer) :
         return 0
 
 class ProductDetailSerializer(serializers.ModelSerializer) :
+
+    rating = serializers.SerializerMethodField()
+    
     class Meta:
         model = Product
-        fields = ('id', 'name', 'image', 'price', 'manufacturer', 'PB', 'large_category', 'small_category', 'comment_set')
+        fields = ('id', 'name', 'image', 'price', 'manufacturer', 'PB', 'large_category', 'small_category', 'rating', 'comment_set')
+    
+    def get_rating(self,obj):
+        ratings = Rating.objects.filter(product=obj)
+        return ratings.aggregate(Avg('value'))['value__avg'] or 0
+    
 
 class ProductSerializer(serializers.ModelSerializer) :
+    
+    rating = serializers.SerializerMethodField()
     class Meta:
         model = Product
-        fields = '__all__'
+        fields = ('id', 'name', 'image', 'price', 'manufacturer', 'PB', 'large_category', 'small_category', 'rating')
+    
+    def get_rating(self,obj):
+        ratings = Rating.objects.filter(product=obj)
+        return ratings.aggregate(Avg('value'))['value__avg'] or 0
+        
 
 """
 class CommentRelatedField(serializers.RelatedField) :

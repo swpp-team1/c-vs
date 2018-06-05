@@ -2,7 +2,13 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes import fields
-   
+from django.db.models import Avg   
+
+'''
+class ProductManager(models.Manager):
+    def get_queryset(self):
+        return super().get_queryset().annotate(rating_avg=Avg('rating__value'))
+'''
 
 class Product(models.Model):
     DEFAULT_PK = 1
@@ -32,6 +38,8 @@ class Product(models.Model):
         max_length=10,
         null=True,
     )
+    # overide default manager
+    # objects = ProductManager()
 
     class Meta:
         ordering = ('manufacturer', 'name',)
@@ -131,12 +139,7 @@ class Rating(models.Model) :
         related_name='ratings',
         on_delete=models.CASCADE,
     )
-    """
-    comment = models.OneToOneField(
-        Comment,
-        on_delete=models.CASCADE
-        )
-    """
+    
     product = models.ForeignKey(
         'Product',
         on_delete=models.CASCADE,     

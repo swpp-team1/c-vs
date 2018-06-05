@@ -76,8 +76,9 @@ class CustomUserDetail(generics.RetrieveAPIView):
 class ProductList(generics.ListAPIView) :
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
-    filter_backends = (filters.SearchFilter, DjangoFilterBackend)
+    filter_backends = (filters.SearchFilter, DjangoFilterBackend, filters.OrderingFilter)
     search_fields = ('name',)
+    ordering_fields = ('name', 'rating')
     filter_fields = ('price', 'large_category', 'small_category', 'manufacturer', 'PB')
 
 #/products/id
