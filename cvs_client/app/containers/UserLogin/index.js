@@ -15,17 +15,40 @@ import Grommet from 'grommet'
 import Box from 'grommet/components/Box';
 import CustomHeader from '../../components/CustomHeader'
 import Anchor from 'grommet/components/Anchor'
+import Form from 'grommet/components/Form'
+import FormField from 'grommet/components/FormField'
+import TextInput from 'grommet/components/TextInput'
 
 export class UserLogin extends React.Component { // eslint-disable-line react/prefer-stateless-function
+  constructor() {
+    super()
+    this.state = {
+      needSignUp: false,
+    }
+  }
   render() {
     return (
-      <Grommet.App>
+      <div>
       <CustomHeader/>
       <Box align='center' pad='large'>
         <Grommet.LoginForm align='center' title='C:VS login' onSubmit={() => console.log('login')} usernameType='text'/>
-        <Anchor align='right' label='회원이 아니신가요?' href='signUp'/>
+        <Anchor label='회원이 아니신가요?' onClick={() => this.setState({needSignUp: true})}/>
+        {
+          this.state.needSignUp &&
+          <Form>
+            <FormField label='Username'>
+              <TextInput/>
+          </FormField>
+            <FormField label='Password'>
+              <TextInput/>
+            </FormField>
+            <FormField label='e-mail'>
+              <TextInput/>
+            </FormField>
+          </Form>
+        }
       </Box>
-      </Grommet.App>
+      </div>
     );
   }
 }
