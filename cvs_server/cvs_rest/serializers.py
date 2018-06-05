@@ -41,24 +41,6 @@ class RatingSerializer(serializers.ModelSerializer) :
         model = Rating
         fields = ('id', 'created', 'edited', 'value', 'user_id', 'comment')
 
-class RatingSerializer(serializers.ModelSerializer) :
-
-    #override
-    def create(self, validated_data) :
-        return Rating.objects.create(**validated_data)
-    
-    #override
-    def update(self, instance, validated_data) :
-        instance.edited = validated_data.get('edited', instance.edited)
-        instance.value = validated_data.get('value', instance.value)
-        instance.save()
-        return instance
-    
-    
-    class Meta:
-        model = Rating
-        fields = ('id', 'created', 'edited', 'value', 'user_id', 'comment')
-
 class CommentSerializer(serializers.ModelSerializer) :
 
     #rating = RatingSerializer()
