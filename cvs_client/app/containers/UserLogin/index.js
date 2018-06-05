@@ -18,12 +18,19 @@ import Anchor from 'grommet/components/Anchor'
 import Form from 'grommet/components/Form'
 import FormField from 'grommet/components/FormField'
 import TextInput from 'grommet/components/TextInput'
+import Status from 'grommet/components/icons/Status'
+
+function validateEmail(email) {
+  let emailExp = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  return emailExp.test(String(email).toLowerCase());
+}
 
 export class UserLogin extends React.Component { // eslint-disable-line react/prefer-stateless-function
   constructor() {
     super()
     this.state = {
       needSignUp: false,
+      emailValid: false,
     }
   }
   render() {
@@ -38,12 +45,23 @@ export class UserLogin extends React.Component { // eslint-disable-line react/pr
           <Form>
             <FormField label='Username'>
               <TextInput/>
-          </FormField>
+            </FormField>
             <FormField label='Password'>
               <TextInput/>
             </FormField>
-            <FormField label='e-mail'>
+            <FormField label='Password Confirm'>
               <TextInput/>
+            </FormField>
+            <FormField label='E-mail'>
+              <div>
+                <TextInput
+                  style={{border: '0px', width: '90%', paddingRight: '25px'}}
+                  onDOMChange={(event) => {
+                    this.setState({emailValid: validateEmail(event.target.value)})
+                  }}
+                />
+                <Status value={this.state.emailValid ? 'ok' : 'critical'}/>
+              </div>
             </FormField>
           </Form>
         }
