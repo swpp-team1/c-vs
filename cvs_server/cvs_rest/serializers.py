@@ -11,19 +11,11 @@ class ProductSerializer(serializers.ModelSerializer):
 class UserSerializer(serializers.ModelSerializer):
     #recipe_set = serializers.PrimaryKeyRelatedField(many=True, queryset=Recipe.objects.all())
     #review_set = serializers.PrimaryKeyRelatedField(many=True, queryset=Review.objects.all())
-<<<<<<< HEAD
-    comment_set = serializers.PrimaryKeyRelatedField(many=True, queryset=Comment.objects.all())
-    
-    class Meta:
-        model = CustomUser
-        fields = ('id', 'username', 'nickname', 'created', 'email', 'comment_set')
-=======
     #comment_set = serializers.PrimaryKeyRelatedField(many=True, queryset=Comment.objects.all())
     
     class Meta:
         model = CustomUser
         fields = ('id', 'username', 'created', 'email', 'comment_set')
->>>>>>> 7385396e6fe1afec8ee9c78afa2b79a1ae6381a3
         #fields = ('id', 'username', 'nickname', 'created', 'email', 'recipe_set', 'review_set', 'comment_set')
 
 
@@ -33,9 +25,9 @@ class RecipeSerializer(serializers.ModelSerializer) :
         fields = '__all__'
 
 class ReviewSerializer(serializers.ModelSerializer) :
-   class Meta:
+    class Meta:
        model = Review
-       fields = '__all__'
+       fields = ('id', 'created', 'edited', 'title', 'user_id', 'product_id')
 
 
 
@@ -91,12 +83,27 @@ class ProductDetailSerializer(serializers.ModelSerializer) :
     comments = serializers.PrimaryKeyRelatedField(many=True, allow_null=True, queryset=Comment)
     class Meta:
         model = Product
-        fields = ('name', 'image', 'price', 'flag', 'manufacturer', 'PB', 'large_category', 'small_category', 'comments')
+        fields = ('name', 'image', 'price', 'manufacturer', 'PB', 'large_category', 'small_category', 'comments')
 
 class ProductSerializer(serializers.ModelSerializer) :
     class Meta:
         model = Product
         fields = '__all__'
+
+class PostRelatedField(serializers.RelatedField) :
+
+    created = serializers.DateTimeField()
+    image = serializers.ImageField()
+    content = serializers.CharField()
+    
+    
+    def to_representation(self, value) :
+        if isinstance(value, Review) :
+            return 'review_id: ' + value.id
+        elif isinstance(value, Recipe) :
+            return 'recipe_id: ' + value.id
+        raise Exception('Unexpected type of Post object')
+
 
 """
 class CommentRelatedField(serializers.RelatedField) :

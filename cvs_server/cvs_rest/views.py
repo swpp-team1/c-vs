@@ -163,20 +163,14 @@ def comment_detail(request, pk, format=None) :
 
     
 
-    
 
-"""
-
-
-
-#/reviews
 class ReviewList(generics.ListCreateAPIView) :
     queryset = Review.objects.all()
     serializer_class = ReviewSerializer
-    filter_backends = (DjangoFilterBackend,)
-    filter_fields = ('user_id',)
 
 
+
+"""
 #/reviews/pk
 class ReviewDetail(generics.RetrieveUpdateDestroyAPIView) :
     queryset = Review.objects.all()
