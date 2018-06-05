@@ -87,31 +87,41 @@ class ProductDetail(generics.RetrieveAPIView) :
 
 
 #일단 유저빼고 해봄
-@api_view(['POST'])
+@api_view(['GET','POST'])
 @permission_classes((IsAuthenticatedOrReadOnly,))
 def create_comment(request, format=None) :
 
-    #create and save new rating object
-    data = request.data
-    rating = data.get('rating')
-    content = data.get('content')
-    product = data.get('product')
+    if request.method == 'GET':
+        comments = Comment.objects.all()
+        product = request.query_params.get('product', None)
+        user_id = request.query_params.get('user_id', None)
+        if product is not None:
+            comments = comments.filter(product=product)
+        if user_id is not None:
+            comments = comments.filter(user_id=user_id)
+        serializer = CommentSerializer(comments, many=True)
+        return Response(serializer.data)
+
+    elif request.method == 'POST':
+        #create and save new rating object
+        data = request.data
+        rating = data.get('rating')
+        content = data.get('content')
+        product = data.get('product')
         
-    if not (rating and content and product):
-        return Response(data={'message':'content or product or rating Field is not existed'}, status=status.HTTP_400_BAD_REQUEST)
+        if not (rating and content and product):
+            return Response(data={'message':'content or product or rating Field is not existed'}, status=status.HTTP_400_BAD_REQUEST)
     
-    try:
-        product_obj = Product.objects.get(id=product)
-    except ObjectDoesNotExist:    
-        return Response(data={'message':'Wrong Product ID'}, status=status.HTTP_400_BAD_REQUEST)
+        try:
+            product_obj = Product.objects.get(id=product)
+        except ObjectDoesNotExist:    
+            return Response(data={'message':'Wrong Product ID'}, status=status.HTTP_400_BAD_REQUEST)
    
-    comment_obj = Comment.objects.create(content=content, product=product_obj, user_id=request.user)
-    Rating.objects.create(comment=comment_obj, value=rating, user_id=request.user)
+        comment_obj = Comment.objects.create(content=content, product=product_obj, user_id=request.user)
+        Rating.objects.create(comment=comment_obj, value=rating, user_id=request.user)
     
-    serializer = CommentSerializer(comment_obj) 
-    #if serializer.is_valid():
-        #serializer.save()
-    return Response(serializer.data, status=status.HTTP_201_CREATED)
+        serializer = CommentSerializer(comment_obj) 
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
 
