@@ -43,7 +43,6 @@ class RatingSerializer(serializers.ModelSerializer) :
 
 class CommentSerializer(serializers.ModelSerializer) :
 
-    #rating = RatingSerializer()
     rating = serializers.SerializerMethodField()
     '''
     def update(self, instance, validated_data) :
@@ -70,27 +69,24 @@ class CommentSerializer(serializers.ModelSerializer) :
         return 0
 
 class ProductDetailSerializer(serializers.ModelSerializer) :
-    rating = serializers.SerializerMethodField()
+    rating_avg = serializers.SerializerMethodField()
 
     class Meta:
         model = Product
-        fields = ('id', 'name', 'image', 'price', 'manufacturer', 'PB', 'large_category', 'small_category', 'rating', 'comment_set')
+        fields = ('id', 'name', 'image', 'price', 'manufacturer', 'PB', 'large_category', 'small_category', 'rating_avg', 'comment_set')
     
-    def get_rating(self,obj):
-        ratings = Rating.objects.filter(product=obj)
-        return ratings.aggregate(Avg('value'))['value__avg'] or 0
+    def get_rating_avg(self,obj):
+        return obj.rating_avg or 0
     
 
 class ProductSerializer(serializers.ModelSerializer) :
     
-    rating = serializers.SerializerMethodField()
+    rating_avg = serializers.SerializerMethodField()
     class Meta:
         model = Product
-        fields = ('id', 'name', 'image', 'price', 'manufacturer', 'PB', 'large_category', 'small_category', 'rating')
+        fields = ('id', 'name', 'image', 'price', 'manufacturer', 'PB', 'large_category', 'small_category', 'rating_avg')
     
-    def get_rating(self,obj):
-        ratings = Rating.objects.filter(product=obj)
-        return ratings.aggregate(Avg('value'))['value__avg'] or 0
-        
+    def get_rating_avg(self,obj):
+        return obj.rating_avg or 0
 
 

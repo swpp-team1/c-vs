@@ -4,11 +4,9 @@ from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes import fields
 from django.db.models import Avg   
 
-'''
 class ProductManager(models.Manager):
     def get_queryset(self):
         return super().get_queryset().annotate(rating_avg=Avg('rating__value'))
-'''
 
 class Product(models.Model):
     DEFAULT_PK = 1
@@ -39,7 +37,7 @@ class Product(models.Model):
         null=True,
     )
     # overide default manager
-    # objects = ProductManager()
+    objects = ProductManager()
 
     class Meta:
         ordering = ('manufacturer', 'name',)

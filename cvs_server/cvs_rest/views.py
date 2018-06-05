@@ -78,7 +78,7 @@ class ProductList(generics.ListAPIView) :
     serializer_class = ProductSerializer
     filter_backends = (filters.SearchFilter, DjangoFilterBackend, filters.OrderingFilter)
     search_fields = ('name',)
-    ordering_fields = ('name', 'rating')
+    ordering_fields = ('name', 'rating_avg')
     filter_fields = ('price', 'large_category', 'small_category', 'manufacturer', 'PB')
 
 #/products/id
