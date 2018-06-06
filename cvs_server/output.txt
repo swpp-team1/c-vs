@@ -3,8 +3,8 @@
 <head>
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
   <meta name="robots" content="NONE,NOARCHIVE">
-  <title>RuntimeError
-          at /reviews/1</title>
+  <title>TypeError
+          at /reviews/</title>
   <style type="text/css">
     html * { padding:0; margin:0; }
     body * { padding:10px 20px; }
@@ -105,18 +105,18 @@
 </head>
 <body>
 <div id="summary">
-  <h1>RuntimeError
-       at /reviews/1</h1>
-  <pre class="exception_value">You called this URL via PUT, but the URL doesn&#39;t end in a slash and you have APPEND_SLASH set. Django can&#39;t redirect to the slash URL while maintaining PUT data. Change your form to point to 127.0.0.1:8000/reviews/1/ (note the trailing slash), or set APPEND_SLASH=False in your Django settings.</pre>
+  <h1>TypeError
+       at /reviews/</h1>
+  <pre class="exception_value">Object of type &#39;GenericRelatedObjectManager&#39; is not JSON serializable</pre>
   <table class="meta">
 
     <tr>
       <th>Request Method:</th>
-      <td>PUT</td>
+      <td>POST</td>
     </tr>
     <tr>
       <th>Request URL:</th>
-      <td>http://127.0.0.1:8000/reviews/1</td>
+      <td>http://127.0.0.1:8000/reviews/</td>
     </tr>
 
     <tr>
@@ -126,19 +126,19 @@
 
     <tr>
       <th>Exception Type:</th>
-      <td>RuntimeError</td>
+      <td>TypeError</td>
     </tr>
 
 
     <tr>
       <th>Exception Value:</th>
-      <td><pre>You called this URL via PUT, but the URL doesn&#39;t end in a slash and you have APPEND_SLASH set. Django can&#39;t redirect to the slash URL while maintaining PUT data. Change your form to point to 127.0.0.1:8000/reviews/1/ (note the trailing slash), or set APPEND_SLASH=False in your Django settings.</pre></td>
+      <td><pre>Object of type &#39;GenericRelatedObjectManager&#39; is not JSON serializable</pre></td>
     </tr>
 
 
     <tr>
       <th>Exception Location:</th>
-      <td>/Library/Frameworks/Python.framework/Versions/3.6/lib/python3.6/site-packages/django/middleware/common.py in get_full_path_with_slash, line 99</td>
+      <td>/Library/Frameworks/Python.framework/Versions/3.6/lib/python3.6/json/encoder.py in default, line 180</td>
     </tr>
 
     <tr>
@@ -159,7 +159,7 @@
     </tr>
     <tr>
       <th>Server time:</th>
-      <td>Tue, 5 Jun 2018 12:29:59 +0000</td>
+      <td>Wed, 6 Jun 2018 07:34:18 +0000</td>
     </tr>
   </table>
 </div>
@@ -179,43 +179,43 @@
           <code>/Library/Frameworks/Python.framework/Versions/3.6/lib/python3.6/site-packages/django/core/handlers/exception.py</code> in <code>inner</code>
 
           
-            <div class="context" id="c4376785160">
+            <div class="context" id="c4377451784">
               
-                <ol start="28" class="pre-context" id="pre4376785160">
+                <ol start="28" class="pre-context" id="pre4377451784">
                 
-                  <li onclick="toggle('pre4376785160', 'post4376785160')"><pre>    This decorator is automatically applied to all middleware to ensure that</pre></li>
+                  <li onclick="toggle('pre4377451784', 'post4377451784')"><pre>    This decorator is automatically applied to all middleware to ensure that</pre></li>
                 
-                  <li onclick="toggle('pre4376785160', 'post4376785160')"><pre>    no middleware leaks an exception and that the next middleware in the stack</pre></li>
+                  <li onclick="toggle('pre4377451784', 'post4377451784')"><pre>    no middleware leaks an exception and that the next middleware in the stack</pre></li>
                 
-                  <li onclick="toggle('pre4376785160', 'post4376785160')"><pre>    can rely on getting a response instead of an exception.</pre></li>
+                  <li onclick="toggle('pre4377451784', 'post4377451784')"><pre>    can rely on getting a response instead of an exception.</pre></li>
                 
-                  <li onclick="toggle('pre4376785160', 'post4376785160')"><pre>    &quot;&quot;&quot;</pre></li>
+                  <li onclick="toggle('pre4377451784', 'post4377451784')"><pre>    &quot;&quot;&quot;</pre></li>
                 
-                  <li onclick="toggle('pre4376785160', 'post4376785160')"><pre>    @wraps(get_response)</pre></li>
+                  <li onclick="toggle('pre4377451784', 'post4377451784')"><pre>    @wraps(get_response)</pre></li>
                 
-                  <li onclick="toggle('pre4376785160', 'post4376785160')"><pre>    def inner(request):</pre></li>
+                  <li onclick="toggle('pre4377451784', 'post4377451784')"><pre>    def inner(request):</pre></li>
                 
-                  <li onclick="toggle('pre4376785160', 'post4376785160')"><pre>        try:</pre></li>
+                  <li onclick="toggle('pre4377451784', 'post4377451784')"><pre>        try:</pre></li>
                 
                 </ol>
               
               <ol start="35" class="context-line">
-                <li onclick="toggle('pre4376785160', 'post4376785160')"><pre>            response = get_response(request)</pre> <span>...</span></li>
+                <li onclick="toggle('pre4377451784', 'post4377451784')"><pre>            response = get_response(request)</pre> <span>...</span></li>
               </ol>
               
-                <ol start='36' class="post-context" id="post4376785160">
+                <ol start='36' class="post-context" id="post4377451784">
                   
-                  <li onclick="toggle('pre4376785160', 'post4376785160')"><pre>        except Exception as exc:</pre></li>
+                  <li onclick="toggle('pre4377451784', 'post4377451784')"><pre>        except Exception as exc:</pre></li>
                   
-                  <li onclick="toggle('pre4376785160', 'post4376785160')"><pre>            response = response_for_exception(request, exc)</pre></li>
+                  <li onclick="toggle('pre4377451784', 'post4377451784')"><pre>            response = response_for_exception(request, exc)</pre></li>
                   
-                  <li onclick="toggle('pre4376785160', 'post4376785160')"><pre>        return response</pre></li>
+                  <li onclick="toggle('pre4377451784', 'post4377451784')"><pre>        return response</pre></li>
                   
-                  <li onclick="toggle('pre4376785160', 'post4376785160')"><pre>    return inner</pre></li>
+                  <li onclick="toggle('pre4377451784', 'post4377451784')"><pre>    return inner</pre></li>
                   
-                  <li onclick="toggle('pre4376785160', 'post4376785160')"><pre></pre></li>
+                  <li onclick="toggle('pre4377451784', 'post4377451784')"><pre></pre></li>
                   
-                  <li onclick="toggle('pre4376785160', 'post4376785160')"><pre></pre></li>
+                  <li onclick="toggle('pre4377451784', 'post4377451784')"><pre></pre></li>
                   
               </ol>
               
@@ -225,10 +225,10 @@
           
             <div class="commands">
                 
-                    <a href="#" onclick="return varToggle(this, '4376785160')"><span>&#x25b6;</span> Local vars</a>
+                    <a href="#" onclick="return varToggle(this, '4377451784')"><span>&#x25b6;</span> Local vars</a>
                 
             </div>
-            <table class="vars" id="v4376785160">
+            <table class="vars" id="v4377451784">
               <thead>
                 <tr>
                   <th>Variable</th>
@@ -239,17 +239,17 @@
                 
                   <tr>
                     <td>exc</td>
-                    <td class="code"><pre>RuntimeError(&quot;You called this URL via PUT, but the URL doesn&#39;t end in a slash and you have APPEND_SLASH set. Django can&#39;t redirect to the slash URL while maintaining PUT data. Change your form to point to 127.0.0.1:8000/reviews/1/ (note the trailing slash), or set APPEND_SLASH=False in your Django settings.&quot;,)</pre></td>
+                    <td class="code"><pre>TypeError(&quot;Object of type &#39;GenericRelatedObjectManager&#39; is not JSON serializable&quot;,)</pre></td>
                   </tr>
                 
                   <tr>
                     <td>get_response</td>
-                    <td class="code"><pre>&lt;django.middleware.common.CommonMiddleware object at 0x10155a748&gt;</pre></td>
+                    <td class="code"><pre>&lt;bound method BaseHandler._get_response of &lt;django.core.handlers.wsgi.WSGIHandler object at 0x1040336d8&gt;&gt;</pre></td>
                   </tr>
                 
                   <tr>
                     <td>request</td>
-                    <td class="code"><pre>&lt;WSGIRequest: PUT &#39;/reviews/1&#39;&gt;</pre></td>
+                    <td class="code"><pre>&lt;WSGIRequest: POST &#39;/reviews/&#39;&gt;</pre></td>
                   </tr>
                 
               </tbody>
@@ -259,44 +259,46 @@
       
         
         <li class="frame django">
-          <code>/Library/Frameworks/Python.framework/Versions/3.6/lib/python3.6/site-packages/django/utils/deprecation.py</code> in <code>__call__</code>
+          <code>/Library/Frameworks/Python.framework/Versions/3.6/lib/python3.6/site-packages/django/core/handlers/base.py</code> in <code>_get_response</code>
 
           
-            <div class="context" id="c4376785224">
+            <div class="context" id="c4377450568">
               
-                <ol start="86" class="pre-context" id="pre4376785224">
+                <ol start="151" class="pre-context" id="pre4377450568">
                 
-                  <li onclick="toggle('pre4376785224', 'post4376785224')"><pre>    def __init__(self, get_response=None):</pre></li>
+                  <li onclick="toggle('pre4377450568', 'post4377450568')"><pre>                        &quot;HttpResponse object. It returned None instead.&quot;</pre></li>
                 
-                  <li onclick="toggle('pre4376785224', 'post4376785224')"><pre>        self.get_response = get_response</pre></li>
+                  <li onclick="toggle('pre4377450568', 'post4377450568')"><pre>                        % (middleware_method.__self__.__class__.__name__)</pre></li>
                 
-                  <li onclick="toggle('pre4376785224', 'post4376785224')"><pre>        super().__init__()</pre></li>
+                  <li onclick="toggle('pre4377450568', 'post4377450568')"><pre>                    )</pre></li>
                 
-                  <li onclick="toggle('pre4376785224', 'post4376785224')"><pre></pre></li>
+                  <li onclick="toggle('pre4377450568', 'post4377450568')"><pre></pre></li>
                 
-                  <li onclick="toggle('pre4376785224', 'post4376785224')"><pre>    def __call__(self, request):</pre></li>
+                  <li onclick="toggle('pre4377450568', 'post4377450568')"><pre>            try:</pre></li>
                 
-                  <li onclick="toggle('pre4376785224', 'post4376785224')"><pre>        response = None</pre></li>
+                  <li onclick="toggle('pre4377450568', 'post4377450568')"><pre>                response = response.render()</pre></li>
                 
-                  <li onclick="toggle('pre4376785224', 'post4376785224')"><pre>        if hasattr(self, &#39;process_request&#39;):</pre></li>
+                  <li onclick="toggle('pre4377450568', 'post4377450568')"><pre>            except Exception as e:</pre></li>
                 
                 </ol>
               
-              <ol start="93" class="context-line">
-                <li onclick="toggle('pre4376785224', 'post4376785224')"><pre>            response = self.process_request(request)</pre> <span>...</span></li>
+              <ol start="158" class="context-line">
+                <li onclick="toggle('pre4377450568', 'post4377450568')"><pre>                response = self.process_exception_by_middleware(e, request)</pre> <span>...</span></li>
               </ol>
               
-                <ol start='94' class="post-context" id="post4376785224">
+                <ol start='159' class="post-context" id="post4377450568">
                   
-                  <li onclick="toggle('pre4376785224', 'post4376785224')"><pre>        if not response:</pre></li>
+                  <li onclick="toggle('pre4377450568', 'post4377450568')"><pre></pre></li>
                   
-                  <li onclick="toggle('pre4376785224', 'post4376785224')"><pre>            response = self.get_response(request)</pre></li>
+                  <li onclick="toggle('pre4377450568', 'post4377450568')"><pre>        return response</pre></li>
                   
-                  <li onclick="toggle('pre4376785224', 'post4376785224')"><pre>        if hasattr(self, &#39;process_response&#39;):</pre></li>
+                  <li onclick="toggle('pre4377450568', 'post4377450568')"><pre></pre></li>
                   
-                  <li onclick="toggle('pre4376785224', 'post4376785224')"><pre>            response = self.process_response(request, response)</pre></li>
+                  <li onclick="toggle('pre4377450568', 'post4377450568')"><pre>    def process_exception_by_middleware(self, exception, request):</pre></li>
                   
-                  <li onclick="toggle('pre4376785224', 'post4376785224')"><pre>        return response</pre></li>
+                  <li onclick="toggle('pre4377450568', 'post4377450568')"><pre>        &quot;&quot;&quot;</pre></li>
+                  
+                  <li onclick="toggle('pre4377450568', 'post4377450568')"><pre>        Pass the exception to the exception middleware. If no middleware</pre></li>
                   
               </ol>
               
@@ -306,10 +308,10 @@
           
             <div class="commands">
                 
-                    <a href="#" onclick="return varToggle(this, '4376785224')"><span>&#x25b6;</span> Local vars</a>
+                    <a href="#" onclick="return varToggle(this, '4377450568')"><span>&#x25b6;</span> Local vars</a>
                 
             </div>
-            <table class="vars" id="v4376785224">
+            <table class="vars" id="v4377450568">
               <thead>
                 <tr>
                   <th>Variable</th>
@@ -319,18 +321,356 @@
               <tbody>
                 
                   <tr>
+                    <td>callback</td>
+                    <td class="code"><pre>&lt;function WrappedAPIView at 0x104c771e0&gt;</pre></td>
+                  </tr>
+                
+                  <tr>
+                    <td>callback_args</td>
+                    <td class="code"><pre>()</pre></td>
+                  </tr>
+                
+                  <tr>
+                    <td>callback_kwargs</td>
+                    <td class="code"><pre>{}</pre></td>
+                  </tr>
+                
+                  <tr>
+                    <td>middleware_method</td>
+                    <td class="code"><pre>&lt;bound method CorsMiddleware.process_view of &lt;corsheaders.middleware.CorsMiddleware object at 0x104d06cf8&gt;&gt;</pre></td>
+                  </tr>
+                
+                  <tr>
                     <td>request</td>
-                    <td class="code"><pre>&lt;WSGIRequest: PUT &#39;/reviews/1&#39;&gt;</pre></td>
+                    <td class="code"><pre>&lt;WSGIRequest: POST &#39;/reviews/&#39;&gt;</pre></td>
+                  </tr>
+                
+                  <tr>
+                    <td>resolver</td>
+                    <td class="code"><pre>&lt;URLResolver &#39;cvs_server.urls&#39; (None:None) &#39;^/&#39;&gt;</pre></td>
+                  </tr>
+                
+                  <tr>
+                    <td>resolver_match</td>
+                    <td class="code"><pre>ResolverMatch(func=cvs_rest.views.get_create_review, args=(), kwargs={}, url_name=None, app_names=[], namespaces=[])</pre></td>
                   </tr>
                 
                   <tr>
                     <td>response</td>
+                    <td class="code"><pre>&lt;Response status_code=201, &quot;application/json&quot;&gt;</pre></td>
+                  </tr>
+                
+                  <tr>
+                    <td>self</td>
+                    <td class="code"><pre>&lt;django.core.handlers.wsgi.WSGIHandler object at 0x1040336d8&gt;</pre></td>
+                  </tr>
+                
+                  <tr>
+                    <td>wrapped_callback</td>
+                    <td class="code"><pre>&lt;function WrappedAPIView at 0x104c771e0&gt;</pre></td>
+                  </tr>
+                
+              </tbody>
+            </table>
+          
+        </li>
+      
+        
+        <li class="frame django">
+          <code>/Library/Frameworks/Python.framework/Versions/3.6/lib/python3.6/site-packages/django/core/handlers/base.py</code> in <code>_get_response</code>
+
+          
+            <div class="context" id="c4377621512">
+              
+                <ol start="149" class="pre-context" id="pre4377621512">
+                
+                  <li onclick="toggle('pre4377621512', 'post4377621512')"><pre>                    raise ValueError(</pre></li>
+                
+                  <li onclick="toggle('pre4377621512', 'post4377621512')"><pre>                        &quot;%s.process_template_response didn&#39;t return an &quot;</pre></li>
+                
+                  <li onclick="toggle('pre4377621512', 'post4377621512')"><pre>                        &quot;HttpResponse object. It returned None instead.&quot;</pre></li>
+                
+                  <li onclick="toggle('pre4377621512', 'post4377621512')"><pre>                        % (middleware_method.__self__.__class__.__name__)</pre></li>
+                
+                  <li onclick="toggle('pre4377621512', 'post4377621512')"><pre>                    )</pre></li>
+                
+                  <li onclick="toggle('pre4377621512', 'post4377621512')"><pre></pre></li>
+                
+                  <li onclick="toggle('pre4377621512', 'post4377621512')"><pre>            try:</pre></li>
+                
+                </ol>
+              
+              <ol start="156" class="context-line">
+                <li onclick="toggle('pre4377621512', 'post4377621512')"><pre>                response = response.render()</pre> <span>...</span></li>
+              </ol>
+              
+                <ol start='157' class="post-context" id="post4377621512">
+                  
+                  <li onclick="toggle('pre4377621512', 'post4377621512')"><pre>            except Exception as e:</pre></li>
+                  
+                  <li onclick="toggle('pre4377621512', 'post4377621512')"><pre>                response = self.process_exception_by_middleware(e, request)</pre></li>
+                  
+                  <li onclick="toggle('pre4377621512', 'post4377621512')"><pre></pre></li>
+                  
+                  <li onclick="toggle('pre4377621512', 'post4377621512')"><pre>        return response</pre></li>
+                  
+                  <li onclick="toggle('pre4377621512', 'post4377621512')"><pre></pre></li>
+                  
+                  <li onclick="toggle('pre4377621512', 'post4377621512')"><pre>    def process_exception_by_middleware(self, exception, request):</pre></li>
+                  
+              </ol>
+              
+            </div>
+          
+
+          
+            <div class="commands">
+                
+                    <a href="#" onclick="return varToggle(this, '4377621512')"><span>&#x25b6;</span> Local vars</a>
+                
+            </div>
+            <table class="vars" id="v4377621512">
+              <thead>
+                <tr>
+                  <th>Variable</th>
+                  <th>Value</th>
+                </tr>
+              </thead>
+              <tbody>
+                
+                  <tr>
+                    <td>callback</td>
+                    <td class="code"><pre>&lt;function WrappedAPIView at 0x104c771e0&gt;</pre></td>
+                  </tr>
+                
+                  <tr>
+                    <td>callback_args</td>
+                    <td class="code"><pre>()</pre></td>
+                  </tr>
+                
+                  <tr>
+                    <td>callback_kwargs</td>
+                    <td class="code"><pre>{}</pre></td>
+                  </tr>
+                
+                  <tr>
+                    <td>middleware_method</td>
+                    <td class="code"><pre>&lt;bound method CorsMiddleware.process_view of &lt;corsheaders.middleware.CorsMiddleware object at 0x104d06cf8&gt;&gt;</pre></td>
+                  </tr>
+                
+                  <tr>
+                    <td>request</td>
+                    <td class="code"><pre>&lt;WSGIRequest: POST &#39;/reviews/&#39;&gt;</pre></td>
+                  </tr>
+                
+                  <tr>
+                    <td>resolver</td>
+                    <td class="code"><pre>&lt;URLResolver &#39;cvs_server.urls&#39; (None:None) &#39;^/&#39;&gt;</pre></td>
+                  </tr>
+                
+                  <tr>
+                    <td>resolver_match</td>
+                    <td class="code"><pre>ResolverMatch(func=cvs_rest.views.get_create_review, args=(), kwargs={}, url_name=None, app_names=[], namespaces=[])</pre></td>
+                  </tr>
+                
+                  <tr>
+                    <td>response</td>
+                    <td class="code"><pre>&lt;Response status_code=201, &quot;application/json&quot;&gt;</pre></td>
+                  </tr>
+                
+                  <tr>
+                    <td>self</td>
+                    <td class="code"><pre>&lt;django.core.handlers.wsgi.WSGIHandler object at 0x1040336d8&gt;</pre></td>
+                  </tr>
+                
+                  <tr>
+                    <td>wrapped_callback</td>
+                    <td class="code"><pre>&lt;function WrappedAPIView at 0x104c771e0&gt;</pre></td>
+                  </tr>
+                
+              </tbody>
+            </table>
+          
+        </li>
+      
+        
+        <li class="frame django">
+          <code>/Library/Frameworks/Python.framework/Versions/3.6/lib/python3.6/site-packages/django/template/response.py</code> in <code>render</code>
+
+          
+            <div class="context" id="c4377622344">
+              
+                <ol start="99" class="pre-context" id="pre4377622344">
+                
+                  <li onclick="toggle('pre4377622344', 'post4377622344')"><pre></pre></li>
+                
+                  <li onclick="toggle('pre4377622344', 'post4377622344')"><pre>        If the content has already been rendered, this is a no-op.</pre></li>
+                
+                  <li onclick="toggle('pre4377622344', 'post4377622344')"><pre></pre></li>
+                
+                  <li onclick="toggle('pre4377622344', 'post4377622344')"><pre>        Return the baked response instance.</pre></li>
+                
+                  <li onclick="toggle('pre4377622344', 'post4377622344')"><pre>        &quot;&quot;&quot;</pre></li>
+                
+                  <li onclick="toggle('pre4377622344', 'post4377622344')"><pre>        retval = self</pre></li>
+                
+                  <li onclick="toggle('pre4377622344', 'post4377622344')"><pre>        if not self._is_rendered:</pre></li>
+                
+                </ol>
+              
+              <ol start="106" class="context-line">
+                <li onclick="toggle('pre4377622344', 'post4377622344')"><pre>            self.content = self.rendered_content</pre> <span>...</span></li>
+              </ol>
+              
+                <ol start='107' class="post-context" id="post4377622344">
+                  
+                  <li onclick="toggle('pre4377622344', 'post4377622344')"><pre>            for post_callback in self._post_render_callbacks:</pre></li>
+                  
+                  <li onclick="toggle('pre4377622344', 'post4377622344')"><pre>                newretval = post_callback(retval)</pre></li>
+                  
+                  <li onclick="toggle('pre4377622344', 'post4377622344')"><pre>                if newretval is not None:</pre></li>
+                  
+                  <li onclick="toggle('pre4377622344', 'post4377622344')"><pre>                    retval = newretval</pre></li>
+                  
+                  <li onclick="toggle('pre4377622344', 'post4377622344')"><pre>        return retval</pre></li>
+                  
+                  <li onclick="toggle('pre4377622344', 'post4377622344')"><pre></pre></li>
+                  
+              </ol>
+              
+            </div>
+          
+
+          
+            <div class="commands">
+                
+                    <a href="#" onclick="return varToggle(this, '4377622344')"><span>&#x25b6;</span> Local vars</a>
+                
+            </div>
+            <table class="vars" id="v4377622344">
+              <thead>
+                <tr>
+                  <th>Variable</th>
+                  <th>Value</th>
+                </tr>
+              </thead>
+              <tbody>
+                
+                  <tr>
+                    <td>retval</td>
+                    <td class="code"><pre>&lt;Response status_code=201, &quot;application/json&quot;&gt;</pre></td>
+                  </tr>
+                
+                  <tr>
+                    <td>self</td>
+                    <td class="code"><pre>&lt;Response status_code=201, &quot;application/json&quot;&gt;</pre></td>
+                  </tr>
+                
+              </tbody>
+            </table>
+          
+        </li>
+      
+        
+        <li class="frame user">
+          <code>/Library/Frameworks/Python.framework/Versions/3.6/lib/python3.6/site-packages/rest_framework/response.py</code> in <code>rendered_content</code>
+
+          
+            <div class="context" id="c4377623880">
+              
+                <ol start="65" class="pre-context" id="pre4377623880">
+                
+                  <li onclick="toggle('pre4377623880', 'post4377623880')"><pre></pre></li>
+                
+                  <li onclick="toggle('pre4377623880', 'post4377623880')"><pre>        if content_type is None and charset is not None:</pre></li>
+                
+                  <li onclick="toggle('pre4377623880', 'post4377623880')"><pre>            content_type = &quot;{0}; charset={1}&quot;.format(media_type, charset)</pre></li>
+                
+                  <li onclick="toggle('pre4377623880', 'post4377623880')"><pre>        elif content_type is None:</pre></li>
+                
+                  <li onclick="toggle('pre4377623880', 'post4377623880')"><pre>            content_type = media_type</pre></li>
+                
+                  <li onclick="toggle('pre4377623880', 'post4377623880')"><pre>        self[&#39;Content-Type&#39;] = content_type</pre></li>
+                
+                  <li onclick="toggle('pre4377623880', 'post4377623880')"><pre></pre></li>
+                
+                </ol>
+              
+              <ol start="72" class="context-line">
+                <li onclick="toggle('pre4377623880', 'post4377623880')"><pre>        ret = renderer.render(self.data, accepted_media_type, context)</pre> <span>...</span></li>
+              </ol>
+              
+                <ol start='73' class="post-context" id="post4377623880">
+                  
+                  <li onclick="toggle('pre4377623880', 'post4377623880')"><pre>        if isinstance(ret, six.text_type):</pre></li>
+                  
+                  <li onclick="toggle('pre4377623880', 'post4377623880')"><pre>            assert charset, (</pre></li>
+                  
+                  <li onclick="toggle('pre4377623880', 'post4377623880')"><pre>                &#39;renderer returned unicode, and did not specify &#39;</pre></li>
+                  
+                  <li onclick="toggle('pre4377623880', 'post4377623880')"><pre>                &#39;a charset value.&#39;</pre></li>
+                  
+                  <li onclick="toggle('pre4377623880', 'post4377623880')"><pre>            )</pre></li>
+                  
+                  <li onclick="toggle('pre4377623880', 'post4377623880')"><pre>            return bytes(ret.encode(charset))</pre></li>
+                  
+              </ol>
+              
+            </div>
+          
+
+          
+            <div class="commands">
+                
+                    <a href="#" onclick="return varToggle(this, '4377623880')"><span>&#x25b6;</span> Local vars</a>
+                
+            </div>
+            <table class="vars" id="v4377623880">
+              <thead>
+                <tr>
+                  <th>Variable</th>
+                  <th>Value</th>
+                </tr>
+              </thead>
+              <tbody>
+                
+                  <tr>
+                    <td>accepted_media_type</td>
+                    <td class="code"><pre>&#39;application/json&#39;</pre></td>
+                  </tr>
+                
+                  <tr>
+                    <td>charset</td>
                     <td class="code"><pre>None</pre></td>
                   </tr>
                 
                   <tr>
+                    <td>content_type</td>
+                    <td class="code"><pre>&#39;application/json&#39;</pre></td>
+                  </tr>
+                
+                  <tr>
+                    <td>context</td>
+                    <td class="code"><pre>{&#39;args&#39;: (),
+ &#39;kwargs&#39;: {},
+ &#39;request&#39;: &lt;rest_framework.request.Request object at 0x104ecf390&gt;,
+ &#39;response&#39;: &lt;Response status_code=201, &quot;application/json&quot;&gt;,
+ &#39;view&#39;: &lt;cvs_rest.views.WrappedAPIView object at 0x104ecf240&gt;}</pre></td>
+                  </tr>
+                
+                  <tr>
+                    <td>media_type</td>
+                    <td class="code"><pre>&#39;application/json&#39;</pre></td>
+                  </tr>
+                
+                  <tr>
+                    <td>renderer</td>
+                    <td class="code"><pre>&lt;rest_framework.renderers.JSONRenderer object at 0x104ecf438&gt;</pre></td>
+                  </tr>
+                
+                  <tr>
                     <td>self</td>
-                    <td class="code"><pre>&lt;django.middleware.common.CommonMiddleware object at 0x10155a748&gt;</pre></td>
+                    <td class="code"><pre>&lt;Response status_code=201, &quot;application/json&quot;&gt;</pre></td>
                   </tr>
                 
               </tbody>
@@ -339,47 +679,47 @@
         </li>
       
         
-        <li class="frame django">
-          <code>/Library/Frameworks/Python.framework/Versions/3.6/lib/python3.6/site-packages/django/middleware/common.py</code> in <code>process_request</code>
+        <li class="frame user">
+          <code>/Library/Frameworks/Python.framework/Versions/3.6/lib/python3.6/site-packages/rest_framework/renderers.py</code> in <code>render</code>
 
           
-            <div class="context" id="c4376785288">
+            <div class="context" id="c4377624200">
               
-                <ol start="54" class="pre-context" id="pre4376785288">
+                <ol start="98" class="pre-context" id="pre4377624200">
                 
-                  <li onclick="toggle('pre4376785288', 'post4376785288')"><pre>        # Check for a redirect based on settings.PREPEND_WWW</pre></li>
+                  <li onclick="toggle('pre4377624200', 'post4377624200')"><pre>            separators = SHORT_SEPARATORS if self.compact else LONG_SEPARATORS</pre></li>
                 
-                  <li onclick="toggle('pre4376785288', 'post4376785288')"><pre>        host = request.get_host()</pre></li>
+                  <li onclick="toggle('pre4377624200', 'post4377624200')"><pre>        else:</pre></li>
                 
-                  <li onclick="toggle('pre4376785288', 'post4376785288')"><pre>        must_prepend = settings.PREPEND_WWW and host and not host.startswith(&#39;www.&#39;)</pre></li>
+                  <li onclick="toggle('pre4377624200', 'post4377624200')"><pre>            separators = INDENT_SEPARATORS</pre></li>
                 
-                  <li onclick="toggle('pre4376785288', 'post4376785288')"><pre>        redirect_url = (&#39;%s://www.%s&#39; % (request.scheme, host)) if must_prepend else &#39;&#39;</pre></li>
+                  <li onclick="toggle('pre4377624200', 'post4377624200')"><pre></pre></li>
                 
-                  <li onclick="toggle('pre4376785288', 'post4376785288')"><pre></pre></li>
+                  <li onclick="toggle('pre4377624200', 'post4377624200')"><pre>        ret = json.dumps(</pre></li>
                 
-                  <li onclick="toggle('pre4376785288', 'post4376785288')"><pre>        # Check if a slash should be appended</pre></li>
+                  <li onclick="toggle('pre4377624200', 'post4377624200')"><pre>            data, cls=self.encoder_class,</pre></li>
                 
-                  <li onclick="toggle('pre4376785288', 'post4376785288')"><pre>        if self.should_redirect_with_slash(request):</pre></li>
+                  <li onclick="toggle('pre4377624200', 'post4377624200')"><pre>            indent=indent, ensure_ascii=self.ensure_ascii,</pre></li>
                 
                 </ol>
               
-              <ol start="61" class="context-line">
-                <li onclick="toggle('pre4376785288', 'post4376785288')"><pre>            path = self.get_full_path_with_slash(request)</pre> <span>...</span></li>
+              <ol start="105" class="context-line">
+                <li onclick="toggle('pre4377624200', 'post4377624200')"><pre>            allow_nan=not self.strict, separators=separators</pre> <span>...</span></li>
               </ol>
               
-                <ol start='62' class="post-context" id="post4376785288">
+                <ol start='106' class="post-context" id="post4377624200">
                   
-                  <li onclick="toggle('pre4376785288', 'post4376785288')"><pre>        else:</pre></li>
+                  <li onclick="toggle('pre4377624200', 'post4377624200')"><pre>        )</pre></li>
                   
-                  <li onclick="toggle('pre4376785288', 'post4376785288')"><pre>            path = request.get_full_path()</pre></li>
+                  <li onclick="toggle('pre4377624200', 'post4377624200')"><pre></pre></li>
                   
-                  <li onclick="toggle('pre4376785288', 'post4376785288')"><pre></pre></li>
+                  <li onclick="toggle('pre4377624200', 'post4377624200')"><pre>        # On python 2.x json.dumps() returns bytestrings if ensure_ascii=True,</pre></li>
                   
-                  <li onclick="toggle('pre4376785288', 'post4376785288')"><pre>        # Return a redirect if necessary</pre></li>
+                  <li onclick="toggle('pre4377624200', 'post4377624200')"><pre>        # but if ensure_ascii=False, the return type is underspecified,</pre></li>
                   
-                  <li onclick="toggle('pre4376785288', 'post4376785288')"><pre>        if redirect_url or path != request.get_full_path():</pre></li>
+                  <li onclick="toggle('pre4377624200', 'post4377624200')"><pre>        # and may (or may not) be unicode.</pre></li>
                   
-                  <li onclick="toggle('pre4376785288', 'post4376785288')"><pre>            redirect_url += path</pre></li>
+                  <li onclick="toggle('pre4377624200', 'post4377624200')"><pre>        # On python 3.x json.dumps() returns unicode strings.</pre></li>
                   
               </ol>
               
@@ -389,10 +729,10 @@
           
             <div class="commands">
                 
-                    <a href="#" onclick="return varToggle(this, '4376785288')"><span>&#x25b6;</span> Local vars</a>
+                    <a href="#" onclick="return varToggle(this, '4377624200')"><span>&#x25b6;</span> Local vars</a>
                 
             </div>
-            <table class="vars" id="v4376785288">
+            <table class="vars" id="v4377624200">
               <thead>
                 <tr>
                   <th>Variable</th>
@@ -402,28 +742,266 @@
               <tbody>
                 
                   <tr>
-                    <td>host</td>
-                    <td class="code"><pre>&#39;127.0.0.1:8000&#39;</pre></td>
+                    <td>accepted_media_type</td>
+                    <td class="code"><pre>&#39;application/json&#39;</pre></td>
                   </tr>
                 
                   <tr>
-                    <td>must_prepend</td>
+                    <td>data</td>
+                    <td class="code"><pre>{&#39;created&#39;: &#39;2018-06-06T07:34:18.088328Z&#39;,
+ &#39;edited&#39;: &#39;2018-06-06T07:34:18.088398Z&#39;,
+ &#39;post&#39;: [OrderedDict([(&#39;created&#39;, &#39;2018-06-06T07:34:18.095318Z&#39;),
+                       (&#39;image&#39;, &#39;/media/aa&#39;),
+                       (&#39;content&#39;, &#39;review content&#39;)])],
+ &#39;product&#39;: 2,
+ &#39;rating&#39;: &lt;django.contrib.contenttypes.fields.create_generic_related_manager.&lt;locals&gt;.GenericRelatedObjectManager object at 0x104ed5be0&gt;,
+ &#39;title&#39;: &#39;review_title&#39;,
+ &#39;user_id&#39;: 1}</pre></td>
+                  </tr>
+                
+                  <tr>
+                    <td>indent</td>
+                    <td class="code"><pre>None</pre></td>
+                  </tr>
+                
+                  <tr>
+                    <td>renderer_context</td>
+                    <td class="code"><pre>{&#39;args&#39;: (),
+ &#39;kwargs&#39;: {},
+ &#39;request&#39;: &lt;rest_framework.request.Request object at 0x104ecf390&gt;,
+ &#39;response&#39;: &lt;Response status_code=201, &quot;application/json&quot;&gt;,
+ &#39;view&#39;: &lt;cvs_rest.views.WrappedAPIView object at 0x104ecf240&gt;}</pre></td>
+                  </tr>
+                
+                  <tr>
+                    <td>self</td>
+                    <td class="code"><pre>&lt;rest_framework.renderers.JSONRenderer object at 0x104ecf438&gt;</pre></td>
+                  </tr>
+                
+                  <tr>
+                    <td>separators</td>
+                    <td class="code"><pre>(&#39;,&#39;, &#39;:&#39;)</pre></td>
+                  </tr>
+                
+              </tbody>
+            </table>
+          
+        </li>
+      
+        
+        <li class="frame user">
+          <code>/Library/Frameworks/Python.framework/Versions/3.6/lib/python3.6/site-packages/rest_framework/utils/json.py</code> in <code>dumps</code>
+
+          
+            <div class="context" id="c4377622280">
+              
+                <ol start="21" class="pre-context" id="pre4377622280">
+                
+                  <li onclick="toggle('pre4377622280', 'post4377622280')"><pre>    kwargs.setdefault(&#39;allow_nan&#39;, False)</pre></li>
+                
+                  <li onclick="toggle('pre4377622280', 'post4377622280')"><pre>    return json.dump(*args, **kwargs)</pre></li>
+                
+                  <li onclick="toggle('pre4377622280', 'post4377622280')"><pre></pre></li>
+                
+                  <li onclick="toggle('pre4377622280', 'post4377622280')"><pre></pre></li>
+                
+                  <li onclick="toggle('pre4377622280', 'post4377622280')"><pre>@functools.wraps(json.dumps)</pre></li>
+                
+                  <li onclick="toggle('pre4377622280', 'post4377622280')"><pre>def dumps(*args, **kwargs):</pre></li>
+                
+                  <li onclick="toggle('pre4377622280', 'post4377622280')"><pre>    kwargs.setdefault(&#39;allow_nan&#39;, False)</pre></li>
+                
+                </ol>
+              
+              <ol start="28" class="context-line">
+                <li onclick="toggle('pre4377622280', 'post4377622280')"><pre>    return json.dumps(*args, **kwargs)</pre> <span>...</span></li>
+              </ol>
+              
+                <ol start='29' class="post-context" id="post4377622280">
+                  
+                  <li onclick="toggle('pre4377622280', 'post4377622280')"><pre></pre></li>
+                  
+                  <li onclick="toggle('pre4377622280', 'post4377622280')"><pre></pre></li>
+                  
+                  <li onclick="toggle('pre4377622280', 'post4377622280')"><pre>@functools.wraps(json.load)</pre></li>
+                  
+                  <li onclick="toggle('pre4377622280', 'post4377622280')"><pre>def load(*args, **kwargs):</pre></li>
+                  
+                  <li onclick="toggle('pre4377622280', 'post4377622280')"><pre>    kwargs.setdefault(&#39;parse_constant&#39;, strict_constant)</pre></li>
+                  
+                  <li onclick="toggle('pre4377622280', 'post4377622280')"><pre>    return json.load(*args, **kwargs)</pre></li>
+                  
+              </ol>
+              
+            </div>
+          
+
+          
+            <div class="commands">
+                
+                    <a href="#" onclick="return varToggle(this, '4377622280')"><span>&#x25b6;</span> Local vars</a>
+                
+            </div>
+            <table class="vars" id="v4377622280">
+              <thead>
+                <tr>
+                  <th>Variable</th>
+                  <th>Value</th>
+                </tr>
+              </thead>
+              <tbody>
+                
+                  <tr>
+                    <td>args</td>
+                    <td class="code"><pre>({&#39;created&#39;: &#39;2018-06-06T07:34:18.088328Z&#39;,
+  &#39;edited&#39;: &#39;2018-06-06T07:34:18.088398Z&#39;,
+  &#39;post&#39;: [OrderedDict([(&#39;created&#39;, &#39;2018-06-06T07:34:18.095318Z&#39;),
+                        (&#39;image&#39;, &#39;/media/aa&#39;),
+                        (&#39;content&#39;, &#39;review content&#39;)])],
+  &#39;product&#39;: 2,
+  &#39;rating&#39;: &lt;django.contrib.contenttypes.fields.create_generic_related_manager.&lt;locals&gt;.GenericRelatedObjectManager object at 0x104ed5be0&gt;,
+  &#39;title&#39;: &#39;review_title&#39;,
+  &#39;user_id&#39;: 1},)</pre></td>
+                  </tr>
+                
+                  <tr>
+                    <td>kwargs</td>
+                    <td class="code"><pre>{&#39;allow_nan&#39;: False,
+ &#39;cls&#39;: &lt;class &#39;rest_framework.utils.encoders.JSONEncoder&#39;&gt;,
+ &#39;ensure_ascii&#39;: False,
+ &#39;indent&#39;: None,
+ &#39;separators&#39;: (&#39;,&#39;, &#39;:&#39;)}</pre></td>
+                  </tr>
+                
+              </tbody>
+            </table>
+          
+        </li>
+      
+        
+        <li class="frame user">
+          <code>/Library/Frameworks/Python.framework/Versions/3.6/lib/python3.6/json/__init__.py</code> in <code>dumps</code>
+
+          
+            <div class="context" id="c4377622600">
+              
+                <ol start="231" class="pre-context" id="pre4377622600">
+                
+                  <li onclick="toggle('pre4377622600', 'post4377622600')"><pre>        return _default_encoder.encode(obj)</pre></li>
+                
+                  <li onclick="toggle('pre4377622600', 'post4377622600')"><pre>    if cls is None:</pre></li>
+                
+                  <li onclick="toggle('pre4377622600', 'post4377622600')"><pre>        cls = JSONEncoder</pre></li>
+                
+                  <li onclick="toggle('pre4377622600', 'post4377622600')"><pre>    return cls(</pre></li>
+                
+                  <li onclick="toggle('pre4377622600', 'post4377622600')"><pre>        skipkeys=skipkeys, ensure_ascii=ensure_ascii,</pre></li>
+                
+                  <li onclick="toggle('pre4377622600', 'post4377622600')"><pre>        check_circular=check_circular, allow_nan=allow_nan, indent=indent,</pre></li>
+                
+                  <li onclick="toggle('pre4377622600', 'post4377622600')"><pre>        separators=separators, default=default, sort_keys=sort_keys,</pre></li>
+                
+                </ol>
+              
+              <ol start="238" class="context-line">
+                <li onclick="toggle('pre4377622600', 'post4377622600')"><pre>        **kw).encode(obj)</pre> <span>...</span></li>
+              </ol>
+              
+                <ol start='239' class="post-context" id="post4377622600">
+                  
+                  <li onclick="toggle('pre4377622600', 'post4377622600')"><pre></pre></li>
+                  
+                  <li onclick="toggle('pre4377622600', 'post4377622600')"><pre></pre></li>
+                  
+                  <li onclick="toggle('pre4377622600', 'post4377622600')"><pre>_default_decoder = JSONDecoder(object_hook=None, object_pairs_hook=None)</pre></li>
+                  
+                  <li onclick="toggle('pre4377622600', 'post4377622600')"><pre></pre></li>
+                  
+                  <li onclick="toggle('pre4377622600', 'post4377622600')"><pre></pre></li>
+                  
+                  <li onclick="toggle('pre4377622600', 'post4377622600')"><pre>def detect_encoding(b):</pre></li>
+                  
+              </ol>
+              
+            </div>
+          
+
+          
+            <div class="commands">
+                
+                    <a href="#" onclick="return varToggle(this, '4377622600')"><span>&#x25b6;</span> Local vars</a>
+                
+            </div>
+            <table class="vars" id="v4377622600">
+              <thead>
+                <tr>
+                  <th>Variable</th>
+                  <th>Value</th>
+                </tr>
+              </thead>
+              <tbody>
+                
+                  <tr>
+                    <td>allow_nan</td>
                     <td class="code"><pre>False</pre></td>
                   </tr>
                 
                   <tr>
-                    <td>redirect_url</td>
-                    <td class="code"><pre>&#39;&#39;</pre></td>
+                    <td>check_circular</td>
+                    <td class="code"><pre>True</pre></td>
                   </tr>
                 
                   <tr>
-                    <td>request</td>
-                    <td class="code"><pre>&lt;WSGIRequest: PUT &#39;/reviews/1&#39;&gt;</pre></td>
+                    <td>cls</td>
+                    <td class="code"><pre>&lt;class &#39;rest_framework.utils.encoders.JSONEncoder&#39;&gt;</pre></td>
                   </tr>
                 
                   <tr>
-                    <td>self</td>
-                    <td class="code"><pre>&lt;django.middleware.common.CommonMiddleware object at 0x10155a748&gt;</pre></td>
+                    <td>default</td>
+                    <td class="code"><pre>None</pre></td>
+                  </tr>
+                
+                  <tr>
+                    <td>ensure_ascii</td>
+                    <td class="code"><pre>False</pre></td>
+                  </tr>
+                
+                  <tr>
+                    <td>indent</td>
+                    <td class="code"><pre>None</pre></td>
+                  </tr>
+                
+                  <tr>
+                    <td>kw</td>
+                    <td class="code"><pre>{}</pre></td>
+                  </tr>
+                
+                  <tr>
+                    <td>obj</td>
+                    <td class="code"><pre>{&#39;created&#39;: &#39;2018-06-06T07:34:18.088328Z&#39;,
+ &#39;edited&#39;: &#39;2018-06-06T07:34:18.088398Z&#39;,
+ &#39;post&#39;: [OrderedDict([(&#39;created&#39;, &#39;2018-06-06T07:34:18.095318Z&#39;),
+                       (&#39;image&#39;, &#39;/media/aa&#39;),
+                       (&#39;content&#39;, &#39;review content&#39;)])],
+ &#39;product&#39;: 2,
+ &#39;rating&#39;: &lt;django.contrib.contenttypes.fields.create_generic_related_manager.&lt;locals&gt;.GenericRelatedObjectManager object at 0x104ed5be0&gt;,
+ &#39;title&#39;: &#39;review_title&#39;,
+ &#39;user_id&#39;: 1}</pre></td>
+                  </tr>
+                
+                  <tr>
+                    <td>separators</td>
+                    <td class="code"><pre>(&#39;,&#39;, &#39;:&#39;)</pre></td>
+                  </tr>
+                
+                  <tr>
+                    <td>skipkeys</td>
+                    <td class="code"><pre>False</pre></td>
+                  </tr>
+                
+                  <tr>
+                    <td>sort_keys</td>
+                    <td class="code"><pre>False</pre></td>
                   </tr>
                 
               </tbody>
@@ -432,47 +1010,47 @@
         </li>
       
         
-        <li class="frame django">
-          <code>/Library/Frameworks/Python.framework/Versions/3.6/lib/python3.6/site-packages/django/middleware/common.py</code> in <code>get_full_path_with_slash</code>
+        <li class="frame user">
+          <code>/Library/Frameworks/Python.framework/Versions/3.6/lib/python3.6/json/encoder.py</code> in <code>encode</code>
 
           
-            <div class="context" id="c4376670728">
+            <div class="context" id="c4377620872">
               
-                <ol start="92" class="pre-context" id="pre4376670728">
+                <ol start="192" class="pre-context" id="pre4377620872">
                 
-                  <li onclick="toggle('pre4376670728', 'post4376670728')"><pre>            raise RuntimeError(</pre></li>
+                  <li onclick="toggle('pre4377620872', 'post4377620872')"><pre>            if self.ensure_ascii:</pre></li>
                 
-                  <li onclick="toggle('pre4376670728', 'post4376670728')"><pre>                &quot;You called this URL via %(method)s, but the URL doesn&#39;t end &quot;</pre></li>
+                  <li onclick="toggle('pre4377620872', 'post4377620872')"><pre>                return encode_basestring_ascii(o)</pre></li>
                 
-                  <li onclick="toggle('pre4376670728', 'post4376670728')"><pre>                &quot;in a slash and you have APPEND_SLASH set. Django can&#39;t &quot;</pre></li>
+                  <li onclick="toggle('pre4377620872', 'post4377620872')"><pre>            else:</pre></li>
                 
-                  <li onclick="toggle('pre4376670728', 'post4376670728')"><pre>                &quot;redirect to the slash URL while maintaining %(method)s data. &quot;</pre></li>
+                  <li onclick="toggle('pre4377620872', 'post4377620872')"><pre>                return encode_basestring(o)</pre></li>
                 
-                  <li onclick="toggle('pre4376670728', 'post4376670728')"><pre>                &quot;Change your form to point to %(url)s (note the trailing &quot;</pre></li>
+                  <li onclick="toggle('pre4377620872', 'post4377620872')"><pre>        # This doesn&#39;t pass the iterator directly to &#39;&#39;.join() because the</pre></li>
                 
-                  <li onclick="toggle('pre4376670728', 'post4376670728')"><pre>                &quot;slash), or set APPEND_SLASH=False in your Django settings.&quot; % {</pre></li>
+                  <li onclick="toggle('pre4377620872', 'post4377620872')"><pre>        # exceptions aren&#39;t as detailed.  The list call should be roughly</pre></li>
                 
-                  <li onclick="toggle('pre4376670728', 'post4376670728')"><pre>                    &#39;method&#39;: request.method,</pre></li>
+                  <li onclick="toggle('pre4377620872', 'post4377620872')"><pre>        # equivalent to the PySequence_Fast that &#39;&#39;.join() would do.</pre></li>
                 
                 </ol>
               
-              <ol start="99" class="context-line">
-                <li onclick="toggle('pre4376670728', 'post4376670728')"><pre>                    &#39;url&#39;: request.get_host() + new_path,</pre> <span>...</span></li>
+              <ol start="199" class="context-line">
+                <li onclick="toggle('pre4377620872', 'post4377620872')"><pre>        chunks = self.iterencode(o, _one_shot=True)</pre> <span>...</span></li>
               </ol>
               
-                <ol start='100' class="post-context" id="post4376670728">
+                <ol start='200' class="post-context" id="post4377620872">
                   
-                  <li onclick="toggle('pre4376670728', 'post4376670728')"><pre>                }</pre></li>
+                  <li onclick="toggle('pre4377620872', 'post4377620872')"><pre>        if not isinstance(chunks, (list, tuple)):</pre></li>
                   
-                  <li onclick="toggle('pre4376670728', 'post4376670728')"><pre>            )</pre></li>
+                  <li onclick="toggle('pre4377620872', 'post4377620872')"><pre>            chunks = list(chunks)</pre></li>
                   
-                  <li onclick="toggle('pre4376670728', 'post4376670728')"><pre>        return new_path</pre></li>
+                  <li onclick="toggle('pre4377620872', 'post4377620872')"><pre>        return &#39;&#39;.join(chunks)</pre></li>
                   
-                  <li onclick="toggle('pre4376670728', 'post4376670728')"><pre></pre></li>
+                  <li onclick="toggle('pre4377620872', 'post4377620872')"><pre></pre></li>
                   
-                  <li onclick="toggle('pre4376670728', 'post4376670728')"><pre>    def process_response(self, request, response):</pre></li>
+                  <li onclick="toggle('pre4377620872', 'post4377620872')"><pre>    def iterencode(self, o, _one_shot=False):</pre></li>
                   
-                  <li onclick="toggle('pre4376670728', 'post4376670728')"><pre>        &quot;&quot;&quot;</pre></li>
+                  <li onclick="toggle('pre4377620872', 'post4377620872')"><pre>        &quot;&quot;&quot;Encode the given object and yield each string</pre></li>
                   
               </ol>
               
@@ -482,10 +1060,10 @@
           
             <div class="commands">
                 
-                    <a href="#" onclick="return varToggle(this, '4376670728')"><span>&#x25b6;</span> Local vars</a>
+                    <a href="#" onclick="return varToggle(this, '4377620872')"><span>&#x25b6;</span> Local vars</a>
                 
             </div>
-            <table class="vars" id="v4376670728">
+            <table class="vars" id="v4377620872">
               <thead>
                 <tr>
                   <th>Variable</th>
@@ -495,18 +1073,286 @@
               <tbody>
                 
                   <tr>
-                    <td>new_path</td>
-                    <td class="code"><pre>&#39;/reviews/1/&#39;</pre></td>
-                  </tr>
-                
-                  <tr>
-                    <td>request</td>
-                    <td class="code"><pre>&lt;WSGIRequest: PUT &#39;/reviews/1&#39;&gt;</pre></td>
+                    <td>o</td>
+                    <td class="code"><pre>{&#39;created&#39;: &#39;2018-06-06T07:34:18.088328Z&#39;,
+ &#39;edited&#39;: &#39;2018-06-06T07:34:18.088398Z&#39;,
+ &#39;post&#39;: [OrderedDict([(&#39;created&#39;, &#39;2018-06-06T07:34:18.095318Z&#39;),
+                       (&#39;image&#39;, &#39;/media/aa&#39;),
+                       (&#39;content&#39;, &#39;review content&#39;)])],
+ &#39;product&#39;: 2,
+ &#39;rating&#39;: &lt;django.contrib.contenttypes.fields.create_generic_related_manager.&lt;locals&gt;.GenericRelatedObjectManager object at 0x104ed5be0&gt;,
+ &#39;title&#39;: &#39;review_title&#39;,
+ &#39;user_id&#39;: 1}</pre></td>
                   </tr>
                 
                   <tr>
                     <td>self</td>
-                    <td class="code"><pre>&lt;django.middleware.common.CommonMiddleware object at 0x10155a748&gt;</pre></td>
+                    <td class="code"><pre>&lt;rest_framework.utils.encoders.JSONEncoder object at 0x104ed59e8&gt;</pre></td>
+                  </tr>
+                
+              </tbody>
+            </table>
+          
+        </li>
+      
+        
+        <li class="frame user">
+          <code>/Library/Frameworks/Python.framework/Versions/3.6/lib/python3.6/json/encoder.py</code> in <code>iterencode</code>
+
+          
+            <div class="context" id="c4377623240">
+              
+                <ol start="250" class="pre-context" id="pre4377623240">
+                
+                  <li onclick="toggle('pre4377623240', 'post4377623240')"><pre>                self.key_separator, self.item_separator, self.sort_keys,</pre></li>
+                
+                  <li onclick="toggle('pre4377623240', 'post4377623240')"><pre>                self.skipkeys, self.allow_nan)</pre></li>
+                
+                  <li onclick="toggle('pre4377623240', 'post4377623240')"><pre>        else:</pre></li>
+                
+                  <li onclick="toggle('pre4377623240', 'post4377623240')"><pre>            _iterencode = _make_iterencode(</pre></li>
+                
+                  <li onclick="toggle('pre4377623240', 'post4377623240')"><pre>                markers, self.default, _encoder, self.indent, floatstr,</pre></li>
+                
+                  <li onclick="toggle('pre4377623240', 'post4377623240')"><pre>                self.key_separator, self.item_separator, self.sort_keys,</pre></li>
+                
+                  <li onclick="toggle('pre4377623240', 'post4377623240')"><pre>                self.skipkeys, _one_shot)</pre></li>
+                
+                </ol>
+              
+              <ol start="257" class="context-line">
+                <li onclick="toggle('pre4377623240', 'post4377623240')"><pre>        return _iterencode(o, 0)</pre> <span>...</span></li>
+              </ol>
+              
+                <ol start='258' class="post-context" id="post4377623240">
+                  
+                  <li onclick="toggle('pre4377623240', 'post4377623240')"><pre></pre></li>
+                  
+                  <li onclick="toggle('pre4377623240', 'post4377623240')"><pre>def _make_iterencode(markers, _default, _encoder, _indent, _floatstr,</pre></li>
+                  
+                  <li onclick="toggle('pre4377623240', 'post4377623240')"><pre>        _key_separator, _item_separator, _sort_keys, _skipkeys, _one_shot,</pre></li>
+                  
+                  <li onclick="toggle('pre4377623240', 'post4377623240')"><pre>        ## HACK: hand-optimized bytecode; turn globals into locals</pre></li>
+                  
+                  <li onclick="toggle('pre4377623240', 'post4377623240')"><pre>        ValueError=ValueError,</pre></li>
+                  
+                  <li onclick="toggle('pre4377623240', 'post4377623240')"><pre>        dict=dict,</pre></li>
+                  
+              </ol>
+              
+            </div>
+          
+
+          
+            <div class="commands">
+                
+                    <a href="#" onclick="return varToggle(this, '4377623240')"><span>&#x25b6;</span> Local vars</a>
+                
+            </div>
+            <table class="vars" id="v4377623240">
+              <thead>
+                <tr>
+                  <th>Variable</th>
+                  <th>Value</th>
+                </tr>
+              </thead>
+              <tbody>
+                
+                  <tr>
+                    <td>_encoder</td>
+                    <td class="code"><pre>&lt;built-in function encode_basestring&gt;</pre></td>
+                  </tr>
+                
+                  <tr>
+                    <td>_iterencode</td>
+                    <td class="code"><pre>&lt;_json.Encoder object at 0x104ea2a98&gt;</pre></td>
+                  </tr>
+                
+                  <tr>
+                    <td>_one_shot</td>
+                    <td class="code"><pre>True</pre></td>
+                  </tr>
+                
+                  <tr>
+                    <td>floatstr</td>
+                    <td class="code"><pre>&lt;function JSONEncoder.iterencode.&lt;locals&gt;.floatstr at 0x104e8be18&gt;</pre></td>
+                  </tr>
+                
+                  <tr>
+                    <td>markers</td>
+                    <td class="code"><pre>{4377631712: &lt;django.contrib.contenttypes.fields.create_generic_related_manager.&lt;locals&gt;.GenericRelatedObjectManager object at 0x104ed5be0&gt;,
+ 4377765000: {&#39;created&#39;: &#39;2018-06-06T07:34:18.088328Z&#39;,
+              &#39;edited&#39;: &#39;2018-06-06T07:34:18.088398Z&#39;,
+              &#39;post&#39;: [OrderedDict([(&#39;created&#39;, &#39;2018-06-06T07:34:18.095318Z&#39;),
+                                    (&#39;image&#39;, &#39;/media/aa&#39;),
+                                    (&#39;content&#39;, &#39;review content&#39;)])],
+              &#39;product&#39;: 2,
+              &#39;rating&#39;: &lt;django.contrib.contenttypes.fields.create_generic_related_manager.&lt;locals&gt;.GenericRelatedObjectManager object at 0x104ed5be0&gt;,
+              &#39;title&#39;: &#39;review_title&#39;,
+              &#39;user_id&#39;: 1}}</pre></td>
+                  </tr>
+                
+                  <tr>
+                    <td>o</td>
+                    <td class="code"><pre>{&#39;created&#39;: &#39;2018-06-06T07:34:18.088328Z&#39;,
+ &#39;edited&#39;: &#39;2018-06-06T07:34:18.088398Z&#39;,
+ &#39;post&#39;: [OrderedDict([(&#39;created&#39;, &#39;2018-06-06T07:34:18.095318Z&#39;),
+                       (&#39;image&#39;, &#39;/media/aa&#39;),
+                       (&#39;content&#39;, &#39;review content&#39;)])],
+ &#39;product&#39;: 2,
+ &#39;rating&#39;: &lt;django.contrib.contenttypes.fields.create_generic_related_manager.&lt;locals&gt;.GenericRelatedObjectManager object at 0x104ed5be0&gt;,
+ &#39;title&#39;: &#39;review_title&#39;,
+ &#39;user_id&#39;: 1}</pre></td>
+                  </tr>
+                
+                  <tr>
+                    <td>self</td>
+                    <td class="code"><pre>&lt;rest_framework.utils.encoders.JSONEncoder object at 0x104ed59e8&gt;</pre></td>
+                  </tr>
+                
+              </tbody>
+            </table>
+          
+        </li>
+      
+        
+        <li class="frame user">
+          <code>/Library/Frameworks/Python.framework/Versions/3.6/lib/python3.6/site-packages/rest_framework/utils/encoders.py</code> in <code>default</code>
+
+          
+            <div class="context" id="c4377450952">
+              
+                <ol start="61" class="pre-context" id="pre4377450952">
+                
+                  <li onclick="toggle('pre4377450952', 'post4377450952')"><pre>        elif hasattr(obj, &#39;__getitem__&#39;):</pre></li>
+                
+                  <li onclick="toggle('pre4377450952', 'post4377450952')"><pre>            try:</pre></li>
+                
+                  <li onclick="toggle('pre4377450952', 'post4377450952')"><pre>                return dict(obj)</pre></li>
+                
+                  <li onclick="toggle('pre4377450952', 'post4377450952')"><pre>            except Exception:</pre></li>
+                
+                  <li onclick="toggle('pre4377450952', 'post4377450952')"><pre>                pass</pre></li>
+                
+                  <li onclick="toggle('pre4377450952', 'post4377450952')"><pre>        elif hasattr(obj, &#39;__iter__&#39;):</pre></li>
+                
+                  <li onclick="toggle('pre4377450952', 'post4377450952')"><pre>            return tuple(item for item in obj)</pre></li>
+                
+                </ol>
+              
+              <ol start="68" class="context-line">
+                <li onclick="toggle('pre4377450952', 'post4377450952')"><pre>        return super(JSONEncoder, self).default(obj)</pre> <span>...</span></li>
+              </ol>
+              
+            </div>
+          
+
+          
+            <div class="commands">
+                
+                    <a href="#" onclick="return varToggle(this, '4377450952')"><span>&#x25b6;</span> Local vars</a>
+                
+            </div>
+            <table class="vars" id="v4377450952">
+              <thead>
+                <tr>
+                  <th>Variable</th>
+                  <th>Value</th>
+                </tr>
+              </thead>
+              <tbody>
+                
+                  <tr>
+                    <td>__class__</td>
+                    <td class="code"><pre>&lt;class &#39;rest_framework.utils.encoders.JSONEncoder&#39;&gt;</pre></td>
+                  </tr>
+                
+                  <tr>
+                    <td>obj</td>
+                    <td class="code"><pre>&lt;django.contrib.contenttypes.fields.create_generic_related_manager.&lt;locals&gt;.GenericRelatedObjectManager object at 0x104ed5be0&gt;</pre></td>
+                  </tr>
+                
+                  <tr>
+                    <td>self</td>
+                    <td class="code"><pre>&lt;rest_framework.utils.encoders.JSONEncoder object at 0x104ed59e8&gt;</pre></td>
+                  </tr>
+                
+              </tbody>
+            </table>
+          
+        </li>
+      
+        
+        <li class="frame user">
+          <code>/Library/Frameworks/Python.framework/Versions/3.6/lib/python3.6/json/encoder.py</code> in <code>default</code>
+
+          
+            <div class="context" id="c4377449864">
+              
+                <ol start="173" class="pre-context" id="pre4377449864">
+                
+                  <li onclick="toggle('pre4377449864', 'post4377449864')"><pre>                else:</pre></li>
+                
+                  <li onclick="toggle('pre4377449864', 'post4377449864')"><pre>                    return list(iterable)</pre></li>
+                
+                  <li onclick="toggle('pre4377449864', 'post4377449864')"><pre>                # Let the base class default method raise the TypeError</pre></li>
+                
+                  <li onclick="toggle('pre4377449864', 'post4377449864')"><pre>                return JSONEncoder.default(self, o)</pre></li>
+                
+                  <li onclick="toggle('pre4377449864', 'post4377449864')"><pre></pre></li>
+                
+                  <li onclick="toggle('pre4377449864', 'post4377449864')"><pre>        &quot;&quot;&quot;</pre></li>
+                
+                  <li onclick="toggle('pre4377449864', 'post4377449864')"><pre>        raise TypeError(&quot;Object of type &#39;%s&#39; is not JSON serializable&quot; %</pre></li>
+                
+                </ol>
+              
+              <ol start="180" class="context-line">
+                <li onclick="toggle('pre4377449864', 'post4377449864')"><pre>                        o.__class__.__name__)</pre> <span>...</span></li>
+              </ol>
+              
+                <ol start='181' class="post-context" id="post4377449864">
+                  
+                  <li onclick="toggle('pre4377449864', 'post4377449864')"><pre></pre></li>
+                  
+                  <li onclick="toggle('pre4377449864', 'post4377449864')"><pre>    def encode(self, o):</pre></li>
+                  
+                  <li onclick="toggle('pre4377449864', 'post4377449864')"><pre>        &quot;&quot;&quot;Return a JSON string representation of a Python data structure.</pre></li>
+                  
+                  <li onclick="toggle('pre4377449864', 'post4377449864')"><pre></pre></li>
+                  
+                  <li onclick="toggle('pre4377449864', 'post4377449864')"><pre>        &gt;&gt;&gt; from json.encoder import JSONEncoder</pre></li>
+                  
+                  <li onclick="toggle('pre4377449864', 'post4377449864')"><pre>        &gt;&gt;&gt; JSONEncoder().encode({&quot;foo&quot;: [&quot;bar&quot;, &quot;baz&quot;]})</pre></li>
+                  
+              </ol>
+              
+            </div>
+          
+
+          
+            <div class="commands">
+                
+                    <a href="#" onclick="return varToggle(this, '4377449864')"><span>&#x25b6;</span> Local vars</a>
+                
+            </div>
+            <table class="vars" id="v4377449864">
+              <thead>
+                <tr>
+                  <th>Variable</th>
+                  <th>Value</th>
+                </tr>
+              </thead>
+              <tbody>
+                
+                  <tr>
+                    <td>o</td>
+                    <td class="code"><pre>&lt;django.contrib.contenttypes.fields.create_generic_related_manager.&lt;locals&gt;.GenericRelatedObjectManager object at 0x104ed5be0&gt;</pre></td>
+                  </tr>
+                
+                  <tr>
+                    <td>self</td>
+                    <td class="code"><pre>&lt;rest_framework.utils.encoders.JSONEncoder object at 0x104ed59e8&gt;</pre></td>
                   </tr>
                 
               </tbody>
@@ -521,15 +1367,15 @@
   <div id="pastebinTraceback" class="pastebin">
     <input type="hidden" name="language" value="PythonConsole">
     <input type="hidden" name="title"
-      value="RuntimeError at /reviews/1">
+      value="TypeError at /reviews/">
     <input type="hidden" name="source" value="Django Dpaste Agent">
     <input type="hidden" name="poster" value="Django">
     <textarea name="content" id="traceback_area" cols="140" rows="25">
 Environment:
 
 
-Request Method: PUT
-Request URL: http://127.0.0.1:8000/reviews/1
+Request Method: POST
+Request URL: http://127.0.0.1:8000/reviews/
 
 Django Version: 2.0.4
 Python Version: 3.6.1
@@ -542,7 +1388,9 @@ Installed Applications:
  &#39;django.contrib.staticfiles&#39;,
  &#39;rest_framework&#39;,
  &#39;cvs_rest.apps.CvsRestConfig&#39;,
- &#39;rest_framework.authtoken&#39;]
+ &#39;rest_framework.authtoken&#39;,
+ &#39;django_filters&#39;,
+ &#39;corsheaders&#39;]
 Installed Middleware:
 [&#39;django.middleware.security.SecurityMiddleware&#39;,
  &#39;django.contrib.sessions.middleware.SessionMiddleware&#39;,
@@ -550,7 +1398,9 @@ Installed Middleware:
  &#39;django.middleware.csrf.CsrfViewMiddleware&#39;,
  &#39;django.contrib.auth.middleware.AuthenticationMiddleware&#39;,
  &#39;django.contrib.messages.middleware.MessageMiddleware&#39;,
- &#39;django.middleware.clickjacking.XFrameOptionsMiddleware&#39;]
+ &#39;django.middleware.clickjacking.XFrameOptionsMiddleware&#39;,
+ &#39;corsheaders.middleware.CorsMiddleware&#39;,
+ &#39;django.middleware.common.CommonMiddleware&#39;]
 
 
 
@@ -559,17 +1409,41 @@ Traceback:
 File "/Library/Frameworks/Python.framework/Versions/3.6/lib/python3.6/site-packages/django/core/handlers/exception.py" in inner
   35.             response = get_response(request)
 
-File "/Library/Frameworks/Python.framework/Versions/3.6/lib/python3.6/site-packages/django/utils/deprecation.py" in __call__
-  93.             response = self.process_request(request)
+File "/Library/Frameworks/Python.framework/Versions/3.6/lib/python3.6/site-packages/django/core/handlers/base.py" in _get_response
+  158.                 response = self.process_exception_by_middleware(e, request)
 
-File "/Library/Frameworks/Python.framework/Versions/3.6/lib/python3.6/site-packages/django/middleware/common.py" in process_request
-  61.             path = self.get_full_path_with_slash(request)
+File "/Library/Frameworks/Python.framework/Versions/3.6/lib/python3.6/site-packages/django/core/handlers/base.py" in _get_response
+  156.                 response = response.render()
 
-File "/Library/Frameworks/Python.framework/Versions/3.6/lib/python3.6/site-packages/django/middleware/common.py" in get_full_path_with_slash
-  99.                     &#39;url&#39;: request.get_host() + new_path,
+File "/Library/Frameworks/Python.framework/Versions/3.6/lib/python3.6/site-packages/django/template/response.py" in render
+  106.             self.content = self.rendered_content
 
-Exception Type: RuntimeError at /reviews/1
-Exception Value: You called this URL via PUT, but the URL doesn&#39;t end in a slash and you have APPEND_SLASH set. Django can&#39;t redirect to the slash URL while maintaining PUT data. Change your form to point to 127.0.0.1:8000/reviews/1/ (note the trailing slash), or set APPEND_SLASH=False in your Django settings.
+File "/Library/Frameworks/Python.framework/Versions/3.6/lib/python3.6/site-packages/rest_framework/response.py" in rendered_content
+  72.         ret = renderer.render(self.data, accepted_media_type, context)
+
+File "/Library/Frameworks/Python.framework/Versions/3.6/lib/python3.6/site-packages/rest_framework/renderers.py" in render
+  105.             allow_nan=not self.strict, separators=separators
+
+File "/Library/Frameworks/Python.framework/Versions/3.6/lib/python3.6/site-packages/rest_framework/utils/json.py" in dumps
+  28.     return json.dumps(*args, **kwargs)
+
+File "/Library/Frameworks/Python.framework/Versions/3.6/lib/python3.6/json/__init__.py" in dumps
+  238.         **kw).encode(obj)
+
+File "/Library/Frameworks/Python.framework/Versions/3.6/lib/python3.6/json/encoder.py" in encode
+  199.         chunks = self.iterencode(o, _one_shot=True)
+
+File "/Library/Frameworks/Python.framework/Versions/3.6/lib/python3.6/json/encoder.py" in iterencode
+  257.         return _iterencode(o, 0)
+
+File "/Library/Frameworks/Python.framework/Versions/3.6/lib/python3.6/site-packages/rest_framework/utils/encoders.py" in default
+  68.         return super(JSONEncoder, self).default(obj)
+
+File "/Library/Frameworks/Python.framework/Versions/3.6/lib/python3.6/json/encoder.py" in default
+  180.                         o.__class__.__name__)
+
+Exception Type: TypeError at /reviews/
+Exception Value: Object of type &#39;GenericRelatedObjectManager&#39; is not JSON serializable
 </textarea>
   <br><br>
   <input type="submit" value="Share this traceback on a public website">
@@ -585,7 +1459,7 @@ Exception Value: You called this URL via PUT, but the URL doesn&#39;t end in a s
 
   
     <h3 id="user-info">USER</h3>
-    <p>[unable to retrieve the current user]</p>
+    <p>abab</p>
   
 
   <h3 id="get-info">GET</h3>
@@ -635,7 +1509,7 @@ Exception Value: You called this URL via PUT, but the URL doesn&#39;t end in a s
       
         <tr>
           <td>CONTENT_LENGTH</td>
-          <td class="code"><pre>&#39;142&#39;</pre></td>
+          <td class="code"><pre>&#39;94&#39;</pre></td>
         </tr>
       
         <tr>
@@ -665,7 +1539,7 @@ Exception Value: You called this URL via PUT, but the URL doesn&#39;t end in a s
       
         <tr>
           <td>HTTP_AUTHORIZATION</td>
-          <td class="code"><pre>&#39;Token d9d76e83a39410343f6a2b6f94af75ec66536b14&#39;</pre></td>
+          <td class="code"><pre>&#39;Token 545cc4cb5e862e79722638b110cb9c4e3a3bb9d5&#39;</pre></td>
         </tr>
       
         <tr>
@@ -735,7 +1609,7 @@ Exception Value: You called this URL via PUT, but the URL doesn&#39;t end in a s
       
         <tr>
           <td>OLDPWD</td>
-          <td class="code"><pre>&#39;/Users/yeonjulee/Desktop/swppswpp/c-vs/cvs_server/cvs_rest&#39;</pre></td>
+          <td class="code"><pre>&#39;/Users/yeonjulee/Desktop/swppswpp/c-vs/cvs_server/crawlers&#39;</pre></td>
         </tr>
       
         <tr>
@@ -750,7 +1624,7 @@ Exception Value: You called this URL via PUT, but the URL doesn&#39;t end in a s
       
         <tr>
           <td>PATH_INFO</td>
-          <td class="code"><pre>&#39;/reviews/1&#39;</pre></td>
+          <td class="code"><pre>&#39;/reviews/&#39;</pre></td>
         </tr>
       
         <tr>
@@ -780,7 +1654,7 @@ Exception Value: You called this URL via PUT, but the URL doesn&#39;t end in a s
       
         <tr>
           <td>REQUEST_METHOD</td>
-          <td class="code"><pre>&#39;PUT&#39;</pre></td>
+          <td class="code"><pre>&#39;POST&#39;</pre></td>
         </tr>
       
         <tr>
@@ -910,7 +1784,7 @@ Exception Value: You called this URL via PUT, but the URL doesn&#39;t end in a s
       
         <tr>
           <td>wsgi.input</td>
-          <td class="code"><pre>&lt;_io.BufferedReader name=6&gt;</pre></td>
+          <td class="code"><pre>&lt;_io.BufferedReader name=7&gt;</pre></td>
         </tr>
       
         <tr>
@@ -1324,7 +2198,9 @@ Exception Value: You called this URL via PUT, but the URL doesn&#39;t end in a s
  &#39;django.contrib.staticfiles&#39;,
  &#39;rest_framework&#39;,
  &#39;cvs_rest.apps.CvsRestConfig&#39;,
- &#39;rest_framework.authtoken&#39;]</pre></td>
+ &#39;rest_framework.authtoken&#39;,
+ &#39;django_filters&#39;,
+ &#39;corsheaders&#39;]</pre></td>
         </tr>
       
         <tr>
@@ -1513,7 +2389,9 @@ Exception Value: You called this URL via PUT, but the URL doesn&#39;t end in a s
  &#39;django.middleware.csrf.CsrfViewMiddleware&#39;,
  &#39;django.contrib.auth.middleware.AuthenticationMiddleware&#39;,
  &#39;django.contrib.messages.middleware.MessageMiddleware&#39;,
- &#39;django.middleware.clickjacking.XFrameOptionsMiddleware&#39;]</pre></td>
+ &#39;django.middleware.clickjacking.XFrameOptionsMiddleware&#39;,
+ &#39;corsheaders.middleware.CorsMiddleware&#39;,
+ &#39;django.middleware.common.CommonMiddleware&#39;]</pre></td>
         </tr>
       
         <tr>
@@ -1549,7 +2427,9 @@ Exception Value: You called this URL via PUT, but the URL doesn&#39;t end in a s
         <tr>
           <td>REST_FRAMEWORK</td>
           <td class="code"><pre>{&#39;DEFAULT_AUTHENTICATION_CLASSES&#39;: (&#39;rest_framework.authentication.TokenAuthentication&#39;,),
- &#39;DEFAULT_FILTER_BACKENDS&#39;: ()}</pre></td>
+ &#39;DEFAULT_FILTER_BACKENDS&#39;: (),
+ &#39;DEFAULT_PAGINATION_CLASS&#39;: &#39;rest_framework.pagination.PageNumberPagination&#39;,
+ &#39;PAGE_SIZE&#39;: 30}</pre></td>
         </tr>
       
         <tr>

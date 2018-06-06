@@ -3,25 +3,16 @@ from cvs_rest.models import *
 from django.db.models import Avg
 
 class UserSerializer(serializers.ModelSerializer):
-    #recipe_set = serializers.PrimaryKeyRelatedField(many=True, queryset=Recipe.objects.all())
-    #review_set = serializers.PrimaryKeyRelatedField(many=True, queryset=Review.objects.all())
-    #comment_set = serializers.PrimaryKeyRelatedField(many=True, queryset=Comment.objects.all())
     
     class Meta:
         model = CustomUser
-        fields = ('id', 'username', 'created', 'email', 'comment_set')
-        #fields = ('id', 'username', 'nickname', 'created', 'email', 'recipe_set', 'review_set', 'comment_set')
-
+        fields = ('id', 'username', 'created', 'email', 'comment_set', 'review_set')
+        
 
 class RecipeSerializer(serializers.ModelSerializer) :
     class Meta:
         model = Recipe
         fields = '__all__'
-
-class ReviewListSerializer(serializers.ModelSerializer) :
-    class Meta:
-       model = Review
-       fields = ('id', 'created', 'edited', 'title', 'user_id', 'product')
 
 class RatingSerializer(serializers.ModelSerializer) :
 
@@ -44,20 +35,7 @@ class RatingSerializer(serializers.ModelSerializer) :
 class CommentSerializer(serializers.ModelSerializer) :
 
     rating = serializers.SerializerMethodField()
-    '''
-    def update(self, instance, validated_data) :
 
-        rating_data = validated_data.pop('rating')
-        rating = instance.rating
-        instance.edited = validated_data.get('edited', instance.edited)
-        instance.content = validated_data.get('content', instance.content)
-        instance.save()
-        
-        rating.edited = rating_data.get('edited', rating.edited)
-        rating.value = rating_data.get('value', raing.value)
-        rating.save()
-        return instance
-    '''    
     class Meta:
         model = Comment
         fields = ('id', 'created', 'edited', 'content', 'user_id', 'product', 'rating')
@@ -73,7 +51,7 @@ class ProductDetailSerializer(serializers.ModelSerializer) :
 
     class Meta:
         model = Product
-        fields = ('id', 'name', 'image', 'price', 'manufacturer', 'PB', 'large_category', 'small_category', 'rating_avg', 'comment_set')
+        fields = ('id', 'name', 'image', 'price', 'manufacturer', 'PB', 'large_category', 'small_category', 'rating_avg', 'comment_set', 'review_set')
     
     def get_rating_avg(self,obj):
         return obj.rating_avg or 0
@@ -85,118 +63,39 @@ class ProductSerializer(serializers.ModelSerializer) :
     class Meta:
         model = Product
         fields = '__all__'
-"""
-class PostRelatedField(serializers.RelatedField) :
 
-    created = serializers.DateTimeField()
-    image = serializers.ImageField()
-    content = serializers.CharField()
 
-    
-    def to_representation(self, value) :
-        if isinstance(value, Review) :
-            return 'post: ' + value.id
-        elif isinstance(value, Recipe) :
-            return 'post: ' + value.id
-        raise Exception('Unexpected type of Post object')
-
-"""
 class PostSerializer(serializers.ModelSerializer) :
     class Meta :
         model = Post
         fields = ('created', 'image', 'content')
+
+class ReviewListSerializer(serializers.ModelSerializer) :
+
+    rating = serializers.SerializerMethodField()
+
+    class Meta:
+       model = Review
+       fields = ('id', 'created', 'edited', 'title', 'user_id', 'product', 'rating')
     
+    def get_rating(self, obj) :
+        rat = obj.rating.get()
+        if rat:
+            return rat.value
+        return 0
 
 class ReviewDetailSerializer(serializers.ModelSerializer) :
 
+    rating = serializers.SerializerMethodField()
     post = PostSerializer(many=True)
-    """
-    def create(self, validated_data) :
-        post_image = validated_data.pop('image')
-        post_content = validated_data.pop('content')
-
-        review = Review.objects.create(**validated_data)
-        post_data = {}
-        post_data['belong_to'] = review
-        post_data['image'] = post_image
-        post_data['content'] = post_content
-        Post.objects.create(**post_data)
-        return review
-    
-    def update(self, instance, validated_data) :
-
-        instance.edited = validated_data.get('edited', instance.edited)
-        instance.title = validated_data.get('title', instance.title)
-        instance.save()
-
-        post = validated_data.pop('post')
-
-        post_to_delete = Post.objects.filter(review__id=validated_data['id'])
-        post_to_delete.delete()
-
-        
-        post_image = validated_data.pop('image')
-        post_content = validated_data.pop('content')
-
-        post_data = {}
-        post_data['belong_to'] = instance
-        post_data['image'] = post_image
-        post_data['content'] = post_content
-        Post.objects.create(**post_data)
-        #Post.objects.create(belong_to=instance)
-        
-        return instance
-    """
-    #def validate(self, data) :
-
-
 
     class Meta :
         model = Review
-        fields = ('created', 'edited', 'title', 'user_id', 'product_id', 'post')
-
-
-
-"""
-class CommentRelatedField(serializers.RelatedField) :
-    def to_native(self, value):
-        if isinstance(value, Product):
-            serializer = ProductSerializer(value)
-        elif isinstance(value, Recipe) :
-            serializer = RecipeSerializer(value)
-        else :
-            raise Exception('Unexpected type of comment object')
-        return serializer.data
-class CommentIdSerializer(serializers.ModelSerializer) :
-    class Meta :
-        model = Product
-        fields = ('id')
-
-class ReviewIdSerializer(serializers.ModelSerializer) :
-    class Meta :
-        model = Review
-        fields = ('id')
-
-
-
-
-
-class RatingObjectRelatedField(serializers.RelatedField) :
-
-    def to_native(self, value) :
-        #ratingValue = 
-
-    def to_native(self, value) :
-        if isinstance(value, models.Comment) :
-            serializer = CommentSerializer(value)
-        elif isinstance(value, models.Review) :
-            serializer = ReviewSerializer(value)
-        else :
-            raise Exception('Unexpected type of comment object')
-        return serializer.data
-        fields = ('id', 'name', 'image', 'price', 'manufacturer', 'PB', 'large_category', 'small_category', 'rating_avg')
+        fields = ('created', 'edited', 'title', 'user_id', 'product', 'post', 'rating')
     
-    def get_rating_avg(self,obj):
-        return obj.rating_avg or 0
-"""
+    def get_rating(self, obj) :
+        rat = obj.rating.get()
+        if rat :
+            return rat.value
+        return 0
 

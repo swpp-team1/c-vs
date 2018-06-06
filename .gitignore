@@ -118,3 +118,6 @@ migrations/
 # config file
 .config_secret/
 *.pem
+
+# debug
+output.txt

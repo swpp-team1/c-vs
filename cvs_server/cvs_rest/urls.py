@@ -11,7 +11,7 @@ urlpatterns = [
     url(r'products/$', views.ProductList.as_view()),
     url(r'products/(?P<pk>[0-9]+)/$', views.ProductDetail.as_view()),
     url(r'^reviews/$', views.get_create_review),
-    url(r'^reviews/(?P<pk>[0-9]+)/$', views.ReviewDetail.as_view()),
+    url(r'^reviews/(?P<pk>[0-9]+)/$', views.review_detail),
     url(r'comments/$', views.create_comment),
     url(r'comments/(?P<pk>[0-9]+)/$', views.comment_detail),
     #url(r'recipes/$', views.RecipeList.as_view()),
