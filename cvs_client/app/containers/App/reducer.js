@@ -16,6 +16,7 @@ import {
   LOAD_REPOS_SUCCESS,
   LOAD_REPOS,
   LOAD_REPOS_ERROR,
+  LOGIN_SUCCEEDED
 } from './constants';
 
 // The initial state of the App
@@ -44,6 +45,8 @@ function appReducer(state = initialState, action) {
       return state
         .set('error', action.error)
         .set('loading', false);
+    case LOGIN_SUCCEEDED:
+      return fromJS({...state.toJS(), loginResult: action.loginResult})
     default:
       return state;
   }
