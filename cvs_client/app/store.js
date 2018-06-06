@@ -7,8 +7,19 @@ import { fromJS } from 'immutable';
 import { routerMiddleware } from 'react-router-redux';
 import createSagaMiddleware from 'redux-saga';
 import createReducer from './reducers';
+import { persistStore, autoRehydrate } from 'redux-persist-immutable'
+import storage from 'redux-persist/lib/storage'
+import immutableTransform from 'redux-persist-transform-immutable'
 
 const sagaMiddleware = createSagaMiddleware();
+
+const persistConfig = {
+  transforms: [immutableTransform()],
+  key: 'root',
+  storage: storage,
+  whitelist: ['global'],
+};
+
 
 export default function configureStore(initialState = {}, history) {
   // Create the store with two middlewares
@@ -21,6 +32,7 @@ export default function configureStore(initialState = {}, history) {
 
   const enhancers = [
     applyMiddleware(...middlewares),
+    autoRehydrate({ log: true }),
   ];
 
   // If Redux DevTools Extension is installed use it, otherwise use Redux compose
@@ -38,6 +50,8 @@ export default function configureStore(initialState = {}, history) {
     composeEnhancers(...enhancers)
   );
 
+  persistStore(store, { whitelist: ['global',] });
+
   // Extensions
   store.runSaga = sagaMiddleware.run;
   store.asyncReducers = {}; // Async reducer registry
@@ -54,6 +68,5 @@ export default function configureStore(initialState = {}, history) {
       });
     });
   }
-
   return store;
 }

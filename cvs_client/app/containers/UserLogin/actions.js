@@ -9,7 +9,8 @@ import {
   LOGIN_REQUEST,
   LOGIN_SUCCEEDED,
   SIGNUP_REQUEST,
-  SIGNUP_SUCCEEDED,
+  SIGNUP_RESULT,
+  SET_ERROR_MESSAGE,
   LOGOUT
 } from './constants';
 
@@ -19,11 +20,11 @@ export function defaultAction() {
   };
 }
 
-export function loginRequest (username, password) {
+export function signupResult (succeeded, message) {
   return {
-    type: LOGIN_REQUEST,
-    username,
-    password,
+    type: SIGNUP_RESULT,
+    succeeded: succeeded,
+    message: message
   }
 }
 
