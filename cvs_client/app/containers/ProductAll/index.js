@@ -35,23 +35,23 @@ export class ProductAll extends React.Component { // eslint-disable-line react/p
     return (
       <div>
         <Article>
-        <CustomHeader/>
-      <Section colorIndex='light-2'>
-      <Tiles  fill={false} flush={false} >
-      <Tile>
-      <Card thumbnail='http://cdn2.bgfretail.com/bgfbrand/files/product/5D8998FE3B78430B99641CCA0C3F3506.jpg'
-                textSize='small'
-                label='Sample Label'
-                heading='Sample Heading'
-                description='Sample description providing more details.'
-                onClick = {() => alert("clicked")}
-                // link={<Anchor href=''
-                // label='Sample anchor' />}
-                colorIndex='light-1' />
-      </Tile>
-      </Tiles>
-      </Section>
-      </Article>
+          <Section colorIndex='light-2'>
+            <Tiles  fill={false} flush={false} >
+              <Tile>
+                <Card thumbnail='http://cdn2.bgfretail.com/bgfbrand/files/product/5D8998FE3B78430B99641CCA0C3F3506.jpg'
+                      textSize='small'
+                      label='Sample Label'
+                      heading='Sample Heading'
+                      description='Sample description providing more details.'
+                      onClick = {() => alert("clicked")}
+                      // link={<Anchor href=''
+                      // label='Sample anchor' />}
+                      colorIndex='light-1'
+                />
+              </Tile>
+            </Tiles>
+          </Section>
+        </Article>
       </div>
 
       // <div>

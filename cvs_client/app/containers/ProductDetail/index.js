@@ -46,7 +46,6 @@ export class ProductDetail extends React.Component { // eslint-disable-line reac
     console.log(relatedProductsList)
     return (
       <div>
-        <CustomHeader/>
         <div style={{flexDirection: 'row', display: 'flex', padding: '30px'}}>
           <div style={{width: '250px', justifyContent: 'center', display: 'flex'}}>
             <Image fit='contain' size='large' src={productDetail.image}/>
