@@ -6,15 +6,10 @@
 
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
-import Helmet from 'react-helmet';
-import { FormattedMessage } from 'react-intl';
-import { createStructuredSelector } from 'reselect';
-import makeSelectUserLogin from './selectors';
-import { signupRequest } from './actions'
-import messages from './messages';
+import { signupRequest, signupResult } from './actions'
+import { loginRequest } from '../App/actions'
 import Grommet from 'grommet'
 import Box from 'grommet/components/Box';
-import CustomHeader from '../../components/CustomHeader'
 import Anchor from 'grommet/components/Anchor'
 import Form from 'grommet/components/Form'
 import FormField from 'grommet/components/FormField'
@@ -22,6 +17,7 @@ import TextInput from 'grommet/components/TextInput'
 import Status from 'grommet/components/icons/Status'
 import Heading from 'grommet/components/Heading'
 import Layer from 'grommet/components/Layer'
+import Toast from 'grommet/components/Toast'
 
 
 function validateEmail(email) {
@@ -50,16 +46,44 @@ export class UserLogin extends React.Component { // eslint-disable-line react/pr
       passwordConfirm: false,
     }
   }
+  componentWillReceiveProps (nextProps) {
+    if(nextProps.signupSucceeded){
+      this.setState({needSignUp: false, usernameValid: false, emailValid: false, passwordValid: false, passwordConfirm: false})
+      this.props.signupResult(false, )
+    }
+  }
+
+  componentWillUpdate(nextProps, nextState) {
+    if(!this.props.loginResult)
+      if(nextProps.loginResult){
+        this.props.router.push('/')
+      }
+  }
+
   render() {
     return (
       <div>
         <Box align='center' pad='large'>
-          <Grommet.LoginForm align='center' title='C:VS login' onSubmit={() => console.log('login')} usernameType='text'/>
+          <Grommet.LoginForm align='center' title='C:VS login' onSubmit={(data) => {
+            this.props.loginRequest(data.username, data.password)
+          }} usernameType='text'/>
           <Anchor label='회원이 아니신가요?' onClick={() => this.setState({needSignUp: true})}/>
           {
-            this.state.needSignUp &&
-            <Layer onClose={() => this.setState({needSignUp: false})} closer={true}>
+            this.state.needSignUp && !this.props.signupSucceeded &&
+            <Layer onClose={() => {
+              this.setState({needSignUp: false, usernameValid: false, emailValid: false, passwordValid: false, passwordConfirm: false})
+              this.props.signupResult(false, )
+            }} closer={true}>
               <div style={{margin: '50px'}}>
+                {
+                  (this.props.errorMessage) &&
+                  <Toast status='critical'
+                         onClose={() => {
+                           this.props.signupResult(false, )
+                         }}>
+                    {this.props.errorMessage}
+                  </Toast>
+                }
                 <Heading tag='h2'>회원 가입</Heading>
                 <Form>
                   <FormField label='Username (첫글자 영문. 영문/숫자 4자리 이상 20자리 이하)'>
@@ -139,13 +163,18 @@ UserLogin.propTypes = {
   dispatch: PropTypes.func.isRequired,
 };
 
-const mapStateToProps = createStructuredSelector({
-  UserLogin: makeSelectUserLogin(),
-});
+const mapStateToProps = (state) => {
+  return ({
+    errorMessage: state.get('userLogin').toJS().errorMessage,
+    signupSucceeded: state.get('userLogin').toJS().signupSucceeded,
+    loginResult: state.get('global').toJS().loginResult,
+  })}
 
 function mapDispatchToProps(dispatch) {
   return {
     signupRequest: (username, password, email) => dispatch(signupRequest(username, password, email)),
+    signupResult: (succeeded, message) => dispatch(signupResult(succeeded, message)),
+    loginRequest: (username, password) => dispatch(loginRequest(username, password))
   };
 }
 
