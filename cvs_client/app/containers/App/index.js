@@ -11,10 +11,12 @@ import React from 'react';
 import GrommetApp from 'grommet/components/App';
 import Title from 'grommet/components/Title';
 import withProgressBar from 'components/ProgressBar';
+import CustomHeader from '../../components/CustomHeader'
 
 export function App(props) {
   return (
     <GrommetApp style={{width: '100%', margin: 0, padding: 0, maxWidth: 'none'}}>
+      <CustomHeader/>
       {React.Children.toArray(props.children)}
     </GrommetApp>
   );

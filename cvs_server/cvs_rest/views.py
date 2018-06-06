@@ -77,8 +77,9 @@ class CustomUserDetail(generics.RetrieveAPIView):
 class ProductList(generics.ListAPIView) :
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
-    filter_backends = (filters.SearchFilter, DjangoFilterBackend)
+    filter_backends = (filters.SearchFilter, DjangoFilterBackend, filters.OrderingFilter)
     search_fields = ('name',)
+    ordering_fields = ('name', 'rating_avg')
     filter_fields = ('price', 'large_category', 'small_category', 'manufacturer', 'PB')
 
 #/products/id
@@ -89,31 +90,46 @@ class ProductDetail(generics.RetrieveAPIView) :
 
 
 #일단 유저빼고 해봄
-@api_view(['POST'])
+@api_view(['GET','POST'])
 @permission_classes((IsAuthenticatedOrReadOnly,))
 def create_comment(request, format=None) :
 
-    #create and save new rating object
-    data = request.data
-    rating = data.get('rating')
-    content = data.get('content')
-    product = data.get('product')
+    if request.method == 'GET':
+        comments = Comment.objects.all()
+        product = request.query_params.get('product', None)
+        user_id = request.query_params.get('user_id', None)
+        if product is not None:
+            comments = comments.filter(product=product)
+        if user_id is not None:
+            comments = comments.filter(user_id=user_id)
+        serializer = CommentSerializer(comments, many=True)
+        return Response(serializer.data)
+
+    elif request.method == 'POST':
+        #create and save new rating object
+        data = request.data
+        rating = data.get('rating')
+        content = data.get('content')
+        product = data.get('product')
         
-    if not (rating and content and product):
-        return Response(data={'message':'content or product or rating Field does not exist'}, status=status.HTTP_400_BAD_REQUEST)
-    
-    try:
-        product_obj = Product.objects.get(id=product)
-    except ObjectDoesNotExist:    
-        return Response(data={'message':'Wrong Product ID'}, status=status.HTTP_400_BAD_REQUEST)
+        if not (rating and content and product):
+            return Response(data={'message':'content or product or rating Field is not existed'}, status=status.HTTP_400_BAD_REQUEST)
+        
+        rating = int(rating)
+        
+        if rating < 1 or rating > 5:
+            return Response(data={'message':'rating should be 1 to 5'}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            product_obj = Product.objects.get(id=product)
+        except ObjectDoesNotExist:    
+            return Response(data={'message':'Wrong Product ID'}, status=status.HTTP_400_BAD_REQUEST)
    
-    comment_obj = Comment.objects.create(content=content, product=product_obj, user_id=request.user)
-    Rating.objects.create(comment=comment_obj, value=rating, user_id=request.user)
+        comment_obj = Comment.objects.create(content=content, product=product_obj, user_id=request.user)
+        Rating.objects.create(belong_to=comment_obj, value=rating, user_id=request.user, product=product_obj)
     
-    serializer = CommentSerializer(comment_obj) 
-    #if serializer.is_valid():
-        #serializer.save()
-    return Response(serializer.data, status=status.HTTP_201_CREATED)
+        serializer = CommentSerializer(comment_obj) 
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
 
@@ -144,6 +160,7 @@ def comment_detail(request, pk, format=None) :
 
     
 
+<<<<<<< HEAD
 #/reviews/
 @api_view(['GET', 'POST'])
 @permission_classes((IsAuthenticatedOrReadOnly,))
@@ -210,6 +227,15 @@ def review_detail(request, pk, format=None) :
         review.edited = data.get('edited')
         review.title = data.get('title')
         review.save()
+=======
+"""
+#/reviews
+class ReviewList(generics.ListCreateAPIView) :
+    queryset = Review.objects.all()
+    serializer_class = ReviewSerializer
+    filter_backends = (DjangoFilterBackend,)
+    filter_fields = ('user_id',)
+>>>>>>> de629e973d1b2c06f175b1bf63334839ac386498
 
         #in serializer, create new post object and update review object
         serializer = ReviewDetailSerializer(review, data=data)

@@ -2,7 +2,11 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes import fields
-   
+from django.db.models import Avg   
+
+class ProductManager(models.Manager):
+    def get_queryset(self):
+        return super().get_queryset().annotate(rating_avg=Avg('rating__value'))
 
 class Product(models.Model):
     DEFAULT_PK = 1
@@ -32,6 +36,8 @@ class Product(models.Model):
         max_length=10,
         null=True,
     )
+    # overide default manager
+    objects = ProductManager()
 
     class Meta:
         ordering = ('manufacturer', 'name',)
@@ -67,9 +73,9 @@ class Review(models.Model):
         'CustomUser',
         on_delete=models.CASCADE,
     )
-
-    product_id = models.ForeignKey('Product', on_delete=models.CASCADE)
     
+    product = models.ForeignKey('Product', on_delete=models.CASCADE)
+    rating = fields.GenericRelation('Rating', related_query_name='review')
     post = fields.GenericRelation('Post', related_query_name='review')    
     
     class Meta:
@@ -82,13 +88,13 @@ class Comment(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     edited = models.DateTimeField(auto_now=True)
     content = models.TextField()
-    
+    rating = fields.GenericRelation('Rating')
     user_id = models.ForeignKey(
         'CustomUser',
         on_delete=models.CASCADE,
     )
+    product = models.ForeignKey('Product', on_delete=models.CASCADE, default=Product.DEFAULT_PK)
     
-    product = models.ForeignKey('Product', related_name='comments', on_delete=models.CASCADE, default=Product.DEFAULT_PK)
 
     class Meta:
         ordering = ('created',)
@@ -117,12 +123,14 @@ class Rating(models.Model) :
         on_delete=models.CASCADE,
     )
     
-    comment = models.OneToOneField(
-        Comment,
-        on_delete=models.CASCADE
+    product = models.ForeignKey(
+        'Product',
+        on_delete=models.CASCADE,     
     )
-        
-    #comment = models.ForeignKey('Comment', related_name='rating',  on_delete=models.CASCADE, default=Comment.DEFAULT_PK)
-    #review = models.ForeignKey('Review', on_delete=models.CASCADE, null=True)
+    content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
+    object_id = models.PositiveIntegerField()
+    belong_to = fields.GenericForeignKey('content_type', 'object_id')
+
     class Meta:
         ordering = ('created',)
+
