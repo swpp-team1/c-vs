@@ -20,13 +20,16 @@ import Article from 'grommet/components/Article';
 import Section from 'grommet/components/Section';
 import { searchProduct, receivedSearchResult } from './actions';
 import Heading from 'grommet/components/Heading';
-
+import Card from 'grommet/components/Card';
+import Tile from 'grommet/components/Tile';
+import Tiles from 'grommet/components/Tiles';
+import Image from 'grommet/components/Image';
 
 export class SearchPage extends React.Component { // eslint-disable-line react/prefer-stateless-function
   constructor(props){
     super(props);
 
-    this.state = {term: ''};
+    this.state = {term: '', result: []};
     this.onInputChange = this.onInputChange.bind(this);
     this.onEnter = this.onEnter.bind(this);
   }
@@ -40,6 +43,7 @@ export class SearchPage extends React.Component { // eslint-disable-line react/p
       console.log("PARAM: ", this.props.params.id);
       this.props.searchProduct(this.props.params.id);
     }
+
   }
 
   onInputChange(event){
@@ -55,7 +59,15 @@ export class SearchPage extends React.Component { // eslint-disable-line react/p
   }
   
   render() {
-    console.log("RESULT: ", this.props.searchResult);
+    var resultCard;
+    if(!this.props.searchResult) {
+      resultCard = (() => {return <p>NO RESULT</p>});
+    }
+    else{
+      resultCard = this.props.searchResult.map((object, index) => {
+      return (<Tile pad='medium' key={index}><Card colorIndex = 'light-1' textSize = 'small' thumbnail = {<Image src={object.image} />} label={object.manufacturer} heading = {object.name} key = {index} onClick={() => this.props.router.push(`/productDetail/${object.id}`)}/></Tile>);
+    })
+  }
 
     return (
       <div>
@@ -78,7 +90,9 @@ export class SearchPage extends React.Component { // eslint-disable-line react/p
         </Section>
         </Box>
         </Article>
-
+        <Box colorIndex='light-2'>
+        <Tiles fill={true}>{resultCard}</Tiles>
+        </Box>
       </div>
     );
   }
