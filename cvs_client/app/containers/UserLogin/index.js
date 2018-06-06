@@ -10,6 +10,7 @@ import Helmet from 'react-helmet';
 import { FormattedMessage } from 'react-intl';
 import { createStructuredSelector } from 'reselect';
 import makeSelectUserLogin from './selectors';
+import { signupRequest } from './actions'
 import messages from './messages';
 import Grommet from 'grommet'
 import Box from 'grommet/components/Box';
@@ -117,7 +118,11 @@ export class UserLogin extends React.Component { // eslint-disable-line react/pr
                 <Anchor
                   primary={true}
                   reverse={true}
-                  onClick={() => console.log('!')}
+                  onClick={() => {
+                    if (this.state.passwordValid && this.state.usernameValid && this.state.passwordConfirm && this.state.emailValid) {
+                      this.props.signupRequest(document.getElementById('username').value, document.getElementById('password-input').value, document.getElementById('e-mail').value)
+                    }
+                  }}
                   disabled={!(this.state.passwordValid && this.state.usernameValid && this.state.passwordConfirm && this.state.emailValid)}
                   label='회원 가입'
                   style={{padding: '5px'}}/>
@@ -141,7 +146,7 @@ const mapStateToProps = createStructuredSelector({
 
 function mapDispatchToProps(dispatch) {
   return {
-    dispatch,
+    signupRequest: (username, password, email) => dispatch(signupRequest(username, password, email)),
   };
 }
 

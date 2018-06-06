@@ -43,6 +43,7 @@ export class ProductDetail extends React.Component { // eslint-disable-line reac
     const productDetail = this.props.productDetail ? this.props.productDetail : ''
     const relatedProducts = this.props.relatedProducts ? this.props.relatedProducts: []
     const relatedProductsList = (relatedProducts.filter((obj) => (obj.manufacturer !== productDetail.manufacturer && obj.name !== productDetail.name)).concat(relatedProducts.filter((obj) => (obj.manufacturer === productDetail.manufacturer && obj.name !== productDetail.name))))
+    console.log(relatedProductsList)
     return (
       <div>
         <CustomHeader/>
