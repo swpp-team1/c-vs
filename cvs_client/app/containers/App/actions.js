@@ -65,7 +65,6 @@ export function repoLoadingError(error) {
 }
 
 export function loginRequest (username, password) {
-  console.log("!!!")
   return {
     type: LOGIN_REQUEST,
     username,

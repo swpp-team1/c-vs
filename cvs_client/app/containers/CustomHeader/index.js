@@ -11,7 +11,6 @@ import { loginRequest } from '../App/actions';
 
 
 const mapStateToProps = (state) => {
-  console.log(state)
   return ({
     loginResult: state.get('global').toJS().loginResult,
   })}

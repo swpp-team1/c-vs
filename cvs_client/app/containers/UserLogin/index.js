@@ -19,6 +19,7 @@ import Heading from 'grommet/components/Heading'
 import Layer from 'grommet/components/Layer'
 import Toast from 'grommet/components/Toast'
 
+
 function validateEmail(email) {
   let emailExp = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
   return emailExp.test(String(email).toLowerCase());
@@ -51,11 +52,21 @@ export class UserLogin extends React.Component { // eslint-disable-line react/pr
       this.props.signupResult(false, )
     }
   }
+
+  componentWillUpdate(nextProps, nextState) {
+    if(!this.props.loginResult)
+      if(nextProps.loginResult){
+        this.props.router.push('/')
+      }
+  }
+
   render() {
     return (
       <div>
         <Box align='center' pad='large'>
-          <Grommet.LoginForm align='center' title='C:VS login' onSubmit={(data) => this.props.loginRequest(data.username, data.password)} usernameType='text'/>
+          <Grommet.LoginForm align='center' title='C:VS login' onSubmit={(data) => {
+            this.props.loginRequest(data.username, data.password)
+          }} usernameType='text'/>
           <Anchor label='회원이 아니신가요?' onClick={() => this.setState({needSignUp: true})}/>
           {
             this.state.needSignUp && !this.props.signupSucceeded &&

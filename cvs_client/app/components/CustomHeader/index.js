@@ -10,7 +10,6 @@ import { withRouter } from 'react-router';
 
 class CustomHeader extends React.Component { // eslint-disable-line react/prefer-stateless-function
   render() {
-    console.log(this.props.loginResult)
     return (
       <Header style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0px 15px'}}>
         <div style={{display: 'flex', flexDirection: 'row', alignItems: 'center'}}>
