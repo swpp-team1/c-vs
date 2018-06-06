@@ -60,11 +60,12 @@ export class SearchPage extends React.Component { // eslint-disable-line react/p
 
   render() {
     var resultCard;
-    if(!this.props.searchResult) {
-      resultCard = (() => {return <p>NO RESULT</p>});
+    if(this.props.searchResult == undefined) {
+      resultCard = (<p>NO RESULT</p>);
     }
     else{
-      resultCard = this.props.searchResult.map((object, index) => {
+      console.log(this.props.searchResult.results)
+      resultCard = this.props.searchResult.results.map((object, index) => {
       return (<Tile pad='medium' key={index}><Card colorIndex = 'light-1' textSize = 'small' thumbnail = {<Image src={object.image} />} label={object.manufacturer} heading = {object.name} key = {index} onClick={() => this.props.router.push(`/productDetail/${object.id}`)}/></Tile>);
     })
   }

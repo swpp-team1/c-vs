@@ -15,6 +15,9 @@ import Heading from 'grommet/components/Heading'
 import Form from 'grommet/components/Form'
 import FormField from 'grommet/components/FormField'
 import TextInput from 'grommet/components/TextInput'
+import Tiles from 'grommet/components/Tiles'
+import Tile from 'grommet/components/Tile'
+import Card from 'grommet/components/Card'
 
 
 const manufacturer = {'CU': 'CU', 'GS': 'GS25', 'SE': 'SEVEN ELEVEN'}
@@ -41,9 +44,23 @@ export class ProductDetail extends React.Component { // eslint-disable-line reac
   }
   render() {
     const productDetail = this.props.productDetail ? this.props.productDetail : ''
-    const relatedProducts = this.props.relatedProducts ? this.props.relatedProducts: []
+    const relatedProducts = this.props.relatedProducts ? this.props.relatedProducts.results: []
     const relatedProductsList = (relatedProducts.filter((obj) => (obj.manufacturer !== productDetail.manufacturer && obj.name !== productDetail.name)).concat(relatedProducts.filter((obj) => (obj.manufacturer === productDetail.manufacturer && obj.name !== productDetail.name))))
     console.log(relatedProductsList)
+
+    var relatedCard;
+    if(relatedProducts == undefined) {
+      relatedCard = (<p>NO RESULT</p>);
+    }
+    else{
+      console.log(relatedProductsList)
+      relatedCard = relatedProducts.map((object, index) => {
+        if(object.id == this.props.params.id) return;
+        else return (<Tile pad='medium' key={index}><Card colorIndex = 'light-1' textSize = 'small' thumbnail = {<Image src={object.image} />} label={object.manufacturer} heading = {object.name} key = {index} onClick={() => this.props.router.push(`/productDetail/${object.id}`)}/></Tile>);
+    })
+  }
+
+
     return (
       <div>
         <div style={{flexDirection: 'row', display: 'flex', padding: '30px'}}>
@@ -68,6 +85,7 @@ export class ProductDetail extends React.Component { // eslint-disable-line reac
         {
           (this.state && this.state.relatedRequestDone || (productDetail !== '' && !(productDetail.small_category || productDetail.large_category))) ? <h3>{relatedProducts.length === 0 ? '인기 상품' : '유사 상품'}</h3> : <div/>
         }
+        <Tiles fill={true}>{relatedCard}</Tiles>
         <Form>
           <FormField label='짧은 상품평'>
             <TextInput/>
