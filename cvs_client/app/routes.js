@@ -15,7 +15,8 @@ const loadModule = (cb) => (componentModule) => {
 export default function createRoutes(store) {
   // create reusable async injectors using getAsyncInjectors factory
   const { injectReducer, injectSagas } = getAsyncInjectors(store);
-
+  const appModule = Promise.resolve(import('containers/App/sagas'))
+  appModule.then((sagas) => injectSagas(sagas.default))
   return [
     {
       path: '/',

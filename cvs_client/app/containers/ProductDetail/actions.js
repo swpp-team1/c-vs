@@ -10,6 +10,9 @@ import {
   RECEIVED_PRODUCT_DETAIL,
   REQUEST_RELATED_PRODUCTS,
   RECEIVED_RELATED_PRODUCTS,
+  POST_REQUEST_COMMENT,
+  GET_REQUEST_COMMENT,
+  RECEIVED_COMMENTS
 } from './constants';
 
 export function defaultAction() {
@@ -44,5 +47,28 @@ export function receivedRelatedProducts (relatedProducts) {
   return {
     type: RECEIVED_RELATED_PRODUCTS,
     relatedProducts: relatedProducts
+  }
+}
+
+export function postRequestComment (content, product, rating) {
+  return {
+    type: POST_REQUEST_COMMENT,
+    content,
+    product,
+    rating
+  }
+}
+
+export function getRequestComment (id) {
+  return {
+    type: GET_REQUEST_COMMENT,
+    id,
+  }
+}
+
+export function receivedComments (commentList) {
+  return {
+    type: RECEIVED_COMMENTS,
+    commentList: commentList
   }
 }

@@ -1,10 +1,13 @@
 import { take, call, put, select } from 'redux-saga/effects'
+import * as actions from './actions'
 import request from 'utils/request'
-import { SIGNUP_REQUEST } from './constants'
+import { SIGNUP_REQUEST, LOGIN_REQUEST } from './constants'
 
 const signupURL = 'http://13.209.25.111:8000/signup/'
+const loginURL = 'http://13.209.25.111:8000/login/'
 
 
+let message = null
 export function* signupRequest(username, password, email) {
   try {
     const data = yield call(request, signupURL, {
@@ -19,12 +22,16 @@ export function* signupRequest(username, password, email) {
         email: email
       })
     })
-    console.log(data)
+    yield put(actions.signupResult(true, ))
   }
   catch(error) {
-    (Promise.resolve(error.response)).then((value) => value.json()).then((body) => console.log(body))
+    (Promise.resolve(error.response)).then((value) => value.json()).then((body) => {
+      message = body.message
+    })
+    yield put(actions.signupResult(false, message))
   }
 }
+
 
 export function* watchSignupRequest() {
   while (true) {
@@ -32,6 +39,7 @@ export function* watchSignupRequest() {
     yield call(signupRequest, username, password, email)
   }
 }
+
 
 // All sagas to be loaded
 export default [

@@ -48,6 +48,8 @@ import './global-styles';
 // Import routes
 import createRoutes from './routes';
 
+import { PersistGate } from 'redux-persist/integration/react'
+
 // Observe loading of Open Sans (to remove open sans, remove the <link> tag in
 // the index.html file and this observer)
 const openSansObserver = new FontFaceObserver('Open Sans', {});
