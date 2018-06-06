@@ -54,13 +54,12 @@ export class MainPage extends React.Component {
       this.props.router.push(`/search/${this.state.term}`)
     }
   }
-  
+
   // eslint-disable-line react/prefer-stateless-function
   render() {
     return (
       <App style={{maxWidth: 'none'}}>
         <Article>
-          <CustomHeader/>
           <Hero background={<Image src='https://images.pexels.com/photos/811108/pexels-photo-811108.jpeg' fit='cover' full={true} />}
             backgroundColorIndex='dark' size='small'>
             <Box direction='row' justify='center' align='center'>
@@ -68,7 +67,7 @@ export class MainPage extends React.Component {
               <Heading margin='none' strong = {true} tag = 'h2'>제품 및 레시피 검색</Heading>
                 <Box colorIndex='light-1' style={{margin: '20px 0px'}}>
                 <MediaQuery query="(min-device-width: 1024px)">
-                <Search style={{width: '700px'}} inline={true} placeHolder='검색' value={this.state.term} onDOMChange={this.onInputChange} 
+                <Search style={{width: '700px'}} inline={true} placeHolder='검색' value={this.state.term} onDOMChange={this.onInputChange}
                 onSelect={this.onEnter} suggestions={['Suggestion is not yet implemented.']}/>
                 </MediaQuery>
                 <MediaQuery query="(max-device-width: 1023px)">

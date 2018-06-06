@@ -39,7 +39,7 @@ export class SearchPage extends React.Component { // eslint-disable-line react/p
     if(this.props.params.id === undefined){
       console.log("UNDEFINED PARAMETER ID")
     }
-    else{ 
+    else{
       console.log("PARAM: ", this.props.params.id);
       this.props.searchProduct(this.props.params.id);
     }
@@ -57,7 +57,7 @@ export class SearchPage extends React.Component { // eslint-disable-line react/p
       location.reload();
     }
   }
-  
+
   render() {
     var resultCard;
     if(!this.props.searchResult) {
@@ -73,22 +73,20 @@ export class SearchPage extends React.Component { // eslint-disable-line react/p
       <div>
         SEARCH KEYWORD : {this.props.params.id}
         <Article>
-          <CustomHeader/>
-            <Box direction='row' justify='center' align='center'>
-              <Section align='center' style={{alignItems: 'center', justifyContent: 'center', height: 100}}>
-
-        <Box colorIndex='light-1' style={{margin: '20px 0px'}}>
-        <Heading margin='none' strong = {true} tag = 'h3'>제품 및 레시피 검색</Heading>
-        <MediaQuery query="(min-device-width: 1024px)">
-        <Search style={{width: '700px'}} inline={true} placeHolder='검색' value={this.state.term} onDOMChange={this.onInputChange} 
-        onSelect={this.onEnter} suggestions={['Suggestion is not yet implemented.']}/>
-        </MediaQuery>
-        <MediaQuery query="(max-device-width: 1023px)">
-        <Search inline={true} placeHolder='검색' />
-        </MediaQuery>
-        </Box>
-        </Section>
-        </Box>
+          <Box direction='row' justify='center' align='center'>
+            <Section align='center' style={{alignItems: 'center', justifyContent: 'center', height: 100}}>
+              <Box colorIndex='light-1' style={{margin: '20px 0px'}}>
+                <Heading margin='none' strong = {true} tag = 'h3'>제품 및 레시피 검색</Heading>
+                <MediaQuery query="(min-device-width: 1024px)">
+                  <Search style={{width: '700px'}} inline={true} placeHolder='검색' value={this.state.term} onDOMChange={this.onInputChange}
+                          onSelect={this.onEnter} suggestions={['Suggestion is not yet implemented.']}/>
+                </MediaQuery>
+                <MediaQuery query="(max-device-width: 1023px)">
+                  <Search inline={true} placeHolder='검색' />
+                </MediaQuery>
+              </Box>
+            </Section>
+          </Box>
         </Article>
         <Box colorIndex='light-2'>
         <Tiles fill={true}>{resultCard}</Tiles>

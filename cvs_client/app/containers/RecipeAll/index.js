@@ -17,7 +17,6 @@ export class RecipeAll extends React.Component { // eslint-disable-line react/pr
   render() {
     return (
       <div>
-        <CustomHeader/>
         <Helmet
           title="RecipeAll"
           meta={[
