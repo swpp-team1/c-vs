@@ -15,7 +15,6 @@ import messages from './messages';
 export default function NotFound() {
   return (
     <article>
-      <CustomHeader/>
       <Box align='center' alignContent='center'>
       <H1>
         <FormattedMessage {...messages.header} />
