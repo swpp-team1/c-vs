@@ -24,45 +24,43 @@ import Article from 'grommet/components/Article';
 import { Redirect } from 'react-router/lib';
 import CustomHeader from '../../components/CustomHeader'
 import { getAllProducts } from './actions'
+import Image from 'grommet/components/Image'
 
 
 export class ProductAll extends React.Component { // eslint-disable-line react/prefer-stateless-function
+  constructor(props){
+    super(props);
+    this.state={
+      id: 1
+    };
+  }
+
   componentWillMount() {
-    this.props.getProductAll()
+    this.props.getProductAll(this.state.id)
   }
   render() {
-    console.log(this.props.ProductAll.productsList)
+
+    var allCard;
+    if(this.props.ProductAll.productsList == undefined) {
+      allCard = (<p>NO AVAILABLE RESULT</p>);
+    }
+    else{
+      console.log(this.props.ProductAll.productsList.results)
+      allCard = this.props.ProductAll.productsList.results.map((object, index) => {
+      return (<Tile pad='medium' key={index}><Card colorIndex = 'light-1' textSize = 'small' thumbnail = {<Image src={object.image} />} label={object.manufacturer} heading = {object.name} key = {index} onClick={() => this.props.router.push(`/productDetail/${object.id}`)}/></Tile>);
+    })
+  }
+
     return (
       <div>
         <Article>
           <Section colorIndex='light-2'>
-            <Tiles  fill={false} flush={false} >
-              <Tile>
-                <Card thumbnail='http://cdn2.bgfretail.com/bgfbrand/files/product/5D8998FE3B78430B99641CCA0C3F3506.jpg'
-                      textSize='small'
-                      label='Sample Label'
-                      heading='Sample Heading'
-                      description='Sample description providing more details.'
-                      onClick = {() => alert("clicked")}
-                      // link={<Anchor href=''
-                      // label='Sample anchor' />}
-                      colorIndex='light-1'
-                />
-              </Tile>
+            <Tiles  fill={true}>
+              { allCard }
             </Tiles>
           </Section>
         </Article>
       </div>
-
-      // <div>
-      //   <Helmet
-      //     title="ProductAll"
-      //     meta={[
-      //       { name: 'description', content: 'Description of ProductAll' },
-      //     ]}
-      //   />
-      //   <FormattedMessage {...messages.header} />
-      // </div>
     );
   }
 }
@@ -73,7 +71,7 @@ const mapStateToProps = createStructuredSelector({
 
 function mapDispatchToProps(dispatch) {
   return {
-    getProductAll: () => dispatch(getAllProducts())
+    getProductAll: (id) => dispatch(getAllProducts(id))
   };
 }
 

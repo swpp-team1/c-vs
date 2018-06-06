@@ -6,9 +6,9 @@ import request from 'utils/request'
 
 const url = 'http://13.209.25.111:8000/products/'
 
-export function* getAllProducts() {
+export function* getAllProducts(id) {
   try {
-    const data = yield call(request, url)
+    const data = yield call(request, url+'?page='+id)
     yield put(actions.productsListReceived(data))
   }
   catch (error) {
@@ -19,8 +19,8 @@ export function* getAllProducts() {
 // Individual exports for testing
 export function* defaultSaga() {
   while (true) {
-    const {} = yield take(GET_ALL_PRODUCTS)
-    yield call(getAllProducts)
+    const {id} = yield take(GET_ALL_PRODUCTS)
+    yield call(getAllProducts, id)
   }
 }
 
