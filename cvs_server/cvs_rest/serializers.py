@@ -130,17 +130,33 @@ class ReviewDetailSerializer(serializers.ModelSerializer) :
         return review
     
     def update(self, instance, validated_data) :
-        post_data = validated_data.pop('post')
-        post = instance.post
+
         instance.edited = validated_data.get('edited', instance.edited)
         instance.title = validated_data.get('title', instance.title)
         instance.save()
 
-        post.image = post_data.get('image', post.image)
-        post.content = post_data.get('content', post.content)
-        post.save()
+        post = validated_data.pop('post')
+
+        post_to_delete = Post.objects.filter(review__id=validated_data['id'])
+        post_to_delete.delete()
+
+        
+        post_image = validated_data.pop('image')
+        post_content = validated_data.pop('content')
+
+        post_data = {}
+        post_data['belong_to'] = instance
+        post_data['image'] = post_image
+        post_data['content'] = post_content
+        Post.objects.create(**post_data)
+        #Post.objects.create(belong_to=instance)
+        
         return instance
-"""
+    """
+    #def validate(self, data) :
+
+
+
     class Meta :
         model = Review
         fields = ('created', 'edited', 'title', 'user_id', 'product_id', 'post')

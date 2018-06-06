@@ -128,8 +128,9 @@ def comment_detail(request, pk, format=None) :
         serializer = CommentSerializer(comment)
         return Response(serializer.data)
     
-    elif comment.user_id != request.user:
+    elif comment.user_id != request.user :
         return Response(data={'message':'You are not owner'}, status=status.HTTP_400_BAD_REQUEST)
+    
     elif request.method == 'PUT' :
         serializer = CommentSerializer(comment, data=request.data)
         if serializer.is_valid() :
@@ -172,20 +173,55 @@ def get_create_review(request, format=None) :
         review_obj = Review.objects.create(title=title, user_id=request.user, product_id=product_obj)
         Post.objects.create(belong_to=review_obj, image=data.get('image'), content=data.get('content'))
         serializer = ReviewDetailSerializer(review_obj)
-
+        
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
-"""
-
-class ReviewList(generics.ListCreateAPIView) :
-    queryset = Review.objects.all()
-    serializer_class = ReviewListSerializer
-
-"""
 #/reviews/pk
-class ReviewDetail(generics.RetrieveUpdateDestroyAPIView) :
-    queryset = Review.objects.all()
-    serializer_class = ReviewDetailSerializer
+@api_view(['GET', 'PUT', 'DELETE'])
+@permission_classes((IsAuthenticatedOrReadOnly,))
+def review_detail(request, pk, format=None) :
+    try :
+        review = Review.objects.get(pk=pk)
+    except Review.DoesNotExist :
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    if request.method == 'GET' :
+        serializer = ReviewDetailSerializer(review)
+        return Response(serializer.data)
+    
+    elif review.user_id != request.user :
+        return Response(data={'message':'You are not owner'}, status=status.HTTP_400_BAD_REQUEST)
+    
+
+    #안됨 ㅜㅜ
+    elif request.method == 'PUT' :
+        data = request.data
+        
+        #create 해서 넣어주고 나서 delete?
+        #deleted former post
+        #post_to_delete = Post.objects.filter(review__id=pk)
+        #post_to_delete.delete()
+
+        new_post_image = data.get('image')
+        new_post_content = data.get('content')
+
+        Post.objects.create(belong_to=review, image=new_post_image, content=new_post_content)
+
+        review.edited = data.get('edited')
+        review.title = data.get('title')
+        review.save()
+
+        #in serializer, create new post object and update review object
+        serializer = ReviewDetailSerializer(review, data=data)
+        if serializer.is_valid() :
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    elif request.method == 'DELETE' :
+        review.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
 
 ##for check
 class PostList(generics.ListAPIView) :
@@ -193,23 +229,40 @@ class PostList(generics.ListAPIView) :
     serializer_class = PostSerializer
 
 
+@api_view(['GET', 'POST'])
+@permission_classes((IsAuthenticatedOrReadOnly,))
+def get_create_review(request, format=None) :
+    if request.method == 'GET' :
+        try :
+            reviews = Review.objects.all()
+        except Review.DoesNotExist:
+            return Response(data={'message':'No reviews to show'}, status=status.HTTP_404_NOT_FOUND)
+        serializer = ReviewListSerializer(reviews, many=True)
+        return Response(serializer.data)
+    
+    elif request.method == 'POST' :
+        data = request.data
+        title = data.get('title')
+        product_id = data.get('product_id')
+
+        #에러메세지 나중에 세분화할 것 
+        if not (title and product_id) :
+            return Response(data={'message':'title or rating Field does not exist'}, status=status.HTTP_400_BAD_REQUEST)
+        
+        try:
+            product_obj = Product.objects.get(id=product_id)
+        except ObjectDoesNotExist :
+            return Response(data={'message':'Wrong Product ID'}, status=status.HTTP_400_BAD_REQUEST)
+        
+        review_obj = Review.objects.create(title=title, user_id=request.user, product_id=product_obj)
+        Post.objects.create(belong_to=review_obj, image=data.get('image'), content=data.get('content'))
+        serializer = ReviewDetailSerializer(review_obj)
+        
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+
 """
-#/reviews/pk
-class ReviewDetail(generics.RetrieveUpdateDestroyAPIView) :
-    queryset = Review.objects.all()
-    serializer_class = ReviewSerializer
 
-
-#/comments/pk
-class CommentDetail(generics.RetrieveUpdateDestroyAPIView) :
-    queryset = Comment.objects.all()
-    serializer_class = CommentSerializer
-
-
-#/users/pk
-class CustomUserDetail(generics.RetrieveAPIView) :
-    queryset = CustomUser.objects.all()
-    serializer_class = UserSerializer
 
 
 #/recipes
