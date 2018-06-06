@@ -10,6 +10,7 @@ import { withRouter } from 'react-router';
 
 class CustomHeader extends React.Component { // eslint-disable-line react/prefer-stateless-function
   render() {
+    console.log(this.props.loginResult)
     return (
       <Header style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0px 15px'}}>
         <div style={{display: 'flex', flexDirection: 'row', alignItems: 'center'}}>
@@ -19,7 +20,11 @@ class CustomHeader extends React.Component { // eslint-disable-line react/prefer
         </div>
         <div>
           <Anchor icon={<Search size='small'/>} label='검색' href='/search' animateIcon={false} style={{margin : '0px 20px'}}/>
-          <Anchor icon={<User size='small'/>} label='로그인' href='/login' animateIcon={false}/>
+          {
+            !this.props.loginResult ?
+            <Anchor icon={<User size='small'/>} label='로그인' href='/login' animateIcon={false}/> :
+              <Anchor icon={<User size='small'/>} label='로그아웃' onClick={() => this.props.loginRequest()} animateIcon={false}/>
+          }
         </div>
       </Header>
     );

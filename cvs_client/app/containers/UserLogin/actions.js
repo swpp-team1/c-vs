@@ -20,14 +20,6 @@ export function defaultAction() {
   };
 }
 
-export function loginRequest (username, password) {
-  return {
-    type: LOGIN_REQUEST,
-    username,
-    password,
-  }
-}
-
 export function signupResult (succeeded, message) {
   return {
     type: SIGNUP_RESULT,

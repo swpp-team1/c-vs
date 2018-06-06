@@ -236,6 +236,7 @@
     "react-search-field": "^0.0.3",
     "redux": "3.6.0",
     "redux-immutable": "3.0.8",
+    "redux-persist": "^5.9.1",
     "redux-promise": "^0.6.0",
     "redux-saga": "0.14.0",
     "reselect": "2.5.4",

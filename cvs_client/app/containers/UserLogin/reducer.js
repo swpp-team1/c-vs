@@ -7,7 +7,8 @@
 import { fromJS } from 'immutable';
 import {
   DEFAULT_ACTION,
-  SIGNUP_RESULT
+  SIGNUP_RESULT,
+  LOGIN_SUCCEEDED
 } from './constants';
 
 const initialState = fromJS({});
@@ -17,7 +18,6 @@ function userLoginReducer(state = initialState, action) {
     case DEFAULT_ACTION:
       return state;
     case SIGNUP_RESULT:
-      console.log(action.message)
       return fromJS({...state.toJS(), signupSucceeded: action.succeeded, errorMessage: action.message})
     default:
       return state;

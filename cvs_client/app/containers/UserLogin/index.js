@@ -6,15 +6,10 @@
 
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
-import Helmet from 'react-helmet';
-import { FormattedMessage } from 'react-intl';
-import { createStructuredSelector } from 'reselect';
-import makeSelectUserLogin from './selectors';
 import { signupRequest, signupResult } from './actions'
-import messages from './messages';
+import { loginRequest } from '../App/actions'
 import Grommet from 'grommet'
 import Box from 'grommet/components/Box';
-import CustomHeader from '../../components/CustomHeader'
 import Anchor from 'grommet/components/Anchor'
 import Form from 'grommet/components/Form'
 import FormField from 'grommet/components/FormField'
@@ -60,7 +55,7 @@ export class UserLogin extends React.Component { // eslint-disable-line react/pr
     return (
       <div>
         <Box align='center' pad='large'>
-          <Grommet.LoginForm align='center' title='C:VS login' onSubmit={() => console.log('login')} usernameType='text'/>
+          <Grommet.LoginForm align='center' title='C:VS login' onSubmit={(data) => this.props.loginRequest(data.username, data.password)} usernameType='text'/>
           <Anchor label='회원이 아니신가요?' onClick={() => this.setState({needSignUp: true})}/>
           {
             this.state.needSignUp && !this.props.signupSucceeded &&
@@ -161,12 +156,14 @@ const mapStateToProps = (state) => {
   return ({
     errorMessage: state.get('userLogin').toJS().errorMessage,
     signupSucceeded: state.get('userLogin').toJS().signupSucceeded,
+    loginResult: state.get('global').toJS().loginResult,
   })}
 
 function mapDispatchToProps(dispatch) {
   return {
     signupRequest: (username, password, email) => dispatch(signupRequest(username, password, email)),
-    signupResult: (succeeded, message) => dispatch(signupResult(succeeded, message))
+    signupResult: (succeeded, message) => dispatch(signupResult(succeeded, message)),
+    loginRequest: (username, password) => dispatch(loginRequest(username, password))
   };
 }
 
