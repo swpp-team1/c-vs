@@ -56,7 +56,7 @@ export class ProductDetail extends React.Component { // eslint-disable-line reac
       console.log(relatedProductsList)
       relatedCard = relatedProducts.map((object, index) => {
         if(object.id == this.props.params.id) return;
-        else return (<Tile pad='medium' key={index}><Card colorIndex = 'light-1' textSize = 'small' thumbnail = {<Image src={object.image} />} label={object.manufacturer} heading = {object.name} key = {index} onClick={() => this.props.router.push(`/productDetail/${object.id}`)}/></Tile>);
+        else return (<Tile pad='medium' key={index}><Card colorIndex = 'light-1' textSize = 'small' thumbnail = {<Image src={object.image} />} label={object.manufacturer} heading = {object.name} key = {index} onClick={() => {this.props.router.push(`/productDetail/${object.id}`); location.reload();}}/></Tile>);
     })
   }
 
