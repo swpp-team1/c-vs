@@ -68,7 +68,7 @@ class Review(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     edited = models.DateTimeField(auto_now=True)
     title = models.CharField(max_length=100)
-    rating = fields.GenericRelation('Rating')
+    rating = fields.GenericRelation('Rating', related_query_name='review')
     user_id = models.ForeignKey(
         'CustomUser',
         on_delete=models.CASCADE,

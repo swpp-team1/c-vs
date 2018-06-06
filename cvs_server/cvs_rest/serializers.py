@@ -14,24 +14,6 @@ class RecipeSerializer(serializers.ModelSerializer) :
         model = Recipe
         fields = '__all__'
 
-class RatingSerializer(serializers.ModelSerializer) :
-
-    #override
-    def create(self, validated_data) :
-        return Rating.objects.create(**validated_data)
-    
-    #override
-    def update(self, instance, validated_data) :
-        instance.edited = validated_data.get('edited', instance.edited)
-        instance.value = validated_data.get('value', instance.value)
-        instance.save()
-        return instance
-    
-    
-    class Meta:
-        model = Rating
-        fields = ('id', 'created', 'edited', 'value', 'user_id', 'comment')
-
 class CommentSerializer(serializers.ModelSerializer) :
 
     rating = serializers.SerializerMethodField()
@@ -39,6 +21,8 @@ class CommentSerializer(serializers.ModelSerializer) :
     class Meta:
         model = Comment
         fields = ('id', 'created', 'edited', 'content', 'user_id', 'product', 'rating')
+        depth = 1
+    
     
     def get_rating(self, obj):
         rat = obj.rating.get()
@@ -66,6 +50,7 @@ class ProductSerializer(serializers.ModelSerializer) :
 
 
 class PostSerializer(serializers.ModelSerializer) :
+    image = serializers.ImageField(use_url=True)
     class Meta :
         model = Post
         fields = ('created', 'image', 'content')
@@ -99,3 +84,11 @@ class ReviewDetailSerializer(serializers.ModelSerializer) :
             return rat.value
         return 0
 
+
+#this serializer is used only for testing
+class RatingSerializer(serializers.ModelSerializer) :
+
+    class Meta:
+        model = Rating
+        fields = ('id', 'created', 'edited', 'value', 'user_id', 'product', 'content_type', 'object_id')
+        depth = 2

@@ -137,25 +137,35 @@ def create_comment(request, format=None) :
 @permission_classes((IsAuthenticatedOrReadOnly,))
 def comment_detail(request, pk, format=None) :
     try:
-        comment = Comment.objects.get(pk=pk)
+        comment_obj = Comment.objects.get(pk=pk)
     except Comment.DoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND)
     if request.method == 'GET' :
-        serializer = CommentSerializer(comment)
+        serializer = CommentSerializer(comment_obj)
         return Response(serializer.data)
     
-    elif comment.user_id != request.user :
+    elif comment_obj.user_id != request.user :
         return Response(data={'message':'You are not owner'}, status=status.HTTP_400_BAD_REQUEST)
-    
+
+
     elif request.method == 'PUT' :
-        serializer = CommentSerializer(comment, data=request.data)
+
+        data = request.data
+        new_value = data.get('rating')
+        comment_type = ContentType.objects.get_for_model(comment_obj)
+        
+        rating_obj = Rating.objects.get(content_type__pk=comment_type.id, object_id=comment_obj.id)
+        rating_obj.value = new_value
+        rating_obj.save()
+
+        serializer = CommentSerializer(comment_obj, data=data)
         if serializer.is_valid() :
             serializer.save()
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
     elif request.method == 'DELETE' :
-        comment.delete()
+        comment_obj.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
     
