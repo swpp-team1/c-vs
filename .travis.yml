@@ -6,7 +6,9 @@ matrix:
       script: pytest
     
     - language: node_js
-      before_script: cd cvs_client
+      before_script: 
+      - cd cvs_client
+      - npm clean cache
       node_js:
       - "iojs"
       - "7"
