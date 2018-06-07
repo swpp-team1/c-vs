@@ -235,8 +235,6 @@ def review_detail(request, pk, format=None) :
     elif review_obj.user_id != request.user :
         return Response(data={'message':'You are not owner'}, status=status.HTTP_400_BAD_REQUEST)
     
-
-    #안됨 ㅜㅜ
     elif request.method == 'PUT' :
         data = request.data
 
