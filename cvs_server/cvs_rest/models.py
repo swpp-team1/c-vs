@@ -103,6 +103,7 @@ class Post(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     image = models.ImageField()
     content = models.TextField()
+    
     content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
     object_id = models.PositiveIntegerField()
     belong_to = fields.GenericForeignKey('content_type', 'object_id')

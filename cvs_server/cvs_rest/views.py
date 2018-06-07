@@ -88,7 +88,6 @@ class ProductDetail(generics.RetrieveAPIView) :
     serializer_class = ProductDetailSerializer
 
 
-
 #/comments/
 @api_view(['GET','POST'])
 @permission_classes((IsAuthenticatedOrReadOnly,))
@@ -154,7 +153,10 @@ def comment_detail(request, pk, format=None) :
         new_value = data.get('rating')
         comment_type = ContentType.objects.get_for_model(comment_obj)
         
-        rating_obj = Rating.objects.get(content_type__pk=comment_type.id, object_id=comment_obj.id)
+        try :
+            rating_obj = Rating.objects.get(content_type__pk=comment_type.id, object_id=comment_obj.id)
+        except Rating.DoesNotExist :
+            return Response(status=status.HTTP_404_NOT_FOUND)
         rating_obj.value = new_value
         rating_obj.save()
 
@@ -222,15 +224,15 @@ def get_create_review(request, format=None) :
 @permission_classes((IsAuthenticatedOrReadOnly,))
 def review_detail(request, pk, format=None) :
     try :
-        review = Review.objects.get(pk=pk)
+        review_obj = Review.objects.get(pk=pk)
     except Review.DoesNotExist :
         return Response(status=status.HTTP_404_NOT_FOUND)
 
     if request.method == 'GET' :
-        serializer = ReviewDetailSerializer(review)
+        serializer = ReviewDetailSerializer(review_obj)
         return Response(serializer.data)
     
-    elif review.user_id != request.user :
+    elif review_obj.user_id != request.user :
         return Response(data={'message':'You are not owner'}, status=status.HTTP_400_BAD_REQUEST)
     
 
@@ -238,29 +240,28 @@ def review_detail(request, pk, format=None) :
     elif request.method == 'PUT' :
         data = request.data
         
-        #create 해서 넣어주고 나서 delete?
-        #deleted former post
-        #post_to_delete = Post.objects.filter(review__id=pk)
-        #post_to_delete.delete()
+        
+        review_obj.edited = data.get('edited')
+        review_obj.title = data.get('title')
+        review_obj.save()
+
+        review_type = ContentType.objects.get_for_model(review_obj)
+        post_to_delete = Post.objects.get(content_type__pk=review_type.id, object_id=review_obj.id)
+        post_to_delete.delete()
 
         new_post_image = data.get('image')
         new_post_content = data.get('content')
-
-        Post.objects.create(belong_to=review, image=new_post_image, content=new_post_content)
-
-        review.edited = data.get('edited')
-        review.title = data.get('title')
-        review.save()
+        Post.objects.create(belong_to=review_obj, image=new_post_image, content=new_post_content)
 
         #in serializer, create new post object and update review object
-        serializer = ReviewDetailSerializer(review, data=data)
-        if serializer.is_valid() :
-            serializer.save()
-            return Response(serializer.data)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        serializer = ReviewDetailSerializer(review_obj, data=data)
+        #if serializer.is_valid() :
+        #    serializer.save()
+        return Response(serializer.data)
+        #return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
     elif request.method == 'DELETE' :
-        review.delete()
+        review_obj.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
