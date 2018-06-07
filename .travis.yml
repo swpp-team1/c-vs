@@ -1,0 +1,7 @@
+matrix:
+  include:
+    - language: python
+      before_script: cd/cvs_server
+    
+    - language: node_js
+      before_script: cd/cvs_client
