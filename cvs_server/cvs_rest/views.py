@@ -5,8 +5,9 @@ from rest_framework.authtoken.models import Token
 from rest_framework.response import Response
 
 from rest_framework import status, generics, filters
-from rest_framework.decorators import api_view, permission_classes
+from rest_framework.decorators import api_view, permission_classes, parser_classes
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
+from rest_framework.parsers import MultiPartParser, FormParser
 from django.contrib.contenttypes.models import ContentType
 from django_filters.rest_framework import DjangoFilterBackend
 from django.core.validators import validate_email
@@ -170,11 +171,58 @@ def comment_detail(request, pk, format=None) :
         comment_obj.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
-    
 
+#for testing
+@api_view(['GET', 'POST'])
+@parser_classes((MultiPartParser, FormParser,))
+def get_create_post(request, format=None) :
+
+    if request.method == 'GET' :
+        try :
+            posts = Post.objects.all()
+        except Post.DoesNotExist :
+            return Response(data={'message':'No posts to show'}, status=status.HTTP_404_NOT_FOUND)
+        
+        serializer = PostSerializer(posts, many=True)
+        return Response(serializer.data)
+    
+    elif request.method == 'POST' :
+        data = request.data
+
+        #if review id does not exist, return error
+        if not data.get('review_id') :
+            return Response(data={'message':'Review id is required to save this post'}, status=status.HTTP_400_BAD_REQUEST)
+        
+        #Get review object to save this post
+        review_id = data.get('review_id')
+        try :
+            review_obj = Review.objects.get(pk=review_id)
+        except Review.DoesNotExist :
+            return Response(data={'message':'No Review object of given primary key'}, status=status.HTTP_404_NOT_FOUND)
+        
+        post_obj = Post.objects.create(belong_to=review_obj)
+
+        if not (data.get('image') or data.get('content')) :
+            return Response(data={'message':'The post is empty. Image or content or both is required'}, status=status.HTTP_400_BAD_REQUEST)
+        
+        if (data.get('image')) :
+            post_image = data.get('image')
+            post_obj.image = post_image
+        
+        if (data.get('content')) :
+            post_content = data.get('content')
+            post_obj.content = post_content
+
+        post_obj.save()
+        serializer = PostSerializer(post_obj)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+        
+
+    
 #/reviews/
 @api_view(['GET', 'POST'])
 @permission_classes((IsAuthenticatedOrReadOnly,))
+@parser_classes((MultiPartParser, FormParser,))
 def get_create_review(request, format=None) :
 
     if request.method == 'GET' :

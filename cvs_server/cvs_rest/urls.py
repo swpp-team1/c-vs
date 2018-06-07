@@ -20,7 +20,7 @@ urlpatterns = [
     #url(r'recipes/$', views.RecipeList.as_view()),
     #url(r'recipes/(?P<pk>[0-9]+)/$', views.RecipeDetail.as_view()),
     #####
-    url(r'posts/$', views.PostList.as_view()),
+    url(r'posts/$', views.get_create_post),
     #url(r'comments/(?P<pk>[0-9]+)/$', views.comment_detail),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

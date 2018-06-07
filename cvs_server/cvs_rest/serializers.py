@@ -50,7 +50,9 @@ class ProductSerializer(serializers.ModelSerializer) :
 
 
 class PostSerializer(serializers.ModelSerializer) :
-    image = serializers.ImageField(use_url=True)
+
+    image = serializers.ImageField()
+
     class Meta :
         model = Post
         fields = ('created', 'image', 'content')
