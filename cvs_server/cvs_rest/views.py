@@ -172,9 +172,9 @@ def comment_detail(request, pk, format=None) :
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
-#for testing
 @api_view(['GET', 'POST'])
 @parser_classes((MultiPartParser, FormParser,))
+@permission_classes((IsAuthenticatedOrReadOnly,))
 def get_create_post(request, format=None) :
 
     if request.method == 'GET' :
@@ -205,11 +205,11 @@ def get_create_post(request, format=None) :
         if not (data.get('image') or data.get('content')) :
             return Response(data={'message':'The post is empty. Image or content or both is required'}, status=status.HTTP_400_BAD_REQUEST)
         
-        if (data.get('image')) :
+        if data.get('image') :
             post_image = data.get('image')
             post_obj.image = post_image
         
-        if (data.get('content')) :
+        if data.get('content') :
             post_content = data.get('content')
             post_obj.content = post_content
 
@@ -222,15 +222,15 @@ def get_create_post(request, format=None) :
 #/reviews/
 @api_view(['GET', 'POST'])
 @permission_classes((IsAuthenticatedOrReadOnly,))
-@parser_classes((MultiPartParser, FormParser,))
 def get_create_review(request, format=None) :
 
+    #thumbnail, content 일부 보여줄 방법 생각할 것 
     if request.method == 'GET' :
         try :
             reviews = Review.objects.all()
         except Review.DoesNotExist:
             return Response(data={'message':'No reviews to show'}, status=status.HTTP_404_NOT_FOUND)
-        
+
         product = request.query_params.get('product', None)
         user_id = request.query_params.get('user_id', None)
         if product is not None :
@@ -242,13 +242,18 @@ def get_create_review(request, format=None) :
     
     elif request.method == 'POST' :
         data = request.data
-        rating = data.get('rating')
-        title = data.get('title')
-        product = data.get('product')
 
-        #에러메세지 나중에 세분화할 것 
-        if not (title and product and rating) :
-            return Response(data={'message':'title or product or rating does not exist'}, status=status.HTTP_400_BAD_REQUEST)
+        if not data.get('title') :
+            return Response(data={'message':'title field is required'}, status=status.HTTP_400_BAD_REQUEST)
+        title = data.get('title')
+
+        if not data.get('rating') :
+            return Response(data={'message':'rating field is required'}, status=status.HTTP_400_BAD_REQUEST)
+        rating = data.get('rating')
+
+        if not data.get('product') :
+            return Response(data={'message':'product field is required'}, status=status.HTTP_400_BAD_REQUEST)
+        product = data.get('product')
         
         rating = int(rating)
 
@@ -262,9 +267,9 @@ def get_create_review(request, format=None) :
         
         review_obj = Review.objects.create(title=title, user_id=request.user, product=product_obj)
         Rating.objects.create(belong_to=review_obj, value=rating, user_id=request.user, product=product_obj)
-        Post.objects.create(belong_to=review_obj, image=data.get('image'), content=data.get('content'))
+
         serializer = ReviewDetailSerializer(review_obj)
-        
+
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 #/reviews/pk/

@@ -79,7 +79,7 @@ class ReviewDetailSerializer(serializers.ModelSerializer) :
 
     class Meta :
         model = Review
-        fields = ('created', 'edited', 'title', 'user_id', 'product', 'post', 'rating')
+        fields = ('id', 'created', 'edited', 'title', 'user_id', 'product', 'post', 'rating')
         depth = 1
     
     def get_rating(self, obj) :
