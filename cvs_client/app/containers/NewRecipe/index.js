@@ -25,22 +25,36 @@ export class NewRecipe extends React.Component { // eslint-disable-line react/pr
       searchText: '',
       selectedItems: [],
     }
+    this.onSearchInputChange = this.onSearchInputChange.bind(this)
   }
+
+  onSearchInputChange(event){
+      this.props.requestProductList(event.target.value)
+      this.setState({searchText: event.target.value, selectedItem: null})
+  }
+
+
   render() {
-    console.log(this.state.selectedItems)
+    var searchSuggestion;
+    if(this.props.productList != undefined){
+      searchSuggestion = this.props.productList.results && this.props.productList.results.slice(0,10).map((item) => item.name)
+    }
+    else{
+      searchSuggestion=[];
+
+    }
+    console.log("suggestion:",searchSuggestion)
+    console.log("SEL ITEM:",this.state.selectedItems)
     return (
       <div>
         <Search inline={true}
                 value={(this.state.selectedItem) ? this.state.selectedItem[0].name : this.state.searchText}
                   onSelect={(item, selected) => {
                     if(selected)
-                      this.setState({selectedItem: this.props.productList.filter((product) => product.name === item.suggestion)})
+                      this.setState({selectedItem: this.props.productList.results.filter((product) => product.name === item.suggestion)})
                 }}
-                onDOMChange={(event) => {
-                  this.props.requestProductList(event.srcElement.value)
-                  this.setState({searchText: event.srcElement.value, selectedItem: null})
-                }}
-                suggestions={this.props.productList && this.props.productList.slice(1,10).map((item) => item.name)}/>
+                onDOMChange={this.onSearchInputChange}
+                suggestions={searchSuggestion}/>
         <Button plain={false} style={{borderColor: !this.state.selectedItem && 'gray'}} label={'ADD'} onClick={() => {
           if(this.state.selectedItem) {
             const array = (this.state.selectedItems.concat(this.state.selectedItem))
