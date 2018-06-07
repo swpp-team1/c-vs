@@ -1,7 +1,7 @@
 matrix:
   include:
     - language: python
-      python: 3.4.8
+      python: 3.5.2
       before_script: cd cvs_server
     
     - language: node_js
