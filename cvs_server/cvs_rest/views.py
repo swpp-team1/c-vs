@@ -103,7 +103,7 @@ def create_comment(request, format=None) :
         if user_id is not None:
             comments = comments.filter(user_id=user_id)
         serializer = CommentSerializer(comments, many=True)
-        return Response(serializer.data)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
     elif request.method == 'POST':
         #create and save new rating object
@@ -142,7 +142,7 @@ def comment_detail(request, pk, format=None) :
         return Response(status=status.HTTP_404_NOT_FOUND)
     if request.method == 'GET' :
         serializer = CommentSerializer(comment_obj)
-        return Response(serializer.data)
+        return Response(serializer.data, status=status.HTTP_200_OK)
     
     elif comment_obj.user_id != request.user :
         return Response(data={'message':'You are not owner'}, status=status.HTTP_400_BAD_REQUEST)
@@ -164,7 +164,7 @@ def comment_detail(request, pk, format=None) :
         serializer = CommentSerializer(comment_obj, data=data)
         if serializer.is_valid() :
             serializer.save()
-            return Response(serializer.data)
+            return Response(serializer.data, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
     elif request.method == 'DELETE' :
@@ -183,8 +183,8 @@ def get_create_post(request, format=None) :
         except Post.DoesNotExist :
             return Response(data={'message':'No posts to show'}, status=status.HTTP_404_NOT_FOUND)
         
-        serializer = PostSerializer(posts, many=True)
-        return Response(serializer.data)
+        serializer = PostSerializer(posts)
+        return Response(serializer.data, status=status.HTTP_200_OK)
     
     elif request.method == 'POST' :
         data = request.data
@@ -238,7 +238,7 @@ def get_create_review(request, format=None) :
         if user_id is not None :
             reviews = reviews.filter(user_id=user_id)
         serializer = ReviewListSerializer(reviews, many=True)
-        return Response(serializer.data)
+        return Response(serializer.data, status=status.HTTP_200_OK)
     
     elif request.method == 'POST' :
         data = request.data
@@ -283,7 +283,7 @@ def review_detail(request, pk, format=None) :
 
     if request.method == 'GET' :
         serializer = ReviewDetailSerializer(review_obj)
-        return Response(serializer.data)
+        return Response(serializer.data, status=status.HTTP_200_OK)
     
     elif review_obj.user_id != request.user :
         return Response(data={'message':'You are not owner'}, status=status.HTTP_400_BAD_REQUEST)
