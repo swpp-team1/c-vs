@@ -22,6 +22,7 @@ import Form from 'grommet/components/Form';
 import FormField from 'grommet/components/FormField';
 import TextInput from 'grommet/components/TextInput';
 import FormTrashIcon from 'grommet/components/icons/base/FormTrash'
+import Edit from 'grommet/components/icons/base/Edit';
 
 export class NewRecipe extends React.Component { // eslint-disable-line react/prefer-stateless-function
   constructor(props) {
@@ -68,6 +69,7 @@ export class NewRecipe extends React.Component { // eslint-disable-line react/pr
         <Title>레시피 제목</Title>
         <Form>
           <FormField label="레시피 제목을 작성해주세요"><TextInput value={this.state.recipeTitle} onDOMChange={(event) => this.setState({recipeTitle: event.target.value})}/></FormField>
+        <Title>재료 추가하기</Title>
         <Search inline={true}
                 value={(this.state.selectedItem) ? this.state.selectedItem[0].name : this.state.searchText}
                   onSelect={(item, selected) => {
@@ -98,6 +100,14 @@ export class NewRecipe extends React.Component { // eslint-disable-line react/pr
             })
           }
         </List>
+        <Title>만드는 법 작성</Title>
+        
+        <Button icon={<Edit />}
+          label='레시피 저장'
+          onClick={() => console.log("ONCLICK!")}
+          type='button'
+          //type submit
+          primary={true} />
         </Form>
       </div>
     );
