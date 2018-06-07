@@ -16,6 +16,12 @@ import Button from 'grommet/components/Button'
 import List from 'grommet/components/List'
 import ListItem from 'grommet/components/List'
 import Image from 'grommet/components/Image'
+import Heading from 'grommet/components/Heading';
+import Title from 'grommet/components/Title';
+import Form from 'grommet/components/Form';
+import FormField from 'grommet/components/FormField';
+import TextInput from 'grommet/components/TextInput';
+import FormTrashIcon from 'grommet/components/icons/base/FormTrash'
 
 export class NewRecipe extends React.Component { // eslint-disable-line react/prefer-stateless-function
   constructor(props) {
@@ -24,13 +30,23 @@ export class NewRecipe extends React.Component { // eslint-disable-line react/pr
       selectedItem: null,
       searchText: '',
       selectedItems: [],
+      recipeTitle:''
     }
-    this.onSearchInputChange = this.onSearchInputChange.bind(this)
+    this.onSearchInputChange = this.onSearchInputChange.bind(this);
+    this.onClickDelete = this.onClickDelete.bind(this);
   }
 
   onSearchInputChange(event){
       this.props.requestProductList(event.target.value)
       this.setState({searchText: event.target.value, selectedItem: null})
+  }
+
+  onClickDelete(item){
+    console.log("clicked!", item)
+    console.log(this.state.selectedItems);
+    this.setState({selectedItems: this.state.selectedItems.filter(function(list) { 
+      return list !== item
+  })});
   }
 
 
@@ -43,10 +59,15 @@ export class NewRecipe extends React.Component { // eslint-disable-line react/pr
       searchSuggestion=[];
 
     }
+    console.log("recipe title:", this.state.recipeTitle)
     console.log("suggestion:",searchSuggestion)
     console.log("SEL ITEM:",this.state.selectedItems)
     return (
       <div>
+        <Heading tag='h2'>새 레시피 작성</Heading>
+        <Title>레시피 제목</Title>
+        <Form>
+          <FormField label="레시피 제목을 작성해주세요"><TextInput value={this.state.recipeTitle} onDOMChange={(event) => this.setState({recipeTitle: event.target.value})}/></FormField>
         <Search inline={true}
                 value={(this.state.selectedItem) ? this.state.selectedItem[0].name : this.state.searchText}
                   onSelect={(item, selected) => {
@@ -71,11 +92,13 @@ export class NewRecipe extends React.Component { // eslint-disable-line react/pr
                 <ListItem key={key} separator='horizontal' style={{borderBottom: '0.5px solid black', padding: 3}}>
                   <Image style={{height: '50px', width: '50px'}} fit='contain' size='small' src={item.image}/>
                   <span>{item.name}</span>
+                  <Button onClick={() => this.onClickDelete(item)}><FormTrashIcon/></Button>
                 </ListItem>
               )
             })
           }
         </List>
+        </Form>
       </div>
     );
   }
