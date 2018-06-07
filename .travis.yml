@@ -1,0 +1,14 @@
+matrix:
+  include:
+    - language: python
+      python: 3.5.2
+      before_script: cd cvs_server
+      script: pytest
+    
+    - language: node_js
+      before_script: 
+      - cd cvs_client
+      - npm cache clean
+      node_js:
+      - "iojs"
+      - "7"
