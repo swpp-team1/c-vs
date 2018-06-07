@@ -8,7 +8,7 @@ matrix:
     - language: node_js
       before_script: 
       - cd cvs_client
-      - npm clean cache
+      - npm cache clean
       node_js:
       - "iojs"
       - "7"
