@@ -151,7 +151,7 @@ def comment_detail(request, pk, format=None) :
 
         data = request.data
         new_value = data.get('rating')
-        comment_type = ContentType.objects.get_for_model(comment_obj)
+        cobmment_type = ContentType.objects.get_for_model(comment_obj)
         
         try :
             rating_obj = Rating.objects.get(content_type__pk=comment_type.id, object_id=comment_obj.id)
@@ -239,26 +239,39 @@ def review_detail(request, pk, format=None) :
     #안됨 ㅜㅜ
     elif request.method == 'PUT' :
         data = request.data
-        
-        
-        review_obj.edited = data.get('edited')
-        review_obj.title = data.get('title')
-        review_obj.save()
 
+        #delete former post
         review_type = ContentType.objects.get_for_model(review_obj)
-        post_to_delete = Post.objects.get(content_type__pk=review_type.id, object_id=review_obj.id)
+        try :
+            post_to_delete = Post.objects.get(content_type__pk=review_type.id, object_id=review_obj.id)
+        except Post.DoesNotExist :
+            return Response(status=status.HTTP_404_NOT_FOUND)
         post_to_delete.delete()
 
-        new_post_image = data.get('image')
-        new_post_content = data.get('content')
-        Post.objects.create(belong_to=review_obj, image=new_post_image, content=new_post_content)
+        #create new post
+        post_obj = Post(belong_to=review_obj)
+        if data.get('image') :
+            post_obj.image = data.get('image')
+        if data.get('content') :
+            post_obj.content = data.get('content')
+        post_obj.save()
+        
+        #edit rating value of nested Rating object
+        if data.get('rating') :
+            try :
+                rating_obj = Rating.objects.get(content_type__pk=review_type.id, object_id=review_obj.id)
+            except Rating.DoesNotExist :
+                return Response(status=status.HTTP_404_NOT_FOUND)
+            rating_obj.value = data.get('rating')
+            rating_obj.save()
+        
+        #edit title of Review object
+        if data.get('title') :
+            review_obj.title = data.get('title')
+            review_obj.save()
 
-        #in serializer, create new post object and update review object
-        serializer = ReviewDetailSerializer(review_obj, data=data)
-        #if serializer.is_valid() :
-        #    serializer.save()
+        serializer = ReviewDetailSerializer(review_obj)
         return Response(serializer.data)
-        #return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
     elif request.method == 'DELETE' :
         review_obj.delete()
