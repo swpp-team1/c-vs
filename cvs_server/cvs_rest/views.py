@@ -294,18 +294,10 @@ def review_detail(request, pk, format=None) :
         #delete former post
         review_type = ContentType.objects.get_for_model(review_obj)
         try :
-            post_to_delete = Post.objects.get(content_type__pk=review_type.id, object_id=review_obj.id)
+            posts_to_delete = Post.objects.filter(content_type__pk=review_type.id, object_id=review_obj.id)
         except Post.DoesNotExist :
-            return Response(status=status.HTTP_404_NOT_FOUND)
-        post_to_delete.delete()
-
-        #create new post
-        post_obj = Post(belong_to=review_obj)
-        if data.get('image') :
-            post_obj.image = data.get('image')
-        if data.get('content') :
-            post_obj.content = data.get('content')
-        post_obj.save()
+            return Response(data={'message':'Post to delete does not exist'}, status=status.HTTP_404_NOT_FOUND)
+        posts_to_delete.delete()
         
         #edit rating value of nested Rating object
         if data.get('rating') :
@@ -322,7 +314,7 @@ def review_detail(request, pk, format=None) :
             review_obj.save()
 
         serializer = ReviewDetailSerializer(review_obj)
-        return Response(serializer.data)
+        return Response(serializer.data, status=status.HTTP_200_OK)
     
     elif request.method == 'DELETE' :
         review_obj.delete()
