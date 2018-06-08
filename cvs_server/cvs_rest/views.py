@@ -190,28 +190,32 @@ def get_create_post(request, format=None) :
         data = request.data
 
         #if review id does not exist, return error
-        if not data.get('review_id') :
-            return Response(data={'message':'Review id is required to save this post'}, status=status.HTTP_400_BAD_REQUEST)
+        if not (data.get('review_id') or data.get('recipe_id')) :
+            return Response(data={'message':'review_id or recipe_id is required to save this post'}, status=status.HTTP_400_BAD_REQUEST)
         
         #Get review object to save this post
-        review_id = data.get('review_id')
+        if (data.get('review_id')) :
+            object_id = data.get('review_id')
+        else :
+            object_id = data.get('recipe_id')
         try :
-            review_obj = Review.objects.get(pk=review_id)
-        except Review.DoesNotExist :
-            return Response(data={'message':'No Review object of given primary key'}, status=status.HTTP_404_NOT_FOUND)
+            if data.get('review_id') :
+                obj = Review.objects.get(pk=object_id)
+            else :
+                obj = Recipe.objects.get(pk=object_id)
+        except ObjectDoesNotExist :
+            return Response(data={'message':'No Review or Recipe object of given primary key'}, status=status.HTTP_404_NOT_FOUND)
         
-        post_obj = Post.objects.create(belong_to=review_obj)
+        post_obj = Post.objects.create(belong_to=obj)
 
         if not (data.get('image') or data.get('content')) :
             return Response(data={'message':'The post is empty. Image or content or both is required'}, status=status.HTTP_400_BAD_REQUEST)
         
         if data.get('image') :
-            post_image = data.get('image')
-            post_obj.image = post_image
+            post_obj.image = data.get('image')
         
         if data.get('content') :
-            post_content = data.get('content')
-            post_obj.content = post_content
+            post_obj.content = data.get('content')
 
         post_obj.save()
         serializer = PostSerializer(post_obj)
@@ -220,7 +224,7 @@ def get_create_post(request, format=None) :
 #/posts/pk/
 @api_view(['GET', 'DELETE'])
 @permission_classes((IsAuthenticatedOrReadOnly,))
-def get_delete_post(request, pk, format=None) :
+def post_detail(request, pk, format=None) :
     try :
         post_obj = Post.objects.get(pk=pk)
     except Post.DoesNotExist :
@@ -244,7 +248,6 @@ def get_delete_post(request, pk, format=None) :
 @permission_classes((IsAuthenticatedOrReadOnly,))
 def get_create_review(request, format=None) :
 
-    #thumbnail, content 일부 보여줄 방법 생각할 것 
     if request.method == 'GET' :
         try :
             reviews = Review.objects.all()
@@ -342,21 +345,95 @@ class PostList(generics.ListAPIView) :
     serializer_class = PostSerializer
 
 
-"""
+@api_view(['GET', 'POST'])
+@permission_classes((IsAuthenticatedOrReadOnly,))
+def get_create_recipe(request, format=None) :
+
+    if request.method == 'GET' :
+        try :
+            recipes = Recipe.objects.all()
+        except Recipe.DoesNotExist :
+            return Response(data={'message':'No recipes to show'}, status=status.HTTP_404_NOT_FOUND)
+        
+        product = request.query_params.get('product', None)
+        user_id = request.query_params.get('user_id', None)
+        if product is not None :
+            recipes = recipes.filter(product=product)
+        if user_id is not None :
+            recipes = recipes.filter(user_id=user_id)
+        
+        serializer = RecipeListSerializer(recipes, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    
+    elif request.method == 'POST' :
+        data = request.data
+
+        if not data.get('title') :
+            return Response(data={'message':'title field is required'}, status=status.HTTP_400_BAD_REQUEST)
+        title = data.get('title')
+
+        if not data.get('ingredients') :
+            return Response(data={'message':'ingredients field is required'}, status=status.HTTP_400_BAD_REQUEST)
+        ingredients = data.get('ingredients')
+        if not len(ingredients) :
+            return Response(data={'message':'ingredients field is empty'}, status=status.HTTP_400_BAD_REQUEST)
+
+        recipe_obj = Recipe(title="title", user_id=request.user)
+        recipe_obj.save()
+
+        for ingre in ingredients :
+            try :
+                product_obj = Product.objects.get(id=ingre)
+            except ObjectDoesNotExist :
+                return Response(data={'message':'Wrong Product ID'}, status=status.HTTP_400_BAD_REQUEST)
+            recipe_obj.ingredients.add(product_obj)
+        recipe_obj.save()
+        
+        serializer = RecipeDetailSerializer(recipe_obj)
+        
+
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
+#/recipes/pk/
+@api_view(['GET', 'PUT', 'DELETE'])
+@permission_classes((IsAuthenticatedOrReadOnly,))
+def recipe_detail(request, pk, format=None) :
+    try :
+        recipe_obj = Recipe.objects.get(pk=pk)
+    except Recipe.DoesNotExist :
+        return Response(status=status.HTTP_404_NOT_FOUND)
+    
+    if request.method == 'GET' :
+        serializer = RecipeDetailSerializer(recipe_obj)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    
+    elif recipe_obj.user_id != request.user :
+        return Response(data={'message':'You are not owner'}, status=status.HTTP_400_BAD_REQUEST)
+    
+    elif request.method == 'PUT' :
+        data = request.data
 
-#/recipes
-class RecipeList(generics.ListCreateAPIView) :
-    queryset = Recipe.objects.all()
-    serializer_class = RecipeSerializer
-    filter_backends = (DjangoFilterBackend,)
-    filter_fields = ('user_id',)
+        if data.get('title') :
+            recipe_obj.title = data.get('title')
+            recipe_obj.save()
+        
+        #previous ingredients get deleted and input ingredients are added
+        if data.get('ingredients') :
+            recipe_obj.ingredients = Product.objects.none()
+            ingredients = data.get('ingredients')
 
+            for ingre in ingredients :
+                try :
+                    product_obj = Product.objects.get(id=ingre)
+                except ObjectDoesNotExist :
+                    return Response(data={'message':'Wrong Product ID'}, status=status.HTTP_400_BAD_REQUEST)
+                recipe_obj.ingredients.add(product_obj)
+            recipe_obj.save()
+        
+        serializer = RecipeDetailSerializer(recipe_obj)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
-#/recipes/pk
-class RecipeDetail(generics.RetrieveUpdateDestroyAPIView) :
-    queryset = Recipe.objects.all()
-    serializer_class = RecipeSerializer
-
-"""
+    elif request.method == 'DELETE' :
+        recipe_obj.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)

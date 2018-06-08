@@ -2,7 +2,9 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes import fields
-from django.db.models import Avg   
+from django.db.models import Avg
+
+DEFAULT_IMAGE = "default.png"
 
 class ProductManager(models.Manager):
     def get_queryset(self):
@@ -58,9 +60,8 @@ class Recipe(models.Model):
     )
     post = fields.GenericRelation('Post', related_query_name='recipe', null=True) 
 
-
     class Meta:
-        ordering = ('created',)
+        ordering = ('-created',)
 
 
 class Review(models.Model):
@@ -74,9 +75,7 @@ class Review(models.Model):
     )
     
     product = models.ForeignKey('Product', on_delete=models.CASCADE)
-    post = fields.GenericRelation('Post', related_query_name='review', null=True)    
-    #profile_image = models.ImageField(null=True, default = 'default.png', max_length=1000)
-    #profile_content = models.TextField()
+    post = fields.GenericRelation('Post', related_query_name='review', null=True)
     
     class Meta:
         ordering = ('created',)
@@ -111,7 +110,7 @@ def image_directory_path(instance, filename) :
 
 class Post(models.Model):
     created = models.DateTimeField(auto_now_add=True)
-    image = models.ImageField(null=True, upload_to=image_directory_path, default = "test1.jpg", max_length=1000)
+    image = models.ImageField(null=True, upload_to=image_directory_path, default = DEFAULT_IMAGE, max_length=1000)
     content = models.TextField(null=True)
 
     content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
