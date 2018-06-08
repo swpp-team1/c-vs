@@ -151,7 +151,7 @@ def comment_detail(request, pk, format=None) :
 
         data = request.data
         new_value = data.get('rating')
-        cobmment_type = ContentType.objects.get_for_model(comment_obj)
+        comment_type = ContentType.objects.get_for_model(comment_obj)
         
         try :
             rating_obj = Rating.objects.get(content_type__pk=comment_type.id, object_id=comment_obj.id)
