@@ -7,7 +7,13 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
         fields = ('id', 'username', 'created', 'email', 'comment_set', 'review_set')
-        
+
+#serializes only pk and username
+class UserIdSerializer(serializers.ModelSerializer) :
+    
+    class Meta :
+        model = CustomUser
+        fields = ('id', 'username')
 
 class RecipeSerializer(serializers.ModelSerializer) :
     class Meta:
@@ -17,6 +23,7 @@ class RecipeSerializer(serializers.ModelSerializer) :
 class CommentSerializer(serializers.ModelSerializer) :
 
     rating = serializers.SerializerMethodField()
+    user_id = UserIdSerializer()
 
     class Meta:
         model = Comment
@@ -60,7 +67,9 @@ class PostSerializer(serializers.ModelSerializer) :
 
 class ReviewListSerializer(serializers.ModelSerializer) :
 
+    user_id = UserIdSerializer()
     rating = serializers.SerializerMethodField()
+    
     profile_image = serializers.SerializerMethodField()
     profile_content = serializers.SerializerMethodField()
 
@@ -92,8 +101,10 @@ class ReviewListSerializer(serializers.ModelSerializer) :
 
 class ReviewDetailSerializer(serializers.ModelSerializer) :
 
+    user_id = UserIdSerializer()
     rating = serializers.SerializerMethodField()
     post = PostSerializer(many=True)
+
     profile_image = serializers.SerializerMethodField()
 
     class Meta :
@@ -119,6 +130,8 @@ class ReviewDetailSerializer(serializers.ModelSerializer) :
 
 #this serializer is used only for testing
 class RatingSerializer(serializers.ModelSerializer) :
+
+    user_id = UserIdSerializer()
 
     class Meta:
         model = Rating

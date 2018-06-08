@@ -231,8 +231,7 @@ def get_delete_post(request, pk, format=None) :
         return Response(serializer.data, status=status.HTTP_200_OK)
     
     #under here called only when user is modifying review object(PUT to review)
-    review_obj = post_obj.belong_to
-    elif review_obj.user_id != request.user :
+    elif post_obj.belong_to.user_id != request.user :
         return Response(data={'message':'You are not owner'}, status=status.HTTP_400_BAD_REQUEST)
     
     elif request.method == 'DELETE' :
