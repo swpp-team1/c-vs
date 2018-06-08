@@ -17,11 +17,10 @@ urlpatterns = [
     url(r'^reviews/(?P<pk>[0-9]+)/$', views.review_detail),
     url(r'comments/$', views.create_comment),
     url(r'comments/(?P<pk>[0-9]+)/$', views.comment_detail),
-    #url(r'recipes/$', views.RecipeList.as_view()),
-    #url(r'recipes/(?P<pk>[0-9]+)/$', views.RecipeDetail.as_view()),
-    #####
-    url(r'posts/$', views.PostList.as_view()),
-    #url(r'comments/(?P<pk>[0-9]+)/$', views.comment_detail),
+    url(r'recipes/$', views.get_create_recipe),
+    url(r'recipes/(?P<pk>[0-9]+)/$', views.recipe_detail),
+    url(r'posts/$', views.get_create_post),
+    url(r'posts/(?P<pk>[0-9]+)/$', views.post_detail),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 urlpatterns = format_suffix_patterns(urlpatterns)
