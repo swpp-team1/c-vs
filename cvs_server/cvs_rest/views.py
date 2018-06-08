@@ -182,8 +182,8 @@ def get_create_post(request, format=None) :
             posts = Post.objects.all()
         except Post.DoesNotExist :
             return Response(data={'message':'No posts to show'}, status=status.HTTP_404_NOT_FOUND)
-        
-        serializer = PostSerializer(posts)
+
+        serializer = PostSerializer(posts, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
     
     elif request.method == 'POST' :
@@ -216,7 +216,28 @@ def get_create_post(request, format=None) :
         post_obj.save()
         serializer = PostSerializer(post_obj)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
-        
+
+#/posts/pk/
+@api_view(['GET', 'DELETE'])
+@permission_classes((IsAuthenticatedOrReadOnly,))
+def get_delete_post(request, pk, format=None) :
+    try :
+        post_obj = Post.objects.get(pk=pk)
+    except Post.DoesNotExist :
+        return Response(status=status.HTTP_404_NOT_FOUND)
+    
+    if request.method == 'GET' :
+        serializer = PostSerializer(post_obj)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    
+    #under here called only when user is modifying review object(PUT to review)
+    review_obj = post_obj.belong_to
+    elif review_obj.user_id != request.user :
+        return Response(data={'message':'You are not owner'}, status=status.HTTP_400_BAD_REQUEST)
+    
+    elif request.method == 'DELETE' :
+        post_obj.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
     
 #/reviews/
@@ -231,12 +252,14 @@ def get_create_review(request, format=None) :
         except Review.DoesNotExist:
             return Response(data={'message':'No reviews to show'}, status=status.HTTP_404_NOT_FOUND)
 
+        
         product = request.query_params.get('product', None)
         user_id = request.query_params.get('user_id', None)
         if product is not None :
             reviews = reviews.filter(product=product)
         if user_id is not None :
             reviews = reviews.filter(user_id=user_id)
+        
         serializer = ReviewListSerializer(reviews, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
     
@@ -291,13 +314,6 @@ def review_detail(request, pk, format=None) :
     elif request.method == 'PUT' :
         data = request.data
 
-        #delete former post
-        review_type = ContentType.objects.get_for_model(review_obj)
-        try :
-            posts_to_delete = Post.objects.filter(content_type__pk=review_type.id, object_id=review_obj.id)
-        except Post.DoesNotExist :
-            return Response(data={'message':'Post to delete does not exist'}, status=status.HTTP_404_NOT_FOUND)
-        posts_to_delete.delete()
         
         #edit rating value of nested Rating object
         if data.get('rating') :

@@ -21,7 +21,7 @@ urlpatterns = [
     #url(r'recipes/(?P<pk>[0-9]+)/$', views.RecipeDetail.as_view()),
     #####
     url(r'posts/$', views.get_create_post),
-    #url(r'comments/(?P<pk>[0-9]+)/$', views.comment_detail),
+    url(r'posts/(?P<pk>[0-9]+)/$', views.get_delete_post),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 urlpatterns = format_suffix_patterns(urlpatterns)

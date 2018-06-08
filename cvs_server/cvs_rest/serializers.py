@@ -61,10 +61,12 @@ class PostSerializer(serializers.ModelSerializer) :
 class ReviewListSerializer(serializers.ModelSerializer) :
 
     rating = serializers.SerializerMethodField()
+    profile_image = serializers.SerializerMethodField()
+    profile_content = serializers.SerializerMethodField()
 
     class Meta:
        model = Review
-       fields = ('id', 'created', 'edited', 'title', 'user_id', 'product', 'rating')
+       fields = ('id', 'created', 'edited', 'title', 'user_id', 'profile_image', 'profile_content', 'product', 'rating')
     
     def get_rating(self, obj) :
         rat = obj.rating.get()
@@ -72,14 +74,31 @@ class ReviewListSerializer(serializers.ModelSerializer) :
             return rat.value
         return 0
 
+    def get_profile_image(self, obj) :
+        review_type = ContentType.objects.get_for_model(Review)
+        posts = Post.objects.filter(content_type__pk=review_type.id, object_id=obj.id)
+        for post in posts :
+            if post.image != "/media/test1.jpg" :
+                return post.image
+        return "/media/test1.jpg"
+    
+    def get_profile_content(self, obj) :
+        review_type = ContentType.objects.get_for_model(Review)
+        posts = Post.objects.filter(content_type__pk=review_type.id, object_id=obj.id)
+        for post in posts :
+            if post.content :
+                return post.content[:50]
+        return "No preview content"
+
 class ReviewDetailSerializer(serializers.ModelSerializer) :
 
     rating = serializers.SerializerMethodField()
     post = PostSerializer(many=True)
+    profile_image = serializers.SerializerMethodField()
 
     class Meta :
         model = Review
-        fields = ('id', 'created', 'edited', 'title', 'user_id', 'product', 'post', 'rating')
+        fields = ('id', 'created', 'edited', 'title', 'user_id', 'profile_image', 'product', 'post', 'rating')
         depth = 1
     
     def get_rating(self, obj) :
@@ -87,6 +106,15 @@ class ReviewDetailSerializer(serializers.ModelSerializer) :
         if rat :
             return rat.value
         return 0
+    
+    def get_profile_image(self, obj) :
+        review_type = ContentType.objects.get_for_model(Review)
+        posts = Post.objects.filter(content_type__pk=review_type.id, object_id=obj.id)
+        for post in posts :
+            if post.image != "/media/test1.jpg" :
+                return post.image
+        return "/media/test1.jpg"
+        
 
 
 #this serializer is used only for testing

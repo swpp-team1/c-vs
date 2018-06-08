@@ -51,14 +51,13 @@ class Recipe(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     edited = models.DateTimeField(auto_now=True)
     title = models.CharField(max_length=100, null=False)
-    #ingredients = models.TextField()
     ingredients = models.ManyToManyField('Product')
     user_id = models.ForeignKey(
         'CustomUser',
         on_delete=models.CASCADE,
     )
-    post = fields.GenericRelation('Post', related_query_name='recipe') 
-    
+    post = fields.GenericRelation('Post', related_query_name='recipe', null=True) 
+
 
     class Meta:
         ordering = ('created',)
@@ -76,6 +75,8 @@ class Review(models.Model):
     
     product = models.ForeignKey('Product', on_delete=models.CASCADE)
     post = fields.GenericRelation('Post', related_query_name='review', null=True)    
+    #profile_image = models.ImageField(null=True, default = 'default.png', max_length=1000)
+    #profile_content = models.TextField()
     
     class Meta:
         ordering = ('created',)
@@ -110,13 +111,16 @@ def image_directory_path(instance, filename) :
 
 class Post(models.Model):
     created = models.DateTimeField(auto_now_add=True)
-    image = models.ImageField(null=True, upload_to=image_directory_path, default = 'test.jpg', max_length=1000)
+    image = models.ImageField(null=True, upload_to=image_directory_path, default = "test1.jpg", max_length=1000)
     content = models.TextField(null=True)
 
     content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
     object_id = models.PositiveIntegerField()
     belong_to = fields.GenericForeignKey('content_type', 'object_id')
     
+    def __unicode__(self) :
+        return self.image
+
     class Meta:
         ordering = ('created',)
 
