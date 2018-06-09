@@ -64,7 +64,7 @@ class PostSerializer(serializers.ModelSerializer) :
 
     class Meta :
         model = Post
-        fields = ('created', 'image', 'content')
+        fields = ('id', 'created', 'image', 'content')
         depth = 2
 
 class ReviewListSerializer(serializers.ModelSerializer) :
