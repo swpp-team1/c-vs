@@ -1,6 +1,8 @@
 # convenience-store
 review products and share your own recipe with convenience store
 
+[![Build Status](https://travis-ci.org/swpp-team1/c-vs.svg?branch=master)](https://travis-ci.org/swpp-team1/c-vs)
+
 ## Setting Virtual Environment for Django
 ### 1. install virtualenv
 django의 python의 version과 다른 library의 version을 유지해주기 위하여 가상환경을 사용한다. virtualenv를 이용하여 python3을 기반으로 한 가상환경을 설치한다.
