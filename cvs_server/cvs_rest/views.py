@@ -159,7 +159,8 @@ def comment_detail(request, pk, format=None) :
             return Response(status=status.HTTP_404_NOT_FOUND)
         rating_obj.value = new_value
         rating_obj.save()
-
+        
+        data['user_id'] = comment_obj.user_id.id
         serializer = CommentSerializer(comment_obj, data=data)
         if serializer.is_valid() :
             serializer.save()
@@ -205,10 +206,10 @@ def get_create_post(request, format=None) :
         except ObjectDoesNotExist :
             return Response(data={'message':'No Review or Recipe object of given primary key'}, status=status.HTTP_404_NOT_FOUND)
         
-        post_obj = Post.objects.create(belong_to=obj)
-
         if not (data.get('image') or data.get('content')) :
             return Response(data={'message':'The post is empty. Image or content or both is required'}, status=status.HTTP_400_BAD_REQUEST)
+        
+        post_obj = Post.objects.create(belong_to=obj)
         
         if data.get('image') :
             post_obj.image = data.get('image')
@@ -377,8 +378,7 @@ def get_create_recipe(request, format=None) :
         if not len(ingredients) :
             return Response(data={'message':'ingredients field is empty'}, status=status.HTTP_400_BAD_REQUEST)
 
-        recipe_obj = Recipe(title="title", user_id=request.user)
-        recipe_obj.save()
+        recipe_obj = Recipe.objects.create(title="title", user_id=request.user)
 
         for ingre in ingredients :
             try :
