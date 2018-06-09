@@ -60,7 +60,7 @@ class ProductSerializer(serializers.ModelSerializer) :
 
 class PostSerializer(serializers.ModelSerializer) :
 
-    image = serializers.ImageField()
+    image = serializers.ImageField(use_url=True)
 
     class Meta :
         model = Post
