@@ -1,9 +1,12 @@
 import { take, call, put, select, fork } from 'redux-saga/effects';
 import * as actions from './actions'
-import { REQUEST_PRODUCT_DETAIL, REQUEST_RELATED_PRODUCTS } from './constants'
+import { REQUEST_PRODUCT_DETAIL, REQUEST_RELATED_PRODUCTS, POST_REQUEST_COMMENT, GET_REQUEST_COMMENT } from './constants'
 import request from 'utils/request'
 
 const url = 'http://13.209.25.111:8000/products/'
+const commentURL = 'http://13.209.25.111:8000/comments/'
+
+export const getUserInfo = (state) => state.get('global').toJS().loginResult;
 
 export function* requestProductDetail(id) {
   try {
@@ -25,6 +28,39 @@ export function* requestRelatedProducts(smallCategory, largeCategory) {
   }
 }
 
+export function* postRequestComment(content, product, rating) {
+  const userInfo = yield select(getUserInfo)
+  try {
+    const data = yield call(request, commentURL, {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': 'Token ' + userInfo.token
+      },
+      body: JSON.stringify({
+        content: content,
+        product: product,
+        rating: rating
+      })
+    })
+    const result = yield call(request, commentURL + '?product=' + product)
+    yield put(actions.receivedComments(result))
+  }
+  catch(error) {
+  }
+}
+
+export function* getRequestComment(id) {
+  try {
+    const data = yield call(request, commentURL + '?product=' + id)
+    yield put(actions.receivedComments(data))
+  }
+  catch (error) {
+    yield put(actions.receivedComments())
+  }
+}
+
 export function* watchRequestProductDetail() {
   while (true) {
     const { id } = yield take(REQUEST_PRODUCT_DETAIL)
@@ -39,9 +75,25 @@ export function* watchRequestRelatedProducts() {
   }
 }
 
+export function* watchPostRequestComment() {
+  while (true) {
+    const { content, product, rating } = yield take(POST_REQUEST_COMMENT)
+    yield call(postRequestComment, content, product, rating)
+  }
+}
+
+export function* watchGetRequestComment() {
+  while (true) {
+    const { id } = yield take(GET_REQUEST_COMMENT)
+    yield call(getRequestComment, id)
+  }
+}
+
 export function* defaultSaga() {
   yield fork(watchRequestProductDetail)
   yield fork(watchRequestRelatedProducts)
+  yield fork(watchPostRequestComment)
+  yield fork(watchGetRequestComment)
 }
 
 // All sagas to be loaded

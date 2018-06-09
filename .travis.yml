@@ -1,0 +1,19 @@
+matrix:
+  include:
+    # - language: python
+    #   python: 3.5.2
+    #   before_script: cd cvs_server
+    #   script: pytest 
+    #   comment - test need to be specified
+    
+    - language: node_js
+      node_js:
+      - "node"
+      - "iojs"
+      - "7"
+      before_install:
+      - cd cvs_client
+      - export PATH=./node_modules/.bin:$PATH
+      install:
+      - yarn
+      script: npm run test:clean

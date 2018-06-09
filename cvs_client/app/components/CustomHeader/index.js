@@ -19,7 +19,11 @@ class CustomHeader extends React.Component { // eslint-disable-line react/prefer
         </div>
         <div>
           <Anchor icon={<Search size='small'/>} label='검색' href='/search' animateIcon={false} style={{margin : '0px 20px'}}/>
-          <Anchor icon={<User size='small'/>} label='로그인' href='/login' animateIcon={false}/>
+          {
+            !this.props.loginResult ?
+            <Anchor icon={<User size='small'/>} label='로그인' href='/login' animateIcon={false}/> :
+              <Anchor icon={<User size='small'/>} label='로그아웃' onClick={() => this.props.loginRequest()} animateIcon={false}/>
+          }
         </div>
       </Header>
     );

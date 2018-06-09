@@ -20,13 +20,16 @@ import Article from 'grommet/components/Article';
 import Section from 'grommet/components/Section';
 import { searchProduct, receivedSearchResult } from './actions';
 import Heading from 'grommet/components/Heading';
-
+import Card from 'grommet/components/Card';
+import Tile from 'grommet/components/Tile';
+import Tiles from 'grommet/components/Tiles';
+import Image from 'grommet/components/Image';
 
 export class SearchPage extends React.Component { // eslint-disable-line react/prefer-stateless-function
   constructor(props){
     super(props);
 
-    this.state = {term: ''};
+    this.state = {term: '', result: []};
     this.onInputChange = this.onInputChange.bind(this);
     this.onEnter = this.onEnter.bind(this);
   }
@@ -36,10 +39,11 @@ export class SearchPage extends React.Component { // eslint-disable-line react/p
     if(this.props.params.id === undefined){
       console.log("UNDEFINED PARAMETER ID")
     }
-    else{ 
+    else{
       console.log("PARAM: ", this.props.params.id);
       this.props.searchProduct(this.props.params.id);
     }
+
   }
 
   onInputChange(event){
@@ -53,32 +57,41 @@ export class SearchPage extends React.Component { // eslint-disable-line react/p
       location.reload();
     }
   }
-  
+
   render() {
-    console.log("RESULT: ", this.props.searchResult);
+    var resultCard;
+    if(this.props.searchResult == undefined) {
+      resultCard = (<p>NO RESULT</p>);
+    }
+    else{
+      console.log(this.props.searchResult.results)
+      resultCard = this.props.searchResult.results.map((object, index) => {
+      return (<Tile pad='medium' key={index}><Card colorIndex = 'light-1' textSize = 'small' thumbnail = {<Image src={object.image} />} label={object.manufacturer} heading = {object.name} key = {index} onClick={() => this.props.router.push(`/productDetail/${object.id}`)}/></Tile>);
+    })
+  }
 
     return (
       <div>
         SEARCH KEYWORD : {this.props.params.id}
         <Article>
-          <CustomHeader/>
-            <Box direction='row' justify='center' align='center'>
-              <Section align='center' style={{alignItems: 'center', justifyContent: 'center', height: 100}}>
-
-        <Box colorIndex='light-1' style={{margin: '20px 0px'}}>
-        <Heading margin='none' strong = {true} tag = 'h3'>제품 및 레시피 검색</Heading>
-        <MediaQuery query="(min-device-width: 1024px)">
-        <Search style={{width: '700px'}} inline={true} placeHolder='검색' value={this.state.term} onDOMChange={this.onInputChange} 
-        onSelect={this.onEnter} suggestions={['Suggestion is not yet implemented.']}/>
-        </MediaQuery>
-        <MediaQuery query="(max-device-width: 1023px)">
-        <Search inline={true} placeHolder='검색' />
-        </MediaQuery>
-        </Box>
-        </Section>
-        </Box>
+          <Box direction='row' justify='center' align='center'>
+            <Section align='center' style={{alignItems: 'center', justifyContent: 'center', height: 100}}>
+              <Box colorIndex='light-1' style={{margin: '20px 0px'}}>
+                <Heading margin='none' strong = {true} tag = 'h3'>제품 및 레시피 검색</Heading>
+                <MediaQuery query="(min-device-width: 1024px)">
+                  <Search style={{width: '700px'}} inline={true} placeHolder='검색' value={this.state.term} onDOMChange={this.onInputChange}
+                          onSelect={this.onEnter} suggestions={['Suggestion is not yet implemented.']}/>
+                </MediaQuery>
+                <MediaQuery query="(max-device-width: 1023px)">
+                  <Search inline={true} placeHolder='검색' />
+                </MediaQuery>
+              </Box>
+            </Section>
+          </Box>
         </Article>
-
+        <Box colorIndex='light-2'>
+        <Tiles fill={true}>{resultCard}</Tiles>
+        </Box>
       </div>
     );
   }

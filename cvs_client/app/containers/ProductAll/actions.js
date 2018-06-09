@@ -16,9 +16,10 @@ export function defaultAction() {
   };
 }
 
-export function getAllProducts() {
+export function getAllProducts(id) {
   return {
     type: GET_ALL_PRODUCTS,
+    id
   }
 }
 
