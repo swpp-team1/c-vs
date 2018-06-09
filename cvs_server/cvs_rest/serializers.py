@@ -18,7 +18,6 @@ class UserIdSerializer(serializers.ModelSerializer) :
         fields = ('id', 'username')
         depth = 2
 
-
 class CommentSerializer(serializers.ModelSerializer) :
 
     rating = serializers.SerializerMethodField()
@@ -53,7 +52,6 @@ class ProductSerializer(serializers.ModelSerializer) :
     class Meta:
         model = Product
         fields = '__all__'
-
 
 class PostSerializer(serializers.ModelSerializer) :
 
@@ -194,10 +192,10 @@ class RecipeDetailSerializer(serializers.ModelSerializer) :
 
 #this serializer is used only for testing
 class RatingSerializer(serializers.ModelSerializer) :
-
     user_id = UserIdSerializer()
 
     class Meta:
         model = Rating
         fields = ('id', 'created', 'edited', 'value', 'user_id', 'product', 'content_type', 'object_id')
         depth = 2
+
