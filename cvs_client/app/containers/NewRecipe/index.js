@@ -31,7 +31,8 @@ export class NewRecipe extends React.Component { // eslint-disable-line react/pr
       selectedItem: null,
       searchText: '',
       selectedItems: [],
-      recipeTitle:''
+      recipeTitle:'',
+      image: null
     }
     this.onSearchInputChange = this.onSearchInputChange.bind(this);
     this.onClickDelete = this.onClickDelete.bind(this);
@@ -101,11 +102,22 @@ export class NewRecipe extends React.Component { // eslint-disable-line react/pr
             }
           </List>
           <Title>만드는 법 작성</Title>
-          <input id='image-input' type='file' onChange={(e) => console.log(e.target.files[0])}/>
+          <label>
+            {this.state.image ?
+              <img src={this.state.image}/>
+              : <span>TEMP</span>
+            }
+
+            <input id='image-input'  accept='image/*' type='file' onChange={(e) => {
+              if(e.target.files[0]) {
+                this.setState({image: URL.createObjectURL(e.target.files[0])})
+              }
+            }} style={{display: 'none'}}/>
+          </label>
         <Button icon={<Edit />}
           label='레시피 저장'
           onClick={() => {
-            let nameChangedFile = new File([document.getElementById('image-input').files[0]], 'image-name')
+            let nameChangedFile = new File([document.getElementById('image-input').files[0]], escape(document.getElementById('image-input').files[0].name))
             this.props.sendRequestPost(nameChangedFile)
           }}
           type='button'
