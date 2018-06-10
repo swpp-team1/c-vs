@@ -84,8 +84,8 @@ export class ProductDetail extends React.Component { // eslint-disable-line reac
               <div style={{display: 'flex', flexDirection: 'column'}}>
                 <h3 style={{marginBottom: '10px'}}>평점</h3>
                 {
-                  productDetail.rating ?
-                    <h3 style={{marginBottom: '0'}}>{productDetail.rating}</h3> :
+                  productDetail.rating_avg ?
+                    <h3 style={{marginBottom: '0'}}>{productDetail.rating_avg.toFixed(2)}</h3> :
                     <h3 style={{marginBottom: '0'}}>평점이 매겨지지 않았습니다.</h3>
                 }
               </div>
