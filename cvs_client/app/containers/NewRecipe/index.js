@@ -100,7 +100,7 @@ export class NewRecipe extends React.Component { // eslint-disable-line react/pr
             {
               this.state.selectedItems.map((item, key) => {
                 return (
-                  <ListItem key={key} separator='horizontal' style={{borderBottom: '0.5px solid black', padding: 3}}>
+                  <ListItem key={key} separator='horizontal' style={{borderBottom: '1px solid rgba(0, 0, 0, 0.15)', padding: 3}}>
                     <Image style={{height: '50px', width: '50px'}} fit='contain' size='small' src={item.image}/>
                     <span>{item.name}</span>
                     <Button onClick={() => this.onClickDelete(item)}><FormTrashIcon/></Button>
@@ -157,7 +157,10 @@ export class NewRecipe extends React.Component { // eslint-disable-line react/pr
         <Button icon={<Edit />}
           label='레시피 저장'
           onClick={() => {
-            this.props.sendRequestPost(this.state.posts)
+            let ingredientsIDs = this.state.selectedItems.map((item) => {
+              return item.id
+            });
+            this.props.sendRequestPost({title: this.state.recipeTitle, ingredients: ingredientsIDs}, this.state.posts)
           }}
           type='button'
           primary={true} />
@@ -176,7 +179,7 @@ const mapStateToProps = (state) => {
 function mapDispatchToProps(dispatch) {
   return {
     requestProductList: (searchText) => dispatch(requestProductList(searchText)),
-    sendRequestPost: (posts) => dispatch(sendRequestPost(posts))
+    sendRequestPost: (recipe, posts) => dispatch(sendRequestPost(recipe, posts))
   };
 }
 

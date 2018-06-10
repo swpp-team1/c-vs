@@ -25,9 +25,10 @@ export function receivedProductList (productList) {
   }
 }
 
-export function sendRequestPost (posts) {
+export function sendRequestPost (recipe, posts) {
   return {
     type: SEND_REQUEST_POST,
+    recipe,
     posts
   }
 }
