@@ -53,6 +53,13 @@ export class NewRecipe extends React.Component { // eslint-disable-line react/pr
   })});
   }
 
+  componentWillReceiveProps (nextProps) {
+    console.log(this.props.isSuccessful)
+    console.log(nextProps.isSuccessful)
+    if(!this.props.isSuccessful && nextProps.isSuccessful){
+      this.props.router.push('/recipeAll')
+    }
+  }
 
   render() {
     let searchSuggestion;
@@ -179,6 +186,7 @@ export class NewRecipe extends React.Component { // eslint-disable-line react/pr
 const mapStateToProps = (state) => {
   return ({
     productList: state.get('newRecipe').toJS().productList,
+    isSuccessful: state.get('newRecipe').toJS().isSuccessful,
   })}
 
 function mapDispatchToProps(dispatch) {

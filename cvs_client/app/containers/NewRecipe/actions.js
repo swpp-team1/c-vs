@@ -8,7 +8,8 @@ import {
   DEFAULT_ACTION,
   REQUEST_PRODUCT_LIST,
   RECEIVED_PRODUCT_LIST,
-  SEND_REQUEST_POST
+  SEND_REQUEST_POST,
+  IS_SUCCESSFUL_POST
 } from './constants';
 
 export function requestProductList (searchText) {
@@ -30,6 +31,13 @@ export function sendRequestPost (recipe, posts) {
     type: SEND_REQUEST_POST,
     recipe,
     posts
+  }
+}
+
+export function isSuccessfulPost (isSuccessful) {
+  return {
+    type: IS_SUCCESSFUL_POST,
+    isSuccessful: isSuccessful
   }
 }
 
