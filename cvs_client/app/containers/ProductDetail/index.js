@@ -117,7 +117,10 @@ export class ProductDetail extends React.Component { // eslint-disable-line reac
           (this.state && this.state.relatedRequestDone || (productDetail !== '' && !(productDetail.small_category || productDetail.large_category))) ? <h3>{relatedProducts.length === 0 ? '인기 상품' : '유사 상품'}</h3> : <div/>
         }
         <Tiles>{relatedCard}</Tiles>
-        <Anchor disabled={!this.props.loginResult} label='새 리뷰 쓰기' href={'/newReview/' + this.props.params.id}/>
+        <div style={{display: 'flex', justifyContent: 'space-between'}}>
+          <h3>리뷰</h3>
+          <Anchor disabled={!this.props.loginResult} label='새 리뷰 쓰기' href={this.props.loginResult && ('/newReview/' + this.props.params.id)}/>
+        </div>
         <Tiles>
           {
             this.props.reviewsList &&

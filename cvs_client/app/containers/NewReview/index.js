@@ -35,7 +35,11 @@ export class NewReview extends React.Component { // eslint-disable-line react/pr
       }],
     }
   }
-
+  componentWillReceiveProps (nextProps) {
+    if(!this.props.isSuccessful && nextProps.isSuccessful){
+      this.props.router.push('/productDetail/' + this.props.params.id)
+    }
+  }
   render() {
     return (
       <div style={{margin: '0px 20px'}}>
@@ -115,6 +119,7 @@ export class NewReview extends React.Component { // eslint-disable-line react/pr
 
 const mapStateToProps = (state) => {
   return ({
+    isSuccessful: state.get('newReview').toJS().isSuccessful,
   })}
 
 function mapDispatchToProps(dispatch) {

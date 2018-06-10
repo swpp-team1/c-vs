@@ -19,13 +19,11 @@ export function* sendRequestPost (review, posts) {
       },
       body: JSON.stringify(review)
     })
-    console.log(reviewData)
     for(let i=0; i<posts.length; i++) {
       const form = new FormData()
       form.set('review_id', reviewData.id)
       form.set('content', posts[i].content)
       form.set('image', posts[i].image)
-      console.log(posts[i].image)
       try {
         const postData = yield call(request, postURL, {
           method: 'POST',
@@ -34,13 +32,13 @@ export function* sendRequestPost (review, posts) {
           },
           body: form
         })
-        console.log(postData)
       } catch (postError) {
-        console.log(postError)
+        yield put(actions.isSuccessfulPost(false))
       }
     }
+    yield put(actions.isSuccessfulPost(true))
   } catch (recipeError) {
-    console.log(recipeError)
+    yield put(actions.isSuccessfulPost(false))
   }
 }
 

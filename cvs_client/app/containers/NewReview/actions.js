@@ -6,7 +6,8 @@
 
 import {
   SEND_REQUEST_POST,
-  DEFAULT_ACTION
+  DEFAULT_ACTION,
+  IS_SUCCESSFUL_POST
 } from './constants';
 
 export function sendRequestPost (review, posts) {
@@ -14,6 +15,13 @@ export function sendRequestPost (review, posts) {
     type: SEND_REQUEST_POST,
     review,
     posts
+  }
+}
+
+export function isSuccessfulPost (isSuccessful) {
+  return {
+    type: IS_SUCCESSFUL_POST,
+    isSuccessful: isSuccessful
   }
 }
 
