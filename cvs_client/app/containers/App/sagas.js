@@ -6,7 +6,6 @@ import { LOGIN_REQUEST } from './constants'
 const loginURL = 'http://13.209.25.111:8000/login/'
 
 export function* login(username, password) {
-  console.log('!!')
   try {
     const data = yield call(request, loginURL, {
       method: 'POST',

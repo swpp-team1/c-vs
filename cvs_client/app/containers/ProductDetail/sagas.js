@@ -1,10 +1,14 @@
 import { take, call, put, select, fork } from 'redux-saga/effects';
 import * as actions from './actions'
-import { REQUEST_PRODUCT_DETAIL, REQUEST_RELATED_PRODUCTS, POST_REQUEST_COMMENT, GET_REQUEST_COMMENT } from './constants'
+import {
+  REQUEST_PRODUCT_DETAIL, REQUEST_RELATED_PRODUCTS, POST_REQUEST_COMMENT, GET_REQUEST_COMMENT,
+  GET_REQUEST_REVIEWS
+} from './constants'
 import request from 'utils/request'
 
 const url = 'http://13.209.25.111:8000/products/'
 const commentURL = 'http://13.209.25.111:8000/comments/'
+const reviewsURL = 'http://13.209.25.111:8000/reviews/'
 
 export const getUserInfo = (state) => state.get('global').toJS().loginResult;
 
@@ -61,6 +65,16 @@ export function* getRequestComment(id) {
   }
 }
 
+export function* getRequestReviews(id) {
+  try {
+    const data = yield call(request, reviewsURL + '?product=' + id)
+    yield put(actions.receivedReviews(data))
+  }
+  catch (error) {
+    yield put(actions.receivedReviews())
+  }
+}
+
 export function* watchRequestProductDetail() {
   while (true) {
     const { id } = yield take(REQUEST_PRODUCT_DETAIL)
@@ -89,11 +103,19 @@ export function* watchGetRequestComment() {
   }
 }
 
+export function* watchGetRequestReviews() {
+  while (true) {
+    const { id } = yield take(GET_REQUEST_REVIEWS)
+    yield call(getRequestReviews, id)
+  }
+}
+
 export function* defaultSaga() {
   yield fork(watchRequestProductDetail)
   yield fork(watchRequestRelatedProducts)
   yield fork(watchPostRequestComment)
   yield fork(watchGetRequestComment)
+  yield fork(watchGetRequestReviews)
 }
 
 // All sagas to be loaded
