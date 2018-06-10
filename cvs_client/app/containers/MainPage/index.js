@@ -68,7 +68,7 @@ export class MainPage extends React.Component {
                 <Box colorIndex='light-1' style={{margin: '20px 0px'}}>
                 <MediaQuery query="(min-device-width: 1024px)">
                 <Search style={{width: '700px'}} inline={true} placeHolder='검색' value={this.state.term} onDOMChange={this.onInputChange}
-                onSelect={this.onEnter} suggestions={['Suggestion is not yet implemented.']}/>
+                onSelect={this.onEnter} suggestions={[]}/>
                 </MediaQuery>
                 <MediaQuery query="(max-device-width: 1023px)">
                 <Search inline={true} placeHolder='검색' />
@@ -87,11 +87,6 @@ export class MainPage extends React.Component {
           </Tiles>
           <Anchor align='end' label='Label' primary={true} reverse={true} path='/productAll' style={{margin : '20px 40px', color: '#383838'}}>전체 제품 보기</Anchor>
           </Box>
-
-
-          <Footer style={{justifyContent: 'center'}}>
-            <Heading style={{fontSize: 15}}>@ 2018 C:VS</Heading>
-          </Footer>
         </Article>
       </App>
     );

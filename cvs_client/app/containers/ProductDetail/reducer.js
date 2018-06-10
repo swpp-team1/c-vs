@@ -9,7 +9,7 @@ import {
   DEFAULT_ACTION,
   RECEIVED_PRODUCT_DETAIL,
   RECEIVED_RELATED_PRODUCTS,
-  RECEIVED_COMMENTS
+  RECEIVED_COMMENTS, RECEIVED_REVIEWS
 } from './constants';
 
 const initialState = fromJS({});
@@ -24,6 +24,8 @@ function productDetailReducer(state = initialState, action) {
       return fromJS({...state.toJS(), relatedProducts: action.relatedProducts});
     case RECEIVED_COMMENTS:
       return fromJS({...state.toJS(), commentList: action.commentList});
+    case RECEIVED_REVIEWS:
+      return fromJS({...state.toJS(), reviewsList: action.reviewsList});
     default:
       return state;
   }
