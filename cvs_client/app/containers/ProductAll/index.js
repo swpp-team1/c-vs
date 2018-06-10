@@ -76,7 +76,26 @@ export class ProductAll extends React.Component { // eslint-disable-line react/p
       console.log(this.props.ProductAll.productsList)
       console.log("ALL LIST :", this.state.allList)
       allCard = this.state.allList.map((object, index) => {
-      return (<Tile pad='medium' key={index}><Card colorIndex = 'light-1' textSize = 'small' thumbnail = {<Image src={object.image} />} label={object.manufacturer} heading = {object.name} key = {index} onClick={() => this.props.router.push(`/productDetail/${object.id}`)}/></Tile>);
+        return (
+          <Tile
+            pad='medium'
+            style={{width: '19%'}}
+            key={index}
+          >
+            <Card
+              colorIndex = 'light-1'
+              thumbnail = {<Image src={object.image} />}
+              label={
+                <span>{object.manufacturer}</span>
+              }
+              heading = {
+                <h4 style={{whiteSpace: 'nowrap', fontSize: 20, overflow: 'hidden', textOverflow: 'ellipsis', marginBottom: 0}}>{object.name}</h4>
+              }
+              key = {index}
+              onClick={() => {this.props.router.push(`/productDetail/${object.id}`); location.reload();}}
+            />
+          </Tile>
+        );
     })
   }
 

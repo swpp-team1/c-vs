@@ -40,7 +40,7 @@ export class NewReview extends React.Component { // eslint-disable-line react/pr
     return (
       <div style={{margin: '0px 20px'}}>
         <Heading tag='h2'>새 리뷰 작성</Heading>
-        <Title>평점 매기</Title>
+        <Title>평점 매기기</Title>
         <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'center', margin: '20px 0px 10px 48px'}}>
           <RadioButton checked={this.state.rating >= 1} onChange={() => this.setState({rating: 1})}/>
           <RadioButton checked={this.state.rating >= 2} onChange={() => this.setState({rating: 2})}/>
@@ -98,14 +98,14 @@ export class NewReview extends React.Component { // eslint-disable-line react/pr
             }}
           />
           <div style={{width: '100%', display: 'flex', justifyContent: 'center'}}>
-          <Button
-                  label='리뷰 저장'
-                  style={{width: '50%', maxWidth: '90%', margin: '10px 20px'}}
-                  onClick={() => {
-                    this.props.sendRequestPost({title: this.state.title, rating: this.state.rating, product: this.props.params.id}, this.state.posts)
-                  }}
-                  type='button'
-                  primary={true} />
+            <Button
+                    label='리뷰 저장'
+                    style={{width: '50%', maxWidth: '90%', margin: '10px 20px'}}
+                    onClick={() => {
+                      this.props.sendRequestPost({title: this.state.title, rating: this.state.rating, product: this.props.params.id}, this.state.posts)
+                    }}
+                    type='button'
+                    primary={true}/>
           </div>
         </Form>
       </div>

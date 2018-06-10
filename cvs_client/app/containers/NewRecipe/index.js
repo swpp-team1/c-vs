@@ -67,48 +67,54 @@ export class NewRecipe extends React.Component { // eslint-disable-line react/pr
     console.log("suggestion:",searchSuggestion)
     console.log("SEL ITEM:",this.state.selectedItems)
     return (
-      <div>
+      <div style={{margin: '0px 20px'}}>
         <Heading tag='h2'>새 레시피 작성</Heading>
         <Title>레시피 제목</Title>
         <Form style={{width: '100%'}}>
-          <FormField label="레시피 제목을 작성해주세요">
+          <FormField label="레시피 제목을 작성해주세요" style={{margin: '10px 20px', width: 'auto'}}>
             <TextInput value={this.state.recipeTitle} onDOMChange={(event) => this.setState({recipeTitle: event.target.value})}/>
           </FormField>
-          <Title>재료 추가하기</Title>
-          <Search inline={true}
-                  value={(this.state.selectedItem) ? this.state.selectedItem[0].name : this.state.searchText}
-                    onSelect={(item, selected) => {
-                      if(selected)
-                        this.setState({selectedItem: this.props.productList.results.filter((product) => product.name === item.suggestion)})
-                  }}
-                  onDOMChange={this.onSearchInputChange}
-                  suggestions={searchSuggestion}/>
-          <Button plain={false} style={{borderColor: !this.state.selectedItem && 'gray'}} label={'ADD'} onClick={() => {
-            if(this.state.selectedItem) {
-              const array = (this.state.selectedItems.concat(this.state.selectedItem))
-              this.setState({selectedItems: array.filter((item, i) => {
-                return array.findIndex((item2) => {
-                  return item.id === item2.id;
-                }) === i;
-              })})}
-          }}/>
-          <List>
-            {
-              this.state.selectedItems.map((item, key) => {
-                return (
-                  <ListItem key={key} separator='horizontal' style={{borderBottom: '1px solid rgba(0, 0, 0, 0.15)', padding: 3}}>
-                    <Image style={{height: '50px', width: '50px'}} fit='contain' size='small' src={item.image}/>
-                    <span>{item.name}</span>
-                    <Button onClick={() => this.onClickDelete(item)}><FormTrashIcon/></Button>
-                  </ListItem>
-                )
-              })
-            }
-          </List>
+          <Title style={{marginTop: '30px'}}>재료 추가하기</Title>
+          <div style={{margin: '20px 20px', display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
+            <div style={{display: 'flex', margin: '50px 20px 0 20px', justifyContent: 'center'}}>
+              <Search inline={true}
+                      value={(this.state.selectedItem) ? this.state.selectedItem[0].name : this.state.searchText}
+                        onSelect={(item, selected) => {
+                          if(selected)
+                            this.setState({selectedItem: this.props.productList.results.filter((product) => product.name === item.suggestion)})
+                      }}
+                      onDOMChange={this.onSearchInputChange}
+                      suggestions={searchSuggestion}
+                      style={{width: '600px', display: 'flex'}}
+              />
+              <Button primary={true} plain={false} style={{ width: '100px', backgroundColor: !this.state.selectedItem && 'gray', border: '0px', boxShadow: '0 0 0 0' }} label={'ADD'} onClick={() => {
+                if(this.state.selectedItem) {
+                  const array = (this.state.selectedItems.concat(this.state.selectedItem))
+                  this.setState({selectedItems: array.filter((item, i) => {
+                    return array.findIndex((item2) => {
+                      return item.id === item2.id;
+                    }) === i;
+                  })})}
+              }}/>
+            </div>
+            <List style={{width: '700px', marginBottom: '50px'}}>
+              {
+                this.state.selectedItems.map((item, key) => {
+                  return (
+                    <ListItem key={key} separator='horizontal' style={{borderBottom: '1px solid rgba(0, 0, 0, 0.15)', padding: 3}}>
+                      <Image style={{height: '50px', width: '50px'}} fit='contain' size='small' src={item.image}/>
+                      <span>{item.name}</span>
+                      <Button onClick={() => this.onClickDelete(item)}><FormTrashIcon/></Button>
+                    </ListItem>
+                  )
+                })
+              }
+            </List>
+          </div>
           <Title>만드는 법 작성</Title>
           {this.state.posts.map((item, key) => {
             return (
-              <div key={key} style={{flexDirection: 'row', display: 'flex', margin: '10px 50px'}}>
+              <div key={key} style={{flexDirection: 'row', display: 'flex', margin: '10px 20px'}}>
                 <label>
                   <div style={{width: '200px', height: '200px', backgroundColor: '#C0C0C0', display: 'flex', justifyContent: 'center', alignItems: 'center', marginRight: '20px'}}>
                     {this.state.posts[key].image ?
@@ -150,16 +156,19 @@ export class NewRecipe extends React.Component { // eslint-disable-line react/pr
               this.setState({posts: newPosts})
             }}
           />
-        <Button icon={<Edit />}
-          label='레시피 저장'
-          onClick={() => {
-            let ingredientsIDs = this.state.selectedItems.map((item) => {
-              return item.id
-            });
-            this.props.sendRequestPost({title: this.state.recipeTitle, ingredients: ingredientsIDs}, this.state.posts)
-          }}
-          type='button'
-          primary={true} />
+          <div style={{width: '100%', display: 'flex', justifyContent: 'center'}}>
+            <Button
+              label='레시피 저장'
+              onClick={() => {
+                let ingredientsIDs = this.state.selectedItems.map((item) => {
+                  return item.id
+                });
+                this.props.sendRequestPost({title: this.state.recipeTitle, ingredients: ingredientsIDs}, this.state.posts)
+              }}
+              type='button'
+              style={{width: '50%', maxWidth: '90%', margin: '10px 20px'}}
+              primary={true} />
+          </div>
         </Form>
       </div>
     );

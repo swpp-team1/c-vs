@@ -62,13 +62,31 @@ export class ProductDetail extends React.Component { // eslint-disable-line reac
       console.log(relatedProductsList)
       relatedCard = relatedProducts.slice(0,4).map((object, index) => {
         if(object.id === this.props.params.id) return;
-        else return (<Tile pad='medium' key={index}><Card colorIndex = 'light-1' textSize = 'small' thumbnail = {<Image src={object.image} />} label={object.manufacturer} heading = {object.name} key = {index} onClick={() => {this.props.router.push(`/productDetail/${object.id}`); location.reload();}}/></Tile>);
+        else return (
+          <Tile pad='medium' key={index} style={{width: '19%'}}>
+            <Card
+              colorIndex = 'light-1'
+              textSize = 'small'
+              thumbnail = {
+                <Image src={object.image}/>
+              }
+              label={
+                <span>{object.manufacturer}</span>
+              }
+              heading = {
+                <h4 style={{whiteSpace: 'nowrap', fontSize: 20, overflow: 'hidden', textOverflow: 'ellipsis', marginBottom: 0}}>{object.name}</h4>
+              }
+              key = {index}
+              onClick={() => {this.props.router.push(`/productDetail/${object.id}`); location.reload();}}
+            />
+          </Tile>
+        );
     })
   }
 
 
     return (
-      <div>
+      <div style={{margin: '0 20px'}}>
         <div style={{flexDirection: 'row', display: 'flex', padding: '30px'}}>
           <div style={{width: '250px', justifyContent: 'center', display: 'flex'}}>
             <Image fit='contain' size='large' src={productDetail.image}/>
@@ -96,6 +114,7 @@ export class ProductDetail extends React.Component { // eslint-disable-line reac
           (this.state && this.state.relatedRequestDone || (productDetail !== '' && !(productDetail.small_category || productDetail.large_category))) ? <h3>{relatedProducts.length === 0 ? '인기 상품' : '유사 상품'}</h3> : <div/>
         }
         <Tiles fill={true}>{relatedCard}</Tiles>
+        <Anchor label='새 리뷰 쓰기' href={'/newReview/' + this.props.params.id}/>
         <div style={{display: 'flex', justifyContent:'center', width: '100%'}}>
           <Form style={{display: 'flex', flexDirection: 'column', alignItems: 'center', border: '1px solid rgba(0, 0, 0, 0.15)', padding: '10px', width: '80%'}}>
             <FormField label='짧은 상품평' style={{border: '0px', borderBottom: '1px solid rgba(0,0,0,0.15)'}}>
@@ -120,17 +139,22 @@ export class ProductDetail extends React.Component { // eslint-disable-line reac
             </div>
           </Form>
         </div>
-        <List>
-          {
-            this.props.commentList  && this.props.commentList.map((comment) => {
-              return (
-                <ListItem>
-                  <span>{comment.content}</span>
-                </ListItem>
-              )
-            })
-          }
-        </List>
+        <div style={{width: '100%', alignItems: 'center', display: 'flex', flexDirection: 'column'}}>
+          <div style={{width: '80%', margin: '10px 0'}}>
+            <h3 style={{width: '80%', marginBottom: '0'}}>댓글 목록</h3>
+          </div>
+          <List style={{width: '80%'}} >
+            {
+              this.props.commentList  && this.props.commentList.map((comment) => {
+                return (
+                  <ListItem>
+                    <span>{comment.content}</span>
+                  </ListItem>
+                )
+              })
+            }
+          </List>
+        </div>
       </div>
     );
   }
