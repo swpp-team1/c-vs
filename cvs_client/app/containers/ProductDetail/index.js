@@ -21,6 +21,7 @@ import Card from 'grommet/components/Card'
 import Anchor from 'grommet/components/Anchor'
 import List from 'grommet/components/List'
 import ListItem from 'grommet/components/ListItem'
+import RadioButton from 'grommet/components/RadioButton'
 
 
 const manufacturer = {'CU': 'CU', 'GS': 'GS25', 'SE': 'SEVEN ELEVEN'}
@@ -29,6 +30,7 @@ export class ProductDetail extends React.Component { // eslint-disable-line reac
     super()
     this.state = {
       relatedRequestDone: false,
+      rating: null,
     }
   }
   componentWillMount() {
@@ -59,7 +61,7 @@ export class ProductDetail extends React.Component { // eslint-disable-line reac
     else{
       console.log(relatedProductsList)
       relatedCard = relatedProducts.slice(0,4).map((object, index) => {
-        if(object.id == this.props.params.id) return;
+        if(object.id === this.props.params.id) return;
         else return (<Tile pad='medium' key={index}><Card colorIndex = 'light-1' textSize = 'small' thumbnail = {<Image src={object.image} />} label={object.manufacturer} heading = {object.name} key = {index} onClick={() => {this.props.router.push(`/productDetail/${object.id}`); location.reload();}}/></Tile>);
     })
   }
@@ -81,7 +83,11 @@ export class ProductDetail extends React.Component { // eslint-disable-line reac
               </div>
               <div style={{display: 'flex', flexDirection: 'column'}}>
                 <h3 style={{marginBottom: '10px'}}>평점</h3>
-                <h3 style={{marginBottom: '0'}}>{productDetail.price}</h3>
+                {
+                  productDetail.rating_avg ?
+                    <h3 style={{marginBottom: '0'}}>{productDetail.rating_avg.toFixed(2)}</h3> :
+                    <h3 style={{marginBottom: '0'}}>평점이 매겨지지 않았습니다.</h3>
+                }
               </div>
             </div>
           </div>
@@ -90,19 +96,30 @@ export class ProductDetail extends React.Component { // eslint-disable-line reac
           (this.state && this.state.relatedRequestDone || (productDetail !== '' && !(productDetail.small_category || productDetail.large_category))) ? <h3>{relatedProducts.length === 0 ? '인기 상품' : '유사 상품'}</h3> : <div/>
         }
         <Tiles fill={true}>{relatedCard}</Tiles>
-        <Form>
-          <FormField label='짧은 상품평'>
-            <TextInput id='comment-input'/>
-          </FormField>
-          <Anchor
-            label='등록'
-            disabled={!this.props.loginResult}
-            onClick={() => {
-              if(this.props.loginResult)
-                this.props.postRequestComment(document.getElementById('comment-input').value, this.props.params.id, 3)
-            }}
-          />
-        </Form>
+        <div style={{display: 'flex', justifyContent:'center', width: '100%'}}>
+          <Form style={{display: 'flex', flexDirection: 'column', alignItems: 'center', border: '1px solid rgba(0, 0, 0, 0.15)', padding: '10px', width: '80%'}}>
+            <FormField label='짧은 상품평' style={{border: '0px', borderBottom: '1px solid rgba(0,0,0,0.15)'}}>
+              <TextInput id='comment-input'/>
+            </FormField>
+            <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'center', margin: '20px 0px 10px 48px'}}>
+              <RadioButton checked={this.state.rating >= 1} onChange={() => this.setState({rating: 1})}/>
+              <RadioButton checked={this.state.rating >= 2} onChange={() => this.setState({rating: 2})}/>
+              <RadioButton checked={this.state.rating >= 3} onChange={() => this.setState({rating: 3})}/>
+              <RadioButton checked={this.state.rating >= 4} onChange={() => this.setState({rating: 4})}/>
+              <RadioButton checked={this.state.rating >= 5} onChange={() => this.setState({rating: 5})}/>
+            </div>
+            <div style={{width: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'flex-end'}}>
+              <Anchor
+                label='등록'
+                disabled={!this.props.loginResult}
+                onClick={() => {
+                  if(this.props.loginResult)
+                    this.props.postRequestComment(document.getElementById('comment-input').value, this.props.params.id, this.state.rating)
+                }}
+              />
+            </div>
+          </Form>
+        </div>
         <List>
           {
             this.props.commentList  && this.props.commentList.map((comment) => {
