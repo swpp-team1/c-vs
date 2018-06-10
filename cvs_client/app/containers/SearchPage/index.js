@@ -60,27 +60,60 @@ export class SearchPage extends React.Component { // eslint-disable-line react/p
 
   render() {
     var resultCard;
-    if(this.props.searchResult == undefined) {
-      resultCard = (<p>NO RESULT</p>);
+    if(this.props.searchResult) {
+      if (this.props.searchResult.results.length === 0) {
+        resultCard = (
+          <div style={{display: 'flex', width: '100%', height: '100%', alignItems: 'center', justifyContent: 'center'}}>
+            <span>검색 결과가 없습니다.</span>
+          </div>
+        );
+      }
+      else {
+        console.log(this.props.searchResult.results)
+        resultCard = this.props.searchResult.results.map((object, index) => {
+          return (
+            <Tile
+              pad='medium'
+              style={{width: '20%', maxWidth: '20%'}}
+              key={index}
+            >
+              <Card
+                colorIndex='light-1'
+                thumbnail={<Image src={object.image}/>}
+                label={
+                  <span>{object.manufacturer}</span>
+                }
+                heading={
+                  <h4 style={{
+                    whiteSpace: 'nowrap',
+                    fontSize: 20,
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                    marginBottom: 0
+                  }}>{object.name}</h4>
+                }
+                key={index}
+                onClick={() => {
+                  this.props.router.push(`/productDetail/${object.id}`);
+                  location.reload();
+                }}
+              />
+            </Tile>
+          );
+        })
+      }
     }
-    else{
-      console.log(this.props.searchResult.results)
-      resultCard = this.props.searchResult.results.map((object, index) => {
-      return (<Tile pad='medium' key={index}><Card colorIndex = 'light-1' textSize = 'small' thumbnail = {<Image src={object.image} />} label={object.manufacturer} heading = {object.name} key = {index} onClick={() => this.props.router.push(`/productDetail/${object.id}`)}/></Tile>);
-    })
-  }
 
     return (
       <div>
-        SEARCH KEYWORD : {this.props.params.id}
         <Article>
           <Box direction='row' justify='center' align='center'>
-            <Section align='center' style={{alignItems: 'center', justifyContent: 'center', height: 100}}>
-              <Box colorIndex='light-1' style={{margin: '20px 0px'}}>
-                <Heading margin='none' strong = {true} tag = 'h3'>제품 및 레시피 검색</Heading>
+            <Section align='center' style={{alignItems: 'center', justifyContent: 'center'}}>
+              <Box colorIndex='light-1' style={{margin: '20px 0px', display: 'flex', alignItems: 'center'}}>
+                <Heading strong = {true} tag = 'h3'>제품 및 레시피 검색</Heading>
                 <MediaQuery query="(min-device-width: 1024px)">
                   <Search style={{width: '700px'}} inline={true} placeHolder='검색' value={this.state.term} onDOMChange={this.onInputChange}
-                          onSelect={this.onEnter} suggestions={['Suggestion is not yet implemented.']}/>
+                          onSelect={this.onEnter} suggestions={[]}/>
                 </MediaQuery>
                 <MediaQuery query="(max-device-width: 1023px)">
                   <Search inline={true} placeHolder='검색' />
@@ -89,8 +122,8 @@ export class SearchPage extends React.Component { // eslint-disable-line react/p
             </Section>
           </Box>
         </Article>
-        <Box colorIndex='light-2'>
-        <Tiles fill={true}>{resultCard}</Tiles>
+        <Box colorIndex='light-2' style={{marginTop: 10}}>
+          <Tiles>{resultCard}</Tiles>
         </Box>
       </div>
     );

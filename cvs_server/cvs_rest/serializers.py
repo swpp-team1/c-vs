@@ -18,7 +18,6 @@ class UserIdSerializer(serializers.ModelSerializer) :
         fields = ('id', 'username')
         depth = 2
 
-
 class CommentSerializer(serializers.ModelSerializer) :
 
     rating = serializers.SerializerMethodField()
@@ -53,7 +52,6 @@ class ProductSerializer(serializers.ModelSerializer) :
     class Meta:
         model = Product
         fields = '__all__'
-
 
 class PostSerializer(serializers.ModelSerializer) :
 
@@ -125,6 +123,81 @@ class ReviewDetailSerializer(serializers.ModelSerializer) :
             if post.image != DEFAULT_IMAGE :
                 return "/media/" + str(post.image)
         return "/media/" + DEFAULT_IMAGE
+
+
+class RecipeListSerializer(serializers.ModelSerializer) :
+    user_id = UserIdSerializer()
+
+    profile_image = serializers.SerializerMethodField()
+    profile_content = serializers.SerializerMethodField()
+    price_all = serializers.SerializerMethodField()
+
+    class Meta :
+        model = Recipe
+        fields = ('id', 'created', 'edited', 'title', 'user_id', 'profile_image', 'profile_content', 'price_all','ingredients')
+        depth = 1
+    
+    def get_profile_image(self, obj) :
+        recipe_type = ContentType.objects.get_for_model(Recipe)
+        posts = Post.objects.filter(content_type__pk=recipe_type.id, object_id=obj.id)
+        for post in posts :
+            if post.image != DEFAULT_IMAGE :
+                return "/media/" + str(post.image)
+        return "/media/" + DEFAULT_IMAGE
+    
+    def get_profile_content(self, obj) :
+        recipe_type = ContentType.objects.get_for_model(Recipe)
+        posts = Post.objects.filter(content_type__pk=recipe_type.id, object_id=obj.id)
+        for post in posts :
+            if post.content :
+                return post.content[:50]
+        return "No preview content"
+
+    def get_price_all(self, obj) :
+        ingredients = obj.ingredients.all()
+        sum = 0
+        for ingre in ingredients :
+            sum += int(ingre.price)
+        return sum
+
+class RecipeDetailSerializer(serializers.ModelSerializer) :
+
+    user_id = UserIdSerializer()
+    post = PostSerializer(many=True)
+
+    profile_image = serializers.SerializerMethodField()
+    price_all = serializers.SerializerMethodField()
+
+    class Meta :
+        model = Recipe
+        fields = ('id', 'created', 'edited', 'title', 'user_id', 'profile_image', 'price_all', 'ingredients', 'post')
+        depth = 1
+    
+    def get_profile_image(self, obj) :
+        recipe_type = ContentType.objects.get_for_model(Recipe)
+        posts = Post.objects.filter(content_type__pk=recipe_type.id, object_id=obj.id)
+        for post in posts :
+            if post.image != DEFAULT_IMAGE :
+                return "/media/" + str(post.image)
+        return "/media/" + DEFAULT_IMAGE
+    
+    def get_price_all(self, obj) :
+        ingredients = obj.ingredients.all()
+        sum = 0
+        for ingre in ingredients :
+            sum += int(ingre.price)
+        return sum
+
+
+
+#this serializer is used only for testing
+class RatingSerializer(serializers.ModelSerializer) :
+    user_id = UserIdSerializer()
+
+    class Meta:
+        model = Rating
+        fields = ('id', 'created', 'edited', 'value', 'user_id', 'product', 'content_type', 'object_id')
+        depth = 2
 
 
 class RecipeListSerializer(serializers.ModelSerializer) :

@@ -12,3 +12,5 @@ export const RECEIVED_RELATED_PRODUCTS = 'app/ProductDetail/RECEIVED_RELATED_PRO
 export const POST_REQUEST_COMMENT = 'app/ProductDetail/POST_REQUEST_COMMENT'
 export const GET_REQUEST_COMMENT = 'app/ProductDetail/GET_REQUEST_COMMENT'
 export const RECEIVED_COMMENTS = 'app/ProductDetail/RECEIVED_COMMENTS'
+export const GET_REQUEST_REVIEWS = 'app/ProductDetail/GET_REQUEST_REVIEWS'
+export const RECEIVED_REVIEWS = 'app/ProductDetail/RECEIVED_REVIEWS'

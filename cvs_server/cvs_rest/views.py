@@ -88,7 +88,6 @@ class ProductDetail(generics.RetrieveAPIView) :
     queryset = Product.objects.all()
     serializer_class = ProductDetailSerializer
 
-
 #/comments/
 @api_view(['GET','POST'])
 @permission_classes((IsAuthenticatedOrReadOnly,))

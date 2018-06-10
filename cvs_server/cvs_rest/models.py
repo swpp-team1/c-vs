@@ -73,7 +73,6 @@ class Review(models.Model):
         'CustomUser',
         on_delete=models.CASCADE,
     )
-    
     product = models.ForeignKey('Product', on_delete=models.CASCADE)
     post = fields.GenericRelation('Post', related_query_name='review', null=True)
     

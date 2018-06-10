@@ -9,7 +9,10 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import makeSelectProductDetail from './selectors';
 import CustomHeader from '../../components/CustomHeader'
-import { requestProductDetail, requestRelatedProducts, postRequestComment, getRequestComment } from './actions'
+import {
+  requestProductDetail, requestRelatedProducts, postRequestComment, getRequestComment,
+  getRequestReviews
+} from './actions'
 import Image from 'grommet/components/Image'
 import Heading from 'grommet/components/Heading'
 import Form from 'grommet/components/Form'
@@ -21,6 +24,7 @@ import Card from 'grommet/components/Card'
 import Anchor from 'grommet/components/Anchor'
 import List from 'grommet/components/List'
 import ListItem from 'grommet/components/ListItem'
+import RadioButton from 'grommet/components/RadioButton'
 
 
 const manufacturer = {'CU': 'CU', 'GS': 'GS25', 'SE': 'SEVEN ELEVEN'}
@@ -29,11 +33,13 @@ export class ProductDetail extends React.Component { // eslint-disable-line reac
     super()
     this.state = {
       relatedRequestDone: false,
+      rating: null,
     }
   }
   componentWillMount() {
     this.props.requestProductDetail(this.props.params.id)
     this.props.getRequestComment(this.props.params.id)
+    this.props.getRequestReviews(this.props.params.id)
   }
   componentWillReceiveProps(nextProps) {
     if (nextProps.productDetail && !nextProps.relatedProducts) {
@@ -56,17 +62,34 @@ export class ProductDetail extends React.Component { // eslint-disable-line reac
     if(relatedProducts === undefined) {
       relatedCard = (<p>NO RESULT</p>);
     }
-    else{
+    else {
       console.log(relatedProductsList)
-      relatedCard = relatedProducts.slice(0,4).map((object, index) => {
-        if(object.id == this.props.params.id) return;
-        else return (<Tile pad='medium' key={index}><Card colorIndex = 'light-1' textSize = 'small' thumbnail = {<Image src={object.image} />} label={object.manufacturer} heading = {object.name} key = {index} onClick={() => {this.props.router.push(`/productDetail/${object.id}`); location.reload();}}/></Tile>);
-    })
-  }
-
+      relatedCard = relatedProducts.slice(0,5).map((object, index) => {
+        if(object.id === this.props.params.id) return;
+        else return (
+          <Tile pad='medium' key={index} style={{width: '20%'}}>
+            <Card
+              colorIndex = 'light-1'
+              textSize = 'small'
+              thumbnail = {
+                <Image src={object.image}/>
+              }
+              label={
+                <span>{object.manufacturer}</span>
+              }
+              heading = {
+                <h4 style={{whiteSpace: 'nowrap', fontSize: 20, overflow: 'hidden', textOverflow: 'ellipsis', marginBottom: 0}}>{object.name}</h4>
+              }
+              key = {index}
+              onClick={() => {this.props.router.push(`/productDetail/${object.id}`); location.reload();}}
+            />
+          </Tile>
+        );
+      })
+    }
 
     return (
-      <div>
+      <div style={{margin: '0 20px'}}>
         <div style={{flexDirection: 'row', display: 'flex', padding: '30px'}}>
           <div style={{width: '250px', justifyContent: 'center', display: 'flex'}}>
             <Image fit='contain' size='large' src={productDetail.image}/>
@@ -81,7 +104,11 @@ export class ProductDetail extends React.Component { // eslint-disable-line reac
               </div>
               <div style={{display: 'flex', flexDirection: 'column'}}>
                 <h3 style={{marginBottom: '10px'}}>평점</h3>
-                <h3 style={{marginBottom: '0'}}>{productDetail.price}</h3>
+                {
+                  productDetail.rating_avg ?
+                    <h3 style={{marginBottom: '0'}}>{productDetail.rating_avg.toFixed(2)}</h3> :
+                    <h3 style={{marginBottom: '0'}}>평점이 매겨지지 않았습니다.</h3>
+                }
               </div>
             </div>
           </div>
@@ -89,31 +116,77 @@ export class ProductDetail extends React.Component { // eslint-disable-line reac
         {
           (this.state && this.state.relatedRequestDone || (productDetail !== '' && !(productDetail.small_category || productDetail.large_category))) ? <h3>{relatedProducts.length === 0 ? '인기 상품' : '유사 상품'}</h3> : <div/>
         }
-        <Tiles fill={true}>{relatedCard}</Tiles>
-        <Form>
-          <FormField label='짧은 상품평'>
-            <TextInput id='comment-input'/>
-          </FormField>
-          <Anchor
-            label='등록'
-            disabled={!this.props.loginResult}
-            onClick={() => {
-              if(this.props.loginResult)
-                this.props.postRequestComment(document.getElementById('comment-input').value, this.props.params.id, 3)
-            }}
-          />
-        </Form>
-        <List>
+        <Tiles>{relatedCard}</Tiles>
+        <div style={{display: 'flex', justifyContent: 'space-between'}}>
+          <h3>리뷰</h3>
+          <Anchor disabled={!this.props.loginResult} label='새 리뷰 쓰기' href={this.props.loginResult && ('/newReview/' + this.props.params.id)}/>
+        </div>
+        <Tiles>
           {
-            this.props.commentList  && this.props.commentList.map((comment) => {
+            this.props.reviewsList &&
+            this.props.reviewsList.slice(0,3).map((object, index) => {
               return (
-                <ListItem>
-                  <span>{comment.content}</span>
-                </ListItem>
+                <Tile pad='medium' key={index} style={{width: '33%'}}>
+                  <Card
+                    colorIndex = 'light-1'
+                    textSize = 'small'
+                    thumbnail = {
+                      <Image src={'http://13.209.25.111:8000'+object.profile_image}/>
+                    }
+                    label={
+                      <span style={{whiteSpace: 'nowrap', fontSize: 20, overflow: 'hidden', textOverflow: 'ellipsis', marginBottom: 0}}>{object.title}</span>
+                    }
+                    heading = {
+                      <h4 style={{whiteSpace: 'nowrap', fontSize: 20, overflow: 'hidden', textOverflow: 'ellipsis', marginBottom: 0}}>{object.profile_content}</h4>
+                    }
+                    key = {index}
+                    //onClick={() => {this.props.router.push(`/productDetail/${object.id}`); location.reload();}}
+                  />
+                </Tile>
               )
             })
           }
-        </List>
+        </Tiles>
+        <div style={{display: 'flex', justifyContent:'center', width: '100%'}}>
+          <Form style={{display: 'flex', flexDirection: 'column', alignItems: 'center', border: '1px solid rgba(0, 0, 0, 0.15)', padding: '10px', width: '80%'}}>
+            <FormField label='짧은 상품평' style={{border: '0px', borderBottom: '1px solid rgba(0,0,0,0.15)'}}>
+              <TextInput id='comment-input'/>
+            </FormField>
+            <div style={{display: 'flex', flexDirection: 'row', justifyContent: 'center', margin: '20px 0px 10px 48px'}}>
+              <RadioButton checked={this.state.rating >= 1} onChange={() => this.setState({rating: 1})}/>
+              <RadioButton checked={this.state.rating >= 2} onChange={() => this.setState({rating: 2})}/>
+              <RadioButton checked={this.state.rating >= 3} onChange={() => this.setState({rating: 3})}/>
+              <RadioButton checked={this.state.rating >= 4} onChange={() => this.setState({rating: 4})}/>
+              <RadioButton checked={this.state.rating >= 5} onChange={() => this.setState({rating: 5})}/>
+            </div>
+            <div style={{width: '100%', display: 'flex', flexDirection: 'row', justifyContent: 'flex-end'}}>
+              <Anchor
+                label='등록'
+                disabled={!this.props.loginResult}
+                onClick={() => {
+                  if(this.props.loginResult)
+                    this.props.postRequestComment(document.getElementById('comment-input').value, this.props.params.id, this.state.rating)
+                }}
+              />
+            </div>
+          </Form>
+        </div>
+        <div style={{width: '100%', alignItems: 'center', display: 'flex', flexDirection: 'column'}}>
+          <div style={{width: '80%', margin: '10px 0'}}>
+            <h3 style={{width: '80%', marginBottom: '0'}}>댓글 목록</h3>
+          </div>
+          <List style={{width: '80%'}} >
+            {
+              this.props.commentList  && this.props.commentList.map((comment) => {
+                return (
+                  <ListItem>
+                    <span>{comment.content}</span>
+                  </ListItem>
+                )
+              })
+            }
+          </List>
+        </div>
       </div>
     );
   }
@@ -125,6 +198,7 @@ const mapStateToProps = (state) => {
     loginResult: state.get('global').toJS().loginResult,
     relatedProducts: state.get('productDetail').toJS().relatedProducts,
     commentList: state.get('productDetail').toJS().commentList,
+    reviewsList: state.get('productDetail').toJS().reviewsList,
   })}
 
 function mapDispatchToProps(dispatch) {
@@ -132,7 +206,8 @@ function mapDispatchToProps(dispatch) {
     requestProductDetail: (id) => dispatch(requestProductDetail(id)),
     requestRelatedProducts: (smallCategory, largeCategory) => dispatch(requestRelatedProducts(smallCategory, largeCategory)),
     postRequestComment: (content, product, rating) => dispatch(postRequestComment(content, product, rating)),
-    getRequestComment: (id) => dispatch(getRequestComment(id))
+    getRequestComment: (id) => dispatch(getRequestComment(id)),
+    getRequestReviews: (id) => dispatch(getRequestReviews(id))
   };
 }
 
