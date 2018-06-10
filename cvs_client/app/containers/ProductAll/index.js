@@ -79,7 +79,7 @@ export class ProductAll extends React.Component { // eslint-disable-line react/p
         return (
           <Tile
             pad='medium'
-            style={{width: '19%'}}
+            style={{width: '20%', maxWidth: '20%'}}
             key={index}
           >
             <Card
@@ -103,7 +103,7 @@ export class ProductAll extends React.Component { // eslint-disable-line react/p
       <div>
         <Article>
           <Section colorIndex='light-2'>
-            <Tiles  fill={true} onMore={() => this.onTilesMore(this.state.id)}>
+            <Tiles onMore={() => this.onTilesMore(this.state.id)}>
               { allCard }
             </Tiles>
           </Section>

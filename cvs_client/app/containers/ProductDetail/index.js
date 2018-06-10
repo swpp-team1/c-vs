@@ -60,10 +60,10 @@ export class ProductDetail extends React.Component { // eslint-disable-line reac
     }
     else{
       console.log(relatedProductsList)
-      relatedCard = relatedProducts.slice(0,4).map((object, index) => {
+      relatedCard = relatedProducts.slice(0,5).map((object, index) => {
         if(object.id === this.props.params.id) return;
         else return (
-          <Tile pad='medium' key={index} style={{width: '19%'}}>
+          <Tile pad='medium' key={index} style={{width: '20%'}}>
             <Card
               colorIndex = 'light-1'
               textSize = 'small'
@@ -113,7 +113,7 @@ export class ProductDetail extends React.Component { // eslint-disable-line reac
         {
           (this.state && this.state.relatedRequestDone || (productDetail !== '' && !(productDetail.small_category || productDetail.large_category))) ? <h3>{relatedProducts.length === 0 ? '인기 상품' : '유사 상품'}</h3> : <div/>
         }
-        <Tiles fill={true}>{relatedCard}</Tiles>
+        <Tiles>{relatedCard}</Tiles>
         <Anchor label='새 리뷰 쓰기' href={'/newReview/' + this.props.params.id}/>
         <div style={{display: 'flex', justifyContent:'center', width: '100%'}}>
           <Form style={{display: 'flex', flexDirection: 'column', alignItems: 'center', border: '1px solid rgba(0, 0, 0, 0.15)', padding: '10px', width: '80%'}}>
