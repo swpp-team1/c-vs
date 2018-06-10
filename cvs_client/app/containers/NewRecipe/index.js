@@ -36,7 +36,8 @@ export class NewRecipe extends React.Component { // eslint-disable-line react/pr
       recipeTitle:'',
       posts: [{
         image: undefined,
-        content: undefined
+        content: undefined,
+        imageURL: undefined
       }],
     }
     this.onSearchInputChange = this.onSearchInputChange.bind(this);
@@ -115,14 +116,16 @@ export class NewRecipe extends React.Component { // eslint-disable-line react/pr
                 <label>
                   <div style={{width: '200px', height: '200px', backgroundColor: '#C0C0C0', display: 'flex', justifyContent: 'center', alignItems: 'center', marginRight: '20px'}}>
                     {this.state.posts[key].image ?
-                      <img src={this.state.posts[key].image}/>
+                      <img src={this.state.posts[key].imageURL}/>
                       : <Add style={{width: '50px', height: '50px'}}/>
                     }
 
                     <input id='image-input'  accept='image/*' type='file' onChange={(e) => {
                       if(e.target.files[0]) {
                         let newPosts = this.state.posts
-                        newPosts[key].image = URL.createObjectURL(e.target.files[0])
+                        let encodedImage = new File([e.target.files[0]], escape(e.target.files[0].name))
+                        newPosts[key].imageURL = URL.createObjectURL(encodedImage)
+                        newPosts[key].image = encodedImage
                         this.setState({posts: newPosts})
                       }
                     }} style={{display: 'none'}}/>
@@ -154,11 +157,9 @@ export class NewRecipe extends React.Component { // eslint-disable-line react/pr
         <Button icon={<Edit />}
           label='레시피 저장'
           onClick={() => {
-            let nameChangedFile = new File([document.getElementById('image-input').files[0]], escape(document.getElementById('image-input').files[0].name))
-            this.props.sendRequestPost(nameChangedFile)
+            this.props.sendRequestPost(this.state.posts)
           }}
           type='button'
-          //type submit
           primary={true} />
         </Form>
       </div>
@@ -175,7 +176,7 @@ const mapStateToProps = (state) => {
 function mapDispatchToProps(dispatch) {
   return {
     requestProductList: (searchText) => dispatch(requestProductList(searchText)),
-    sendRequestPost: (post) => dispatch(sendRequestPost(post))
+    sendRequestPost: (posts) => dispatch(sendRequestPost(posts))
   };
 }
 
