@@ -1,0 +1,57 @@
+import { take, call, put, select } from 'redux-saga/effects';
+import request from 'utils/request'
+import * as actions from './actions'
+import { SEND_REQUEST_POST } from './constants'
+
+const reviewURL = 'http://13.209.25.111:8000/reviews/'
+const postURL = 'http://13.209.25.111:8000/posts/'
+export const getUserInfo = (state) => state.get('global').toJS().loginResult;
+
+export function* sendRequestPost (review, posts) {
+  const userInfo = yield select(getUserInfo)
+  try {
+    const reviewData = yield call(request, reviewURL, {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': 'Token ' + userInfo.token
+      },
+      body: JSON.stringify(review)
+    })
+    console.log(reviewData)
+    for(let i=0; i<posts.length; i++) {
+      const form = new FormData()
+      form.set('review_id', reviewData.id)
+      form.set('content', posts[i].content)
+      form.set('image', posts[i].image)
+      console.log(posts[i].image)
+      try {
+        const postData = yield call(request, postURL, {
+          method: 'POST',
+          headers: {
+            'Authorization': 'Token ' + userInfo.token
+          },
+          body: form
+        })
+        console.log(postData)
+      } catch (postError) {
+        console.log(postError)
+      }
+    }
+  } catch (recipeError) {
+    console.log(recipeError)
+  }
+}
+
+export function* watchSendRequestPost() {
+  while (true) {
+    const { review, posts } = yield take(SEND_REQUEST_POST)
+    yield call(sendRequestPost, review, posts)
+  }
+}
+
+// All sagas to be loaded
+export default [
+  watchSendRequestPost,
+];

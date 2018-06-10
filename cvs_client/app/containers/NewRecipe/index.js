@@ -6,10 +6,6 @@
 
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { FormattedMessage } from 'react-intl';
-import { createStructuredSelector } from 'reselect';
-import makeSelectNewRecipe from './selectors';
-import messages from './messages';
 import { requestProductList, sendRequestPost } from './actions'
 import Search from 'grommet/components/Search'
 import Button from 'grommet/components/Button'
