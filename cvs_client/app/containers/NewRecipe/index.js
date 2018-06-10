@@ -13,16 +13,18 @@ import messages from './messages';
 import { requestProductList, sendRequestPost } from './actions'
 import Search from 'grommet/components/Search'
 import Button from 'grommet/components/Button'
+import Anchor from 'grommet/components/Anchor'
 import List from 'grommet/components/List'
 import ListItem from 'grommet/components/List'
 import Image from 'grommet/components/Image'
-import Heading from 'grommet/components/Heading';
-import Title from 'grommet/components/Title';
-import Form from 'grommet/components/Form';
-import FormField from 'grommet/components/FormField';
-import TextInput from 'grommet/components/TextInput';
+import Heading from 'grommet/components/Heading'
+import Title from 'grommet/components/Title'
+import Form from 'grommet/components/Form'
+import FormField from 'grommet/components/FormField'
+import TextInput from 'grommet/components/TextInput'
 import FormTrashIcon from 'grommet/components/icons/base/FormTrash'
-import Edit from 'grommet/components/icons/base/Edit';
+import Edit from 'grommet/components/icons/base/Edit'
+import Add from 'grommet/components/icons/base/Add'
 
 export class NewRecipe extends React.Component { // eslint-disable-line react/prefer-stateless-function
   constructor(props) {
@@ -32,7 +34,10 @@ export class NewRecipe extends React.Component { // eslint-disable-line react/pr
       searchText: '',
       selectedItems: [],
       recipeTitle:'',
-      image: null
+      posts: [{
+        image: undefined,
+        content: undefined
+      }],
     }
     this.onSearchInputChange = this.onSearchInputChange.bind(this);
     this.onClickDelete = this.onClickDelete.bind(this);
@@ -53,7 +58,7 @@ export class NewRecipe extends React.Component { // eslint-disable-line react/pr
 
 
   render() {
-    var searchSuggestion;
+    let searchSuggestion;
     if(this.props.productList !== undefined){
       searchSuggestion = this.props.productList.results && this.props.productList.results.slice(0,10).map((item) => item.name)
     }
@@ -68,8 +73,10 @@ export class NewRecipe extends React.Component { // eslint-disable-line react/pr
       <div>
         <Heading tag='h2'>새 레시피 작성</Heading>
         <Title>레시피 제목</Title>
-        <Form>
-          <FormField label="레시피 제목을 작성해주세요"><TextInput value={this.state.recipeTitle} onDOMChange={(event) => this.setState({recipeTitle: event.target.value})}/></FormField>
+        <Form style={{width: '100%'}}>
+          <FormField label="레시피 제목을 작성해주세요">
+            <TextInput value={this.state.recipeTitle} onDOMChange={(event) => this.setState({recipeTitle: event.target.value})}/>
+          </FormField>
           <Title>재료 추가하기</Title>
           <Search inline={true}
                   value={(this.state.selectedItem) ? this.state.selectedItem[0].name : this.state.searchText}
@@ -102,18 +109,48 @@ export class NewRecipe extends React.Component { // eslint-disable-line react/pr
             }
           </List>
           <Title>만드는 법 작성</Title>
-          <label>
-            {this.state.image ?
-              <img src={this.state.image}/>
-              : <span>TEMP</span>
-            }
+          {this.state.posts.map((item, key) => {
+            return (
+              <div key={key} style={{flexDirection: 'row', display: 'flex', margin: '10px 50px'}}>
+                <label>
+                  <div style={{width: '200px', height: '200px', backgroundColor: '#C0C0C0', display: 'flex', justifyContent: 'center', alignItems: 'center', marginRight: '20px'}}>
+                    {this.state.posts[key].image ?
+                      <img src={this.state.posts[key].image}/>
+                      : <Add style={{width: '50px', height: '50px'}}/>
+                    }
 
-            <input id='image-input'  accept='image/*' type='file' onChange={(e) => {
-              if(e.target.files[0]) {
-                this.setState({image: URL.createObjectURL(e.target.files[0])})
-              }
-            }} style={{display: 'none'}}/>
-          </label>
+                    <input id='image-input'  accept='image/*' type='file' onChange={(e) => {
+                      if(e.target.files[0]) {
+                        let newPosts = this.state.posts
+                        newPosts[key].image = URL.createObjectURL(e.target.files[0])
+                        this.setState({posts: newPosts})
+                      }
+                    }} style={{display: 'none'}}/>
+                  </div>
+                </label>
+                <FormField label="내용" >
+                  <div style={{display: 'flex', height: '150px'}}>
+                    <textarea
+                      value={this.state.posts[key].content}
+                      onChange={(e) => {
+                        let newPosts = this.state.posts
+                        newPosts[key].content = e.target.value
+                        this.setState({posts: newPosts})
+                      }}
+                      style={{width: '100%', resize: 'none', border: 'none'}}/>
+                  </div>
+                </FormField>
+              </div>
+            )
+          })}
+          <Anchor
+            label='이미지/텍스트 추가하기'
+            onClick={() => {
+              let newPosts = this.state.posts
+              newPosts.push({image: undefined, content: undefined})
+              this.setState({posts: newPosts})
+            }}
+          />
         <Button icon={<Edit />}
           label='레시피 저장'
           onClick={() => {
