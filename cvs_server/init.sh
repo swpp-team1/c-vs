@@ -1,5 +1,4 @@
 echo '------ Initialization start! ------'
-pip3 install requests
 echo '------ Delete BD and re-create ----'
 rm -f db.sqlite3
 rm -r cvs_rest/migrations/
