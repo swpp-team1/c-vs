@@ -26,7 +26,7 @@ if __name__ == '__main__':
         try:
             Product.objects.get(name=p['name'])
         except ObjectDoesNotExist:
-            print('{} is registed in DB'.format(p['name']))
+            print('\t{} is registed in DB'.format(p['name']))
             Product(
                 name=p['name'], 
                 price=p['price'], 

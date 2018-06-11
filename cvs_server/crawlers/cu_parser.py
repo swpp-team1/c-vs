@@ -33,10 +33,14 @@ def parsePBList(x):
 
 def parseProductList(x):
     if x.find(class_='prodName'):
+        name = x.find(class_='prodName').find('span').get_text()
+        category = classifyProducts(name)
         return {
-            'name': x.find(class_='prodName').find('span').get_text(), 
+            'large_category': category['large_category'],
+            'small_category': category['small_category'],
+            'name': name, 
             'price': int(x.find(class_='prodPrice').find('span').get_text().replace('\n','').replace(',','')), 
-            'url': x.find('img')['src']
+            'img': x.find('img')['src']
         }
     
 
@@ -69,7 +73,7 @@ def productCrawler(productCode):
                 break
         pageIndex = pageIndex + 1
 
-'''        
+        
 productCrawler(10) #간편식사      
 productCrawler(20) #즉석조리
 productCrawler(30) #과자류
@@ -78,7 +82,6 @@ productCrawler(50) #식품
 productCrawler(60) #음료
 productCrawler(70) #샏활용품
 productList = [x for x in productList if x is not None]
-'''
 
 pbCrawler('PBG')
 pbCrawler('CUG')
@@ -94,7 +97,7 @@ if __name__ == '__main__':
         try:
             Product.objects.get(name=p['name'])
         except ObjectDoesNotExist:
-            print('{} is registed in DB'.format(p['name']))
+            print('\t{} is registed in DB'.format(p['name']))
             Product(
                 name=p['name'], 
                 price=p['price'], 
@@ -103,4 +106,21 @@ if __name__ == '__main__':
                 large_category=p['large_category'],
                 small_category=p['small_category'],
                 PB=True,
-            ).save()   
+            ).save()
+    
+    print('not PB crawler START')
+    product_data_dict = productList
+    for p in product_data_dict:
+        try:
+            Product.objects.get(name=p['name'])
+        except ObjectDoesNotExist:
+            print('\t{} is registed in DB'.format(p['name']))
+            Product(
+                name=p['name'], 
+                price=p['price'], 
+                image=p['img'], 
+                manufacturer='Other',
+                large_category=p['large_category'],
+                small_category=p['small_category'],
+                PB=False,
+            ).save()        

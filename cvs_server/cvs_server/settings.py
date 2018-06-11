@@ -147,4 +147,4 @@ REST_FRAMEWORK = {
 
 # Setting for Image path
 MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'cvs_rest/media')
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')

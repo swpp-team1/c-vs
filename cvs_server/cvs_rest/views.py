@@ -157,14 +157,16 @@ def comment_detail(request, pk, format=None) :
             rating_obj = Rating.objects.get(content_type__pk=comment_type.id, object_id=comment_obj.id)
         except Rating.DoesNotExist :
             return Response(status=status.HTTP_404_NOT_FOUND)
-        rating_obj.value = new_value
-        rating_obj.save()
-
-        serializer = CommentSerializer(comment_obj, data=data)
-        if serializer.is_valid() :
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_200_OK)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        if new_value:
+            rating_obj.value = new_value
+            rating_obj.save()
+        
+        if data.get('content'):
+            comment_obj.content = data.get('content')
+            comment_obj.save()
+        
+        serializer = CommentSerializer(comment_obj)
+        return Response(serializer.data, status=status.HTTP_200_OK)
     
     elif request.method == 'DELETE' :
         comment_obj.delete()
@@ -205,10 +207,10 @@ def get_create_post(request, format=None) :
         except ObjectDoesNotExist :
             return Response(data={'message':'No Review or Recipe object of given primary key'}, status=status.HTTP_404_NOT_FOUND)
         
-        post_obj = Post.objects.create(belong_to=obj)
-
         if not (data.get('image') or data.get('content')) :
             return Response(data={'message':'The post is empty. Image or content or both is required'}, status=status.HTTP_400_BAD_REQUEST)
+        
+        post_obj = Post.objects.create(belong_to=obj)
         
         if data.get('image') :
             post_obj.image = data.get('image')
@@ -314,7 +316,7 @@ def review_detail(request, pk, format=None) :
     
     elif request.method == 'PUT' :
         data = request.data
-
+        review_type = ContentType.objects.get_for_model(review_obj)
         
         #edit rating value of nested Rating object
         if data.get('rating') :
@@ -377,8 +379,7 @@ def get_create_recipe(request, format=None) :
         if not len(ingredients) :
             return Response(data={'message':'ingredients field is empty'}, status=status.HTTP_400_BAD_REQUEST)
 
-        recipe_obj = Recipe(title="title", user_id=request.user)
-        recipe_obj.save()
+        recipe_obj = Recipe.objects.create(title=data.get('title'), user_id=request.user)
 
         for ingre in ingredients :
             try :
@@ -419,7 +420,7 @@ def recipe_detail(request, pk, format=None) :
         
         #previous ingredients get deleted and input ingredients are added
         if data.get('ingredients') :
-            recipe_obj.ingredients = Product.objects.none()
+            recipe_obj.ingredients.set(objs=[])
             ingredients = data.get('ingredients')
 
             for ingre in ingredients :
