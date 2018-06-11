@@ -5,7 +5,8 @@ matrix:
        before_script:
        - cd cvs_server
        - pip3 install -r requirements.txt
-       - ./init.sh 
+       - ./init.sh
+       - python manage.py runserver & 
        script: python runtest.py
        
    
