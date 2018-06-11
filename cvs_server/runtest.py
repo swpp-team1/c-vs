@@ -67,6 +67,19 @@ def put_or_error(link, data, token):
         print('ERROR: Cannot put {0}'.format(link))
         exit(1)
 
+def delete_or_error(link, token):
+    sleep(0.05)
+    try:
+        headers={'Authorization':'Token '+token}
+        res = requests.delete(link, headers=headers)
+        if res.status_code not in [201, 200, 204]:
+            print('ERROR: Cannot delete {0}: {1}, token = {2}'.format(link, res.status_code, token))
+            exit(1)
+    except Exception:
+        print('ERROR: Cannot delete {0}'.format(link))
+        exit(1)
+
+
 
 userN = 10
 user_pairs = userlist.create_users(userN)
@@ -130,6 +143,7 @@ put_data = [
     {'content': 'fifth put', 'rating': 5},
 ]
 put_cnt = 0
+delete_ids = []
 print('4. Checking PUT '+url+'comments/id/')
 
 for comt_json in comts_json:
@@ -147,6 +161,7 @@ for da in put_data:
     found = False
     for comt_json in comts_json:
         if comt_json['rating'] == da['rating'] and comt_json['content'] == da['content']:
+            delete_ids.append((comt_json['id'], comt_json['user_id']['id']))
             found = True
             break
     if not found:
@@ -157,6 +172,11 @@ for da in put_data:
 print('****************************************************************************************')
 
 print('5. Checking DELETE '+url+'comments/id/')
+
+for (d_id, u_id) in delete_ids:
+    (uname, upwd, utoken) = find_userinfo(users, u_id)
+    print('\tDeleting commet {0}'.format(d_id))
+    delete_or_error(url+'comments/'+str(d_id)+'/', utoken)
 
 print('****************************************************************************************')
 
@@ -207,7 +227,7 @@ put_data = [
     {'title': 'fifth put', 'rating': 5},
 ]
 put_cnt = 0
-
+delete_ids = []
 for rev_json in revs_json:
     if put_cnt == 5 :
         break
@@ -223,6 +243,7 @@ for da in put_data:
     found = False
     for rev_json in revs_json:
         if rev_json['rating'] == da['rating'] and rev_json['title'] == da['title']:
+            delete_ids.append((rev_json['id'],rev_json['user_id']['id']))
             found = True
             break
     if not found:
@@ -233,6 +254,11 @@ for da in put_data:
 print('****************************************************************************************')
 
 print('8. Checking DELETE '+url+'reviews/id/')
+
+for (d_id, u_id) in delete_ids:
+    (uname, upwd, utoken) = find_userinfo(users, u_id)
+    print('\tDeleting review {0}'.format(d_id))
+    delete_or_error(url+'reviews/'+str(d_id)+'/', utoken)
 
 print('****************************************************************************************')
 
@@ -292,6 +318,8 @@ put_data = [
 ]
 put_cnt = 0
 
+delete_ids=[]
+
 for rec_json in recs_json:
     if put_cnt == 5 :
         break
@@ -307,6 +335,7 @@ for da in put_data:
     found = False
     for rec_json in recs_json:
         if rec_json['title'] == da['title']:
+            delete_ids.append((rec_json['id'], rec_json['user_id']['id']))
             found = True
             break
     if not found:
@@ -317,6 +346,11 @@ for da in put_data:
 print('****************************************************************************************')
 
 print('11. Checking DELETE '+url+'recipes/id/')
+
+for (d_id, u_id) in delete_ids:
+    (uname, upwd, utoken) = find_userinfo(users, u_id)
+    print('\tDeleting recipe {0}'.format(d_id))
+    delete_or_error(url+'recipes/'+str(d_id)+'/', utoken)
 
 print('****************************************************************************************')
 
