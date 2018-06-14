@@ -49,17 +49,22 @@ class ProductDetailSerializer(serializers.ModelSerializer) :
 class ProductSerializer(serializers.ModelSerializer) :
     
     rating_avg = serializers.SerializerMethodField()
+
     class Meta:
         model = Product
-        fields = '__all__'
+        fields = fields = ('id', 'name', 'image', 'price', 'manufacturer', 'PB', 'large_category', 'small_category', 'rating_avg')
+    
+    def get_rating_avg(self,obj):
+        return obj.rating_avg or 0
+    
 
 class PostSerializer(serializers.ModelSerializer) :
 
-    image = serializers.ImageField()
+    image = serializers.ImageField(use_url=True)
 
     class Meta :
         model = Post
-        fields = ('created', 'image', 'content')
+        fields = ('id', 'created', 'image', 'content')
         depth = 2
 
 class ReviewListSerializer(serializers.ModelSerializer) :

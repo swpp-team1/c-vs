@@ -1,11 +1,15 @@
 matrix:
   include:
-    # - language: python
-    #   python: 3.5.2
-    #   before_script: cd cvs_server
-    #   script: pytest 
-    #   comment - test need to be specified
-    
+     - language: python
+       python: 3.5.2
+       before_script:
+       - cd cvs_server
+       - pip3 install -r requirements.txt
+       - ./init.sh
+       - python manage.py runserver & 
+       script: python runtest.py
+       
+   
     - language: node_js
       node_js:
       - "node"
