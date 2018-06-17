@@ -121,3 +121,6 @@ migrations/
 
 # debug
 output.txt
+
+# default image
+!default.png
