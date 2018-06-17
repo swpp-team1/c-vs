@@ -99,10 +99,11 @@ export class ProductDetail extends React.Component { // eslint-disable-line reac
       if(obj.id == this.state.reviewId){
         reviewDetail = obj.post.map((o, i) => {
           return(
-            <Article key={i}>
+            <Box key={i} align='center' style={{margin: '30px'}}>
+              <h3>{obj.title}</h3>
               <Image src={'http://13.209.25.111:8000'+o.image}/>
-              {o.content}
-            </Article>
+              <p>{o.content}</p>
+            </Box>
           )
         })
       }
