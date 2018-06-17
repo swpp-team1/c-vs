@@ -11,27 +11,28 @@ import { FormattedMessage } from 'react-intl';
 import { createStructuredSelector } from 'reselect';
 import makeSelectRecipeDetail from './selectors';
 import messages from './messages';
+import {requestRecipeDetail} from './actions'
 
 export class RecipeDetail extends React.Component { // eslint-disable-line react/prefer-stateless-function
+  constructor(props){
+    super(props)
+
+  }
+
+  componentWillMount(){
+    this.props.getRecipeDetail(this.props.params.id)
+  }
+  
   render() {
+    console.log(this.props.RecipeDetail.recipeDetail)
     return (
       <div>
-        <Helmet
-          title="RecipeDetail"
-          meta={[
-            { name: 'description', content: 'Description of RecipeDetail' },
-          ]}
-        />
-        <h1>{this.props.params.id}</h1>
-        <FormattedMessage {...messages.header} />
+        <h1>ID: {this.props.params.id}</h1>
       </div>
     );
   }
 }
 
-RecipeDetail.propTypes = {
-  dispatch: PropTypes.func.isRequired,
-};
 
 const mapStateToProps = createStructuredSelector({
   RecipeDetail: makeSelectRecipeDetail(),
@@ -39,7 +40,7 @@ const mapStateToProps = createStructuredSelector({
 
 function mapDispatchToProps(dispatch) {
   return {
-    dispatch,
+    getRecipeDetail: (id) => dispatch(requestRecipeDetail(id))
   };
 }
 

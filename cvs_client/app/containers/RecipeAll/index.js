@@ -61,7 +61,7 @@ export class RecipeAll extends React.Component { // eslint-disable-line react/pr
                 <h4 style={{whiteSpace: 'nowrap', fontSize: 20, overflow: 'hidden', textOverflow: 'ellipsis', marginBottom: 0}}>{object.title}</h4>
               }
               key = {index}
-              onClick={() => {this.props.router.push(`/recipes/${object.id}`); location.reload();}}
+              onClick={() => {this.props.router.push(`/recipeDetail/${object.id}`); location.reload();}}
             />
           </Tile>
         )
