@@ -1,7 +1,7 @@
 // import { take, call, put, select } from 'redux-saga/effects';
 import { take, call, put, select } from 'redux-saga/effects';
 import * as actions from './actions'
-import { GET_ALL_PRODUCTS, GET_ALL_RECIPES } from './constants'
+import { GET_ALL_RECIPES } from './constants'
 import request from 'utils/request'
 
 

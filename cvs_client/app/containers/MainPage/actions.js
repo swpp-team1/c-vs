@@ -7,7 +7,7 @@
 import {
   DEFAULT_ACTION,
   GET_POPULAR_PRODUCTS,
-  POPULAR_LIST_RECEIVED, 
+  POPULAR_LIST_RECEIVED
 } from './constants';
 
 export function defaultAction() {

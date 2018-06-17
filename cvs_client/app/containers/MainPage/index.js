@@ -29,7 +29,7 @@ import Card from 'grommet/components/Card';
 import Anchor from 'grommet/components/Anchor';
 import CustomHeader from '../../components/CustomHeader';
 import MediaQuery from 'react-responsive';
-import {getPopularProduct} from './actions';
+import { getPopularProduct } from './actions';
 
 // How to load image?
 
