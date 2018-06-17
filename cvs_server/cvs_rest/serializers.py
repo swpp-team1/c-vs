@@ -71,13 +71,14 @@ class ReviewListSerializer(serializers.ModelSerializer) :
 
     user_id = UserIdSerializer()
     rating = serializers.SerializerMethodField()
+    post = PostSerializer(many=True)
     
     profile_image = serializers.SerializerMethodField()
     profile_content = serializers.SerializerMethodField()
 
     class Meta:
        model = Review
-       fields = ('id', 'created', 'edited', 'title', 'user_id', 'profile_image', 'profile_content', 'product', 'rating')
+       fields = ('id', 'created', 'edited', 'title', 'user_id', 'profile_image', 'profile_content', 'product', 'post', 'rating')
        depth = 1
     
     def get_rating(self, obj) :
@@ -132,6 +133,7 @@ class ReviewDetailSerializer(serializers.ModelSerializer) :
 
 class RecipeListSerializer(serializers.ModelSerializer) :
     user_id = UserIdSerializer()
+    post = PostSerializer(many=True)
 
     profile_image = serializers.SerializerMethodField()
     profile_content = serializers.SerializerMethodField()
@@ -139,7 +141,7 @@ class RecipeListSerializer(serializers.ModelSerializer) :
 
     class Meta :
         model = Recipe
-        fields = ('id', 'created', 'edited', 'title', 'user_id', 'profile_image', 'profile_content', 'price_all','ingredients')
+        fields = ('id', 'created', 'edited', 'title', 'user_id', 'profile_image', 'profile_content', 'price_all','ingredients', 'post')
         depth = 1
     
     def get_profile_image(self, obj) :
