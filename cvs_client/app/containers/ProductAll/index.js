@@ -68,7 +68,7 @@ export class ProductAll extends React.Component { // eslint-disable-line react/p
 
   render() {
 
-    var allCard;
+    let allCard;
     if(this.props.ProductAll.productsList == undefined) {
       allCard = (<p>NO RESULT AVAILABLE NOW</p>);
     }
