@@ -25,6 +25,7 @@ import { Redirect } from 'react-router/lib';
 import CustomHeader from '../../components/CustomHeader'
 import { getAllProducts } from './actions'
 import Image from 'grommet/components/Image'
+import defaultImage from '../../defaultimage.png'
 
 
 export class ProductAll extends React.Component { // eslint-disable-line react/prefer-stateless-function
@@ -84,7 +85,7 @@ export class ProductAll extends React.Component { // eslint-disable-line react/p
           >
             <Card
               colorIndex = 'light-1'
-              thumbnail = {<Image src={object.image} />}
+              thumbnail = {<Image fit='contain' src={object.image} onError={(e) => e.target.src = defaultImage} />}
               label={
                 <span>{object.manufacturer}</span>
               }

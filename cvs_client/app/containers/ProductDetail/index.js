@@ -29,6 +29,7 @@ import Layer from 'grommet/components/Layer'
 import { Carousel } from 'grommet';
 import Box from 'grommet/components/Box'
 import Article from 'grommet/components/Article'
+import defaultImage from '../../defaultimage.png'
 
 const manufacturer = {'CU': 'CU', 'GS': 'GS25', 'SE': 'SEVEN ELEVEN'}
 export class ProductDetail extends React.Component { // eslint-disable-line react/prefer-stateless-function
@@ -83,7 +84,7 @@ export class ProductDetail extends React.Component { // eslint-disable-line reac
               colorIndex = 'light-1'
               textSize = 'small'
               thumbnail = {
-                <Image src={object.image}/>
+                <Image src={object.image} onError={(e) => e.target.src = defaultImage}/>
               }
               label={
                 <span>{object.manufacturer}</span>
@@ -122,7 +123,7 @@ export class ProductDetail extends React.Component { // eslint-disable-line reac
         <div style={{margin: '0 20px'}}>
           <div style={{flexDirection: 'row', display: 'flex', padding: '30px'}}>
             <div style={{width: '250px', justifyContent: 'center', display: 'flex'}}>
-              <Image fit='contain' size='large' src={productDetail.image}/>
+              <Image fit='contain' size='large' style={{maxHeight: '321px'}} src={productDetail.image} onError={(e) => e.target.src = defaultImage}/>
             </div>
             <div style={{padding: '20px 50px'}}>
               <h3>{manufacturer[productDetail.manufacturer]}</h3>
