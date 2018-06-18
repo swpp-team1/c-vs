@@ -38,9 +38,14 @@ class CustomHeader extends React.Component { // eslint-disable-line react/prefer
                 <Tip target={'menu'} colorIndex={'accent-2'}>
                   <ClickOutside onClickOutside={() => this.setState({tipVisible: false})}>
                     <div style={{flexDirection: 'row', display: 'flex'}}>
-                      <Anchor style={{padding: '12px', textAlign: 'right', color: 'white', padding: '0px'}} label={'마이페이지'}/>
+                      <Anchor onClick={
+                        () => {
+                          this.props.router.push('/myPage')
+                          this.setState({tipVisible: false})
+                        }
+                      } style={{padding: '0px', textAlign: 'right', color: 'white'}} label={'마이페이지'}/>
                       <div style={{backgroundColor: 'white', width: '1px', margin: '0px 10px'}}/>
-                      <Anchor style={{padding: '12px', textAlign: 'right', color: 'white', padding: '0px'}} label='로그아웃'
+                      <Anchor style={{padding: '0px', textAlign: 'right', color: 'white'}} label='로그아웃'
                               onClick={() => {
                                 this.setState({tipVisible: false}, () => {
                                   this.props.loginRequest()
@@ -49,7 +54,7 @@ class CustomHeader extends React.Component { // eslint-disable-line react/prefer
                     </div>
                   </ClickOutside>
                 </Tip>
-            ) : <div></div>
+            ) : <div/>
           }
         </div>
       </Header>

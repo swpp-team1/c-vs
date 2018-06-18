@@ -26,7 +26,7 @@ import List from 'grommet/components/List'
 import ListItem from 'grommet/components/ListItem'
 import RadioButton from 'grommet/components/RadioButton'
 import Layer from 'grommet/components/Layer'
-import { Carousel } from 'grommet';
+import Carousel from 'grommet/components/Carousel';
 import Box from 'grommet/components/Box'
 import Article from 'grommet/components/Article'
 import defaultImage from '../../defaultimage.png'
@@ -108,7 +108,7 @@ export class ProductDetail extends React.Component { // eslint-disable-line reac
       if(obj.id == this.state.reviewId){
         reviewDetail = obj.post.map((o, i) => {
           return(
-            <Box key={i} align='center' style={{padding: '60px', maxHeight: '500px'}}>
+            <Box key={i} align='center' style={{padding: '60px', height: '500px'}}>
               <h3 style={{lineHeight: '1', marginBottom: '20px'}}>{obj.title}</h3>
               <div style={{display: 'flex'}}>
                 <Image style={{objectFit: 'contain'}} src={'http://13.209.25.111:8000'+o.image}/>
