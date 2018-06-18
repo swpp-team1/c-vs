@@ -8,7 +8,7 @@ const url = 'http://13.209.25.111:8000/products/'
 
 export function* getPopularProducts() {
   try {
-    const data = yield call(request, url+'?ordering=-rating_avg/')
+    const data = yield call(request, url+'?ordering=-rating_avg')
     yield put(actions.popularListReceived(data))
   }
   catch (error) {
@@ -17,7 +17,7 @@ export function* getPopularProducts() {
 }
 
 
-export function* defaultSaga() {
+export function* watchGetPopularProducts() {
   while (true) {
     const {} = yield take(GET_POPULAR_PRODUCTS)
     yield call(getPopularProducts)
@@ -26,5 +26,5 @@ export function* defaultSaga() {
 
 // All sagas to be loaded
 export default [
-  defaultSaga,
+  watchGetPopularProducts,
 ];

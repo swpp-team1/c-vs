@@ -11,7 +11,7 @@ import makeSelectProductDetail from './selectors';
 import CustomHeader from '../../components/CustomHeader'
 import {
   requestProductDetail, requestRelatedProducts, postRequestComment, getRequestComment,
-  getRequestReviews
+  getRequestReviews, getPopularProduct
 } from './actions'
 import Image from 'grommet/components/Image'
 import Heading from 'grommet/components/Heading'
@@ -46,6 +46,7 @@ export class ProductDetail extends React.Component { // eslint-disable-line reac
   }
   componentWillMount() {
     this.props.requestProductDetail(this.props.params.id)
+    this.props.getPopularProduct()
     this.props.getRequestComment(this.props.params.id)
     this.props.getRequestReviews(this.props.params.id)
   }
@@ -53,6 +54,7 @@ export class ProductDetail extends React.Component { // eslint-disable-line reac
   componentWillReceiveProps(nextProps) {
     if(this.props.params.id !== nextProps.params.id){
       nextProps.requestProductDetail(nextProps.params.id)
+      nextProps.getPopularProduct()
       nextProps.getRequestComment(nextProps.params.id)
       nextProps.getRequestReviews(nextProps.params.id)
     }
@@ -70,14 +72,33 @@ export class ProductDetail extends React.Component { // eslint-disable-line reac
     const productDetail = this.props.productDetail ? this.props.productDetail : ''
     const relatedProducts = this.props.relatedProducts ? this.props.relatedProducts.results: []
     const relatedProductsList = (relatedProducts.filter((obj) => (obj.manufacturer !== productDetail.manufacturer && obj.name !== productDetail.name)).concat(relatedProducts.filter((obj) => (obj.manufacturer === productDetail.manufacturer && obj.name !== productDetail.name))))
-    console.log(relatedProductsList)
-
+    const popularList = this.props.popularList ? this.props.popularList.results : []
     let relatedCard;
-    if(relatedProducts === undefined) {
-      relatedCard = (<p>NO RESULT</p>);
+    if(relatedProductsList.length === 0) {
+      relatedCard = popularList.slice(0,5).map((object, index) => {
+        if(object.id === this.props.params.id) return;
+        else return (
+          <Tile pad='medium' key={index} style={{width: '20%'}}>
+            <Card
+              colorIndex = 'light-1'
+              textSize = 'small'
+              thumbnail = {
+                <Image src={object.image} onError={(e) => e.target.src = defaultImage}/>
+              }
+              label={
+                <span>{object.manufacturer}</span>
+              }
+              heading = {
+                <h4 style={{whiteSpace: 'nowrap', fontSize: 20, overflow: 'hidden', textOverflow: 'ellipsis', marginBottom: 0}}>{object.name}</h4>
+              }
+              key = {index}
+              onClick={() => {this.props.router.push(`/productDetail/${object.id}`); location.reload();}}
+            />
+          </Tile>
+        );
+      })
     }
     else {
-      console.log(relatedProductsList)
       relatedCard = relatedProductsList.slice(0,5).map((object, index) => {
         if(object.id === this.props.params.id) return;
         else return (
@@ -274,6 +295,7 @@ const mapStateToProps = (state) => {
     relatedProducts: state.get('productDetail').toJS().relatedProducts,
     commentList: state.get('productDetail').toJS().commentList,
     reviewsList: state.get('productDetail').toJS().reviewsList,
+    popularList: state.get('productDetail').toJS().popularList
   })}
 
 function mapDispatchToProps(dispatch) {
@@ -282,7 +304,8 @@ function mapDispatchToProps(dispatch) {
     requestRelatedProducts: (smallCategory, largeCategory) => dispatch(requestRelatedProducts(smallCategory, largeCategory)),
     postRequestComment: (content, product, rating) => dispatch(postRequestComment(content, product, rating)),
     getRequestComment: (id) => dispatch(getRequestComment(id)),
-    getRequestReviews: (id) => dispatch(getRequestReviews(id))
+    getRequestReviews: (id) => dispatch(getRequestReviews(id)),
+    getPopularProduct: () => dispatch(getPopularProduct())
   };
 }
 

@@ -10,7 +10,7 @@ const url = 'http://13.209.25.111:8000/products/?search='
 export function* searchProducts(searchKey) {
   try {
     console.log("SEARCH KEY:", searchKey)
-    const data = yield call(request, url + searchKey + '/')
+    const data = yield call(request, url + searchKey)
     yield put(actions.receivedSearchResult(data))
   }
   catch (error) {
