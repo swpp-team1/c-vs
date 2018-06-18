@@ -7,8 +7,6 @@ import request from 'utils/request'
 const url = 'http://13.209.25.111:8000/products/'
 
 export function* getPopularProducts() {
-
-  console.log("GET POPULAR PRODUCT saga");
   try {
     const data = yield call(request, url+'?ordering=-rating_avg')
     yield put(actions.popularListReceived(data))

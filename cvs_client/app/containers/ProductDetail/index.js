@@ -30,6 +30,8 @@ import { Carousel } from 'grommet';
 import Box from 'grommet/components/Box'
 import Article from 'grommet/components/Article'
 import defaultImage from '../../defaultimage.png'
+import nonImagedPost from '../../non-imaged-post.png'
+
 
 const manufacturer = {'CU': 'CU', 'GS': 'GS25', 'SE': 'SEVEN ELEVEN'}
 export class ProductDetail extends React.Component { // eslint-disable-line react/prefer-stateless-function
@@ -166,7 +168,7 @@ export class ProductDetail extends React.Component { // eslint-disable-line reac
                       colorIndex='light-1'
                       textSize='small'
                       thumbnail={
-                        <Image src={'http://13.209.25.111:8000' + object.profile_image}/>
+                        <Image fit='contain' style={{height: '24.7vw', backgroundColor: '#CCCCCC'}} src={'http://13.209.25.111:8000' + object.profile_image} onError={(e) => e.target.src = nonImagedPost}/>
                       }
                       label={
                         <span style={{

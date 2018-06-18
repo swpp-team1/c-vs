@@ -15,15 +15,15 @@ import App from 'grommet/components/App';
 import Card from "grommet/components/Card";
 import Tiles from 'grommet/components/Tiles';
 import Tile from 'grommet/components/Tile';
-import Header from 'grommet/components/Header';
-import Button from 'grommet/components/Button';
-import Title from 'grommet/components/Title';
+import Anchor from 'grommet/components/Anchor';
+import Heading from 'grommet/components/Heading';
 import User from 'grommet/components/icons/base/User';
 import Section from 'grommet/components/Section';
 import Article from 'grommet/components/Article';
 import { Redirect } from 'react-router/lib';
 import { getAllRecipes } from './actions'
 import Image from 'grommet/components/Image'
+import nonImagedPost from '../../non-imaged-post.png'
 
 export class RecipeAll extends React.Component { // eslint-disable-line react/prefer-stateless-function
   constructor(props){
@@ -36,7 +36,7 @@ export class RecipeAll extends React.Component { // eslint-disable-line react/pr
   componentWillMount(){
     this.props.getRecipeAll();
   }
-  
+
   render() {
     var allCard;
     if(this.props.RecipeAll.recipesList == undefined){
@@ -53,7 +53,7 @@ export class RecipeAll extends React.Component { // eslint-disable-line react/pr
           >
           <Card
               colorIndex = 'light-1'
-              thumbnail = {<Image src={'http://13.209.25.111:8000'+object.profile_image} />}
+              thumbnail = {<Image fit='contain' style={{height: '17vw', backgroundColor: '#CCCCCC'}} src={'http://13.209.25.111:8000'+object.profile_image} onError={(e) => e.target.src = nonImagedPost}/>}
               label={
                 <span>{object.user_id.username}</span>
               }
@@ -72,6 +72,10 @@ export class RecipeAll extends React.Component { // eslint-disable-line react/pr
       <div>
         <Article>
           <Section colorIndex='light-2'>
+            <div style={{display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'}}>
+              <Heading align = 'start' tag='h2' style={{margin: '10px 40px 10px', color: '#383838'}}>레시피 목록</Heading>
+              <Anchor align='end' primary={true} reverse={true} onClick={() => {this.props.router.push(`/newRecipe`)}} style={{paddingTop: '5px', margin : '20px 40px', color: '#383838'}}>새 레시피 작성하기</Anchor>
+            </div>
             <Tiles>
               { allCard }
             </Tiles>
