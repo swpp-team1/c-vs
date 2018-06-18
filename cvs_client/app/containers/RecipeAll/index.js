@@ -20,16 +20,25 @@ import Heading from 'grommet/components/Heading';
 import User from 'grommet/components/icons/base/User';
 import Section from 'grommet/components/Section';
 import Article from 'grommet/components/Article';
+import Carousel from 'grommet/components/Carousel';
+import Layer from 'grommet/components/Layer';
+import Box from 'grommet/components/Box';
+import List from 'grommet/components/List';
+import ListItem from 'grommet/components/ListItem';
 import { Redirect } from 'react-router/lib';
-import { getAllRecipes } from './actions'
+import { getAllRecipes, requestRecipeDetail } from './actions'
 import Image from 'grommet/components/Image'
 import nonImagedPost from '../../non-imaged-post.png'
+import defaultImage from '../../defaultimage.png'
+
 
 export class RecipeAll extends React.Component { // eslint-disable-line react/prefer-stateless-function
   constructor(props){
     super(props);
     this.state={
       allRecipeList: [],
+      recipeOn: false,
+      imageError: [],
     };
   }
 
@@ -37,12 +46,19 @@ export class RecipeAll extends React.Component { // eslint-disable-line react/pr
     this.props.getRecipeAll();
   }
 
+  componentWillReceiveProps(nextProps) {
+    if(this.props.RecipeAll.recipeDetail !== nextProps.RecipeAll.recipeDetail){
+      this.setState({recipeOn: true})
+    }
+  }
+
   render() {
+    console.log(this.state.imageError)
     var allCard;
     if(this.props.RecipeAll.recipesList == undefined){
-      allCard = (<p>NO RESULT AVAILABLE NOW</p>);
+      allCard = (<div/>);
     }
-    else{
+    else {
       console.log(this.props.RecipeAll.recipesList)
       allCard = this.props.RecipeAll.recipesList.map((object, index) => {
         return(
@@ -61,13 +77,53 @@ export class RecipeAll extends React.Component { // eslint-disable-line react/pr
                 <h4 style={{whiteSpace: 'nowrap', fontSize: 20, overflow: 'hidden', textOverflow: 'ellipsis', marginBottom: 0}}>{object.title}</h4>
               }
               key = {index}
-              onClick={() => {this.props.router.push(`/recipeDetail/${object.id}`); location.reload();}}
+              onClick={() => {this.props.requestRecipeDetail(object.id)}}
             />
           </Tile>
         )
       })
-
     }
+    let recipePostList = []
+    if(this.state.recipeOn){
+      recipePostList = this.props.RecipeAll.recipeDetail.post.map((obj, idx) => {
+        return(
+          <Box key={idx} align='center' basis='full' justify='center' style={{margin: '30px', display: 'flex', width: '100%', height: '440px'}}>
+            {
+              <Image src={'http://13.209.25.111:8000'+obj.image}
+                     style={(this.state.imageError.indexOf(idx) !== -1) ? {display: 'none'} : {display: 'flex'}}
+                     onError={(e) => {
+                       console.log(this.state.imageError)
+                       this.state.imageError.push(idx)
+                       let newImageError = this.state.imageError
+                       this.setState({imageError: newImageError})
+                      }}
+              />
+            }
+
+            <p style={(this.state.imageError.indexOf(idx) !== -1) ? {fontSize: '20px'} : {}}>{obj.content}</p>
+          </Box>
+        )
+      })
+      recipePostList.unshift(
+        <Box align='center' basis='full' justify='center' style={{margin: '30px', padding: '0px 70px', display: 'flex', width: '100%', height: '440px'}}>
+          <span style={{fontSize: '20pt', marginBottom: '50px'}}>INGREDIENTS</span>
+          <List style={{width: '100%'}}>
+            {
+              this.props.RecipeAll.recipeDetail.ingredients.map((obj, idx) => {
+                return (
+                  <ListItem justify='between'
+                            separator='horizontal' style={{borderBottom: '1px solid rgba(0, 0, 0, 0.15)', padding: 3}}>
+                    <Image style={{height: '50px', width: '50px'}} fit='contain' size='small' src={obj.image}/>
+                    <span>{obj.name}</span>
+                  </ListItem>
+                )
+              })
+            }
+          </List>
+        </Box>
+      )
+    }
+
     return (
       <div>
         <Article>
@@ -81,6 +137,14 @@ export class RecipeAll extends React.Component { // eslint-disable-line react/pr
             </Tiles>
           </Section>
         </Article>
+        {
+          this.state.recipeOn &&
+          <Layer onClose={() => this.setState({recipeOn: false, imageError: []})} closer={true} align='center' flush={true}>
+            <Carousel persistentNav={false} autoplay={false} style={{width: '800px', height: '500px'}}>
+              {recipePostList}
+            </Carousel>
+          </Layer>
+        }
       </div>
     );
   }
@@ -96,7 +160,8 @@ const mapStateToProps = createStructuredSelector({
 
 function mapDispatchToProps(dispatch) {
   return {
-    getRecipeAll: () => dispatch(getAllRecipes())
+    getRecipeAll: () => dispatch(getAllRecipes()),
+    requestRecipeDetail: (id) => dispatch(requestRecipeDetail(id)),
   };
 }
 

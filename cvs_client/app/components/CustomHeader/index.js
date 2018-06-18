@@ -30,8 +30,8 @@ class CustomHeader extends React.Component { // eslint-disable-line react/prefer
           <Anchor icon={<Search size='small'/>} label={<h4 style={{margin: '0px'}}>검색</h4>} href='/search' animateIcon={false} style={{margin : '0px 20px', display: 'flex', alignItems: 'center'}}/>
           {
             !this.props.loginResult ?
-              <Anchor icon={<User size='small'/>} label='로그인' href='/login' animateIcon={false}/> :
-              <Anchor style={{display: 'flex', alignItems: 'center', marginBottom: '2.5px'}} label={<h4 style={{margin: '0px'}}>{this.props.loginResult.username}</h4>} onClick={() => this.setState({tipVisible: !this.state.tipVisible})} id='menu'icon={<User size='small'/>}/>
+              <Anchor icon={<User size='small'/>} label={<h4 style={{margin: '0px'}}>로그인</h4>} href='/login' animateIcon={false} style={{margin : '20px 20px 21px 0px', display: 'flex', alignItems: 'center'}}/> :
+              <Anchor style={{display: 'flex', alignItems: 'center', marginBottom: '2.5px'}} animateIcon={false} label={<h4 style={{margin: '0px'}}>{this.props.loginResult.username}</h4>} onClick={() => this.setState({tipVisible: !this.state.tipVisible})} id='menu'icon={<User size='small'/>}/>
           }
           {
             this.state.tipVisible ? (
