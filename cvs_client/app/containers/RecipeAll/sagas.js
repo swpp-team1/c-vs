@@ -19,7 +19,7 @@ export function* getAllRecipes(){
 
 export function* requestRecipeDetail(id){
   try {
-    const data = yield call(request, url + id)
+    const data = yield call(request, url + id + '/')
     yield put(actions.receivedRecipeDetail(data))
   }
   catch (error) {
